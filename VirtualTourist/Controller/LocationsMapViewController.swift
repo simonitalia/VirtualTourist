@@ -19,8 +19,8 @@ class LocationsMapViewController: UIViewController {
     
     //actions
     @IBAction func locationsMapLongPressed(_ sender: Any) {
-        let coordinates = getMapCoordinatesFrom(gestureRecognizer: sender as! UILongPressGestureRecognizer)
-        
+        let mapCoordinates = getMapCoordinatesFrom(longPressGestureRecognizer: sender as! UILongPressGestureRecognizer)
+        setLocationMapPointAnnotation(at: mapCoordinates)
     }
     
     //MARK:- View Lifecycle
@@ -49,10 +49,22 @@ class LocationsMapViewController: UIViewController {
 //MARK: - Helpers
 extension LocationsMapViewController {
     
-    func getMapCoordinatesFrom(gestureRecognizer: UILongPressGestureRecognizer) -> CLLocationCoordinate2D {
-        let touch: CGPoint = gestureRecognizer.location(in: locationsMapView)
-        let mapCoordinates: CLLocationCoordinate2D = locationsMapView.convert(touch, toCoordinateFrom: locationsMapView)
+    func getMapCoordinatesFrom(longPressGestureRecognizer touchPoint: UILongPressGestureRecognizer) -> CLLocationCoordinate2D {
+        let touchPoint: CGPoint = touchPoint.location(in: locationsMapView)
+        let mapCoordinates: CLLocationCoordinate2D = locationsMapView.convert(touchPoint, toCoordinateFrom: locationsMapView)
         return mapCoordinates
+    }
+    
+    
+    //once annotatioon is added to map view, delegate will add to map
+    func setLocationMapPointAnnotation(at coordinates: CLLocationCoordinate2D) {
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = coordinates
+        
+        //add annotation to map view
+        DispatchQueue.main.async {
+            self.locationsMapView.addAnnotation(annotation) //done on main thread so pins appear on view/map load
+        }
     }
 }
 
@@ -60,5 +72,20 @@ extension LocationsMapViewController {
 //MARK:- MKMAPView Delegate
 extension LocationsMapViewController: MKMapViewDelegate  {
 
-    
+    //cretaes and sets pin views on map when annotations added to map view
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        guard annotation is MKPointAnnotation else { return nil }
+
+        let reuseID = "pin"
+        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseID)
+
+        if pinView == nil {
+            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseID)
+            pinView!.canShowCallout = true
+        } else {
+            pinView!.annotation = annotation
+        }
+
+        return pinView
+    }
 }
