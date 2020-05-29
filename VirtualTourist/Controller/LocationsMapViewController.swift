@@ -49,7 +49,7 @@ class LocationsMapViewController: UIViewController {
 //MARK: - Helpers
 extension LocationsMapViewController {
     
-    func getMapCoordinatesFrom(longPressGestureRecognizer touchPoint: UILongPressGestureRecognizer) -> CLLocationCoordinate2D {
+    private func getMapCoordinatesFrom(longPressGestureRecognizer touchPoint: UILongPressGestureRecognizer) -> CLLocationCoordinate2D {
         let touchPoint: CGPoint = touchPoint.location(in: locationsMapView)
         let mapCoordinates: CLLocationCoordinate2D = locationsMapView.convert(touchPoint, toCoordinateFrom: locationsMapView)
         return mapCoordinates
@@ -57,7 +57,7 @@ extension LocationsMapViewController {
     
     
     //once annotatioon is added to map view, delegate will add to map
-    func setLocationMapPointAnnotation(at coordinates: CLLocationCoordinate2D) {
+    private func setLocationMapPointAnnotation(at coordinates: CLLocationCoordinate2D) {
         let annotation = MKPointAnnotation()
         annotation.coordinate = coordinates
         
