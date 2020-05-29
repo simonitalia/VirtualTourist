@@ -12,10 +12,16 @@ import MapKit
 
 class LocationsMapViewController: UIViewController {
     
-    //MARK:- Storyboard Outlets
+    //MARK:- Storyboard Connections
     //outlets
     @IBOutlet weak var locationsMapView: MKMapView!
     
+    
+    //actions
+    @IBAction func locationsMapLongPressed(_ sender: Any) {
+        let coordinates = getMapCoordinatesFrom(gestureRecognizer: sender as! UILongPressGestureRecognizer)
+        
+    }
     
     //MARK:- View Lifecycle
     override func viewDidLoad() {
@@ -37,6 +43,17 @@ class LocationsMapViewController: UIViewController {
         
     }
     
+}
+
+
+//MARK: - Helpers
+extension LocationsMapViewController {
+    
+    func getMapCoordinatesFrom(gestureRecognizer: UILongPressGestureRecognizer) -> CLLocationCoordinate2D {
+        let touch: CGPoint = gestureRecognizer.location(in: locationsMapView)
+        let mapCoordinates: CLLocationCoordinate2D = locationsMapView.convert(touch, toCoordinateFrom: locationsMapView)
+        return mapCoordinates
+    }
 }
 
 
