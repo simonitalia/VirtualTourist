@@ -6,7 +6,7 @@
 //  Copyright © 2020 SDI Group Inc. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 class VTNetworkController {
     
@@ -40,7 +40,9 @@ class VTNetworkController {
         enum QueryParameter {
             static let method = "method"
             static let apiKey = (key: "api_key", value: "350ce3759924a6a223d12eb1afd8c9b4")
-            static let tags = "tags"
+            static let text = "text"
+            static let latitude = "lat"
+            static let longitude = "lon"
             static let photosContentType = (key: "content_type", value: "1")
             static let responseFormatJSON = (key: "format", value: "json")
             static let imageUrllOriginal = (key: "extras", value: "url_o")
@@ -50,18 +52,32 @@ class VTNetworkController {
         }
         
         //search method
-        case searchBy(location: String)
+        case searchBy(query: String)
+        case searchByLocation(latitude: Double, longitude: Double)
     
-        
-        //compute endppint url
-        private var url: URL? {
+        //compute endpoint url
+        var url: URL? {
             switch self {
-            case .searchBy(let location):
+            case .searchBy(let query):
                 var components = self.getURLComponents(appendingWith: URLPath.rest)
                 components.queryItems = [
                     URLQueryItem(name: QueryParameter.method, value: APIMethod.Photos.search),
                     URLQueryItem(name: QueryParameter.apiKey.key, value: QueryParameter.apiKey.value),
-                    URLQueryItem(name: QueryParameter.tags, value: "\(location)"),
+                    URLQueryItem(name: QueryParameter.text, value: "\(query)"),
+                    URLQueryItem(name: QueryParameter.photosContentType.key, value: QueryParameter.photosContentType.value),
+                    URLQueryItem(name: QueryParameter.responseFormatJSON.key, value: QueryParameter.responseFormatJSON.value),
+                    URLQueryItem(name: QueryParameter.imageUrllMedium.key, value: QueryParameter.imageUrllMedium.value)
+                ]
+                
+                return components.url
+            
+            case .searchByLocation(let latitude, let longitude):
+                var components = self.getURLComponents(appendingWith: URLPath.rest)
+                components.queryItems = [
+                    URLQueryItem(name: QueryParameter.method, value: APIMethod.Photos.search),
+                    URLQueryItem(name: QueryParameter.apiKey.key, value: QueryParameter.apiKey.value),
+                    URLQueryItem(name: QueryParameter.latitude, value: "\(latitude)"),
+                    URLQueryItem(name: QueryParameter.longitude, value: "\(longitude)"),
                     URLQueryItem(name: QueryParameter.photosContentType.key, value: QueryParameter.photosContentType.value),
                     URLQueryItem(name: QueryParameter.responseFormatJSON.key, value: QueryParameter.responseFormatJSON.value),
                     URLQueryItem(name: QueryParameter.imageUrllMedium.key, value: QueryParameter.imageUrllMedium.value)
@@ -79,6 +95,43 @@ class VTNetworkController {
             components.path = path
             return components
         }
+    }
+    
+    
+    //general search by text
+    func getPhotos(for text: String, completion: @escaping (Result<Bool, Error>) -> Void) {
+        guard let url = Endpoint.searchBy(query: text).url else {
+            print("Internal Error! Endpoint url could not be constructed.")
+            return
+        }
+        print("EnpointUrl: \(url)") //to debug
+    }
+    
+    
+    //search by lat / lon coordinates
+    func getPhotosForLocation(for location: (lat: Double, lon: Double), completion: @escaping (Result<Bool, Error>) -> Void) {
+        
+        guard let url = Endpoint.searchByLocation(latitude: location.lat, longitude: location.lon).url else {
+            print("Internal Error! Endpoint url could not be constructed.")
+            return
+        }
+        
+        print("EnpointUrl: \(url)") //to debug
+        
+        
+        
+        
+        
+        
+    }
+    
+    
+    func downloadPhotoImage(from url: String) -> UIImage {
+        
+        
+        
+        return UIImage()
+        
     }
     
     
