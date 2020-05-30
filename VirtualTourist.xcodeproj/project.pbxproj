@@ -17,6 +17,8 @@
 		2A50CAA72480B6A700F9AC81 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A50CAA62480B6A700F9AC81 /* MapKit.framework */; };
 		2A50CAAD2480D5BE00F9AC81 /* PhotoAlbumMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A50CAAC2480D5BE00F9AC81 /* PhotoAlbumMapViewController.swift */; };
 		2A63A9C62480EAEB009D3AF2 /* PhotoAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A63A9C52480EAEB009D3AF2 /* PhotoAlbumViewController.swift */; };
+		2A63A9C924812645009D3AF2 /* VTNetworkController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A63A9C824812645009D3AF2 /* VTNetworkController.swift */; };
+		2A63A9CB24812662009D3AF2 /* VTDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A63A9CA24812662009D3AF2 /* VTDataController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +34,8 @@
 		2A50CAA62480B6A700F9AC81 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		2A50CAAC2480D5BE00F9AC81 /* PhotoAlbumMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumMapViewController.swift; sourceTree = "<group>"; };
 		2A63A9C52480EAEB009D3AF2 /* PhotoAlbumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumViewController.swift; sourceTree = "<group>"; };
+		2A63A9C824812645009D3AF2 /* VTNetworkController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VTNetworkController.swift; sourceTree = "<group>"; };
+		2A63A9CA24812662009D3AF2 /* VTDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VTDataController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,21 +72,21 @@
 			children = (
 				2A50CAA0248098A700F9AC81 /* AppSupport */,
 				2A50CAA1248098D500F9AC81 /* Model */,
-				2A50CA9E2480988800F9AC81 /* View */,
-				2A50CAA2248098E600F9AC81 /* Controller */,
+				2A50CA9E2480988800F9AC81 /* Views */,
+				2A50CAA2248098E600F9AC81 /* ViewControllers */,
 				2A50CA9F2480989600F9AC81 /* Assets */,
 				2A50CA98248097F800F9AC81 /* Info.plist */,
 			);
 			path = VirtualTourist;
 			sourceTree = "<group>";
 		};
-		2A50CA9E2480988800F9AC81 /* View */ = {
+		2A50CA9E2480988800F9AC81 /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				2A50CA8D248097F400F9AC81 /* Main.storyboard */,
 				2A50CA95248097F800F9AC81 /* LaunchScreen.storyboard */,
 			);
-			path = View;
+			path = Views;
 			sourceTree = "<group>";
 		};
 		2A50CA9F2480989600F9AC81 /* Assets */ = {
@@ -105,18 +109,19 @@
 		2A50CAA1248098D500F9AC81 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				2A63A9C7248125F6009D3AF2 /* Controllers */,
 				2A50CA90248097F400F9AC81 /* VirtualTourist.xcdatamodeld */,
 			);
 			path = Model;
 			sourceTree = "<group>";
 		};
-		2A50CAA2248098E600F9AC81 /* Controller */ = {
+		2A50CAA2248098E600F9AC81 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
 				2A50CAA32480A30E00F9AC81 /* LocationsMapViewController.swift */,
 				2A50CAAE2480D62B00F9AC81 /* LocationsPhotoAlbum */,
 			);
-			path = Controller;
+			path = ViewControllers;
 			sourceTree = "<group>";
 		};
 		2A50CAA52480B6A700F9AC81 /* Frameworks */ = {
@@ -134,6 +139,15 @@
 				2A50CAAC2480D5BE00F9AC81 /* PhotoAlbumMapViewController.swift */,
 			);
 			path = LocationsPhotoAlbum;
+			sourceTree = "<group>";
+		};
+		2A63A9C7248125F6009D3AF2 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				2A63A9C824812645009D3AF2 /* VTNetworkController.swift */,
+				2A63A9CA24812662009D3AF2 /* VTDataController.swift */,
+			);
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -209,8 +223,10 @@
 			files = (
 				2A50CAA42480A30E00F9AC81 /* LocationsMapViewController.swift in Sources */,
 				2A50CAAD2480D5BE00F9AC81 /* PhotoAlbumMapViewController.swift in Sources */,
+				2A63A9C924812645009D3AF2 /* VTNetworkController.swift in Sources */,
 				2A50CA92248097F400F9AC81 /* VirtualTourist.xcdatamodeld in Sources */,
 				2A50CA88248097F400F9AC81 /* AppDelegate.swift in Sources */,
+				2A63A9CB24812662009D3AF2 /* VTDataController.swift in Sources */,
 				2A50CA8A248097F400F9AC81 /* SceneDelegate.swift in Sources */,
 				2A63A9C62480EAEB009D3AF2 /* PhotoAlbumViewController.swift in Sources */,
 			);
