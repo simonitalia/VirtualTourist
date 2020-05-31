@@ -66,7 +66,7 @@
                                 </connections>
                             </containerView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ykv-2f-1KI">
-                                <rect key="frame" x="0.0" y="244" width="320" height="236"/>
+                                <rect key="frame" x="0.0" y="244" width="320" height="192"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="YQN-03-kGD">
                                     <size key="itemSize" width="128" height="128"/>
@@ -89,16 +89,27 @@
                                     <outlet property="delegate" destination="tIO-gR-9FY" id="C69-FJ-FGx"/>
                                 </connections>
                             </collectionView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JUL-4r-Xi8">
+                                <rect key="frame" x="0.0" y="436" width="320" height="44"/>
+                                <items>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="St7-PW-hlC"/>
+                                    <barButtonItem title="New Collection" id="YKZ-BR-97N"/>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="1SP-dt-631"/>
+                                </items>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="JyY-jU-azx" firstAttribute="leading" secondItem="PTr-Sk-kLY" secondAttribute="leading" id="14X-q1-LoN"/>
                             <constraint firstItem="JyY-jU-azx" firstAttribute="top" secondItem="PTr-Sk-kLY" secondAttribute="top" id="ABW-kQ-LFc"/>
+                            <constraint firstItem="JUL-4r-Xi8" firstAttribute="bottom" secondItem="PTr-Sk-kLY" secondAttribute="bottom" id="Jee-wv-h9P"/>
                             <constraint firstItem="ykv-2f-1KI" firstAttribute="leading" secondItem="PTr-Sk-kLY" secondAttribute="leading" id="N9f-bs-XCS"/>
                             <constraint firstItem="ykv-2f-1KI" firstAttribute="top" secondItem="JyY-jU-azx" secondAttribute="bottom" id="P3K-UN-Sch"/>
                             <constraint firstItem="JyY-jU-azx" firstAttribute="trailing" secondItem="PTr-Sk-kLY" secondAttribute="trailing" id="STW-ho-sgf"/>
+                            <constraint firstItem="JUL-4r-Xi8" firstAttribute="leading" secondItem="PTr-Sk-kLY" secondAttribute="leading" id="ZZi-xA-uwf"/>
                             <constraint firstItem="PTr-Sk-kLY" firstAttribute="trailing" secondItem="ykv-2f-1KI" secondAttribute="trailing" id="a2O-uo-FVN"/>
-                            <constraint firstItem="PTr-Sk-kLY" firstAttribute="bottom" secondItem="ykv-2f-1KI" secondAttribute="bottom" id="wlz-SQ-IRl"/>
+                            <constraint firstItem="JUL-4r-Xi8" firstAttribute="top" secondItem="ykv-2f-1KI" secondAttribute="bottom" id="j9m-Qa-YVD"/>
+                            <constraint firstItem="JUL-4r-Xi8" firstAttribute="trailing" secondItem="PTr-Sk-kLY" secondAttribute="trailing" id="tV8-VG-r4C"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="PTr-Sk-kLY"/>
                     </view>
@@ -109,7 +120,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LTd-pm-CQm" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="786" y="938"/>
+            <point key="canvasLocation" x="785.625" y="937.5"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="YFQ-HE-f5G">
@@ -117,7 +128,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="JPz-9T-MQV" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ops-fc-yfD">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>

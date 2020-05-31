@@ -12,7 +12,6 @@ class VTNetworkController {
     
     //accessible class properties
     static var shared = VTNetworkController()
-    
     var photos: PhotosSearchResults!
     
     //private class propeeties
