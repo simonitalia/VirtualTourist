@@ -195,13 +195,33 @@ class VTNetworkController {
     }
     
     
-    func downloadPhotoImage(from url: String) -> UIImage {
-        
-        
-        
-        return UIImage()
-        
+    func getPhotoImage(from urlString: String, completion: @escaping (UIImage?, Error?) -> Void) {
+        guard let url = URL(string: urlString) else { return }
+
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+
+            //check for error
+            if let error = error {
+                completion(nil, error)
+                return
+            }
+
+            //check for server response code 200, else bail out
+            guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
+                completion(nil, error)
+                return
+            }
+
+            if let data = data {
+                guard let image = UIImage(data: data) else {
+                    completion(nil, error)
+                    return
+                }
+                
+                completion(image, nil)
+            }
+        }
+
+        task.resume()
     }
-    
-    
 }
