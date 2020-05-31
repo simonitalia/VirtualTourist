@@ -21,6 +21,7 @@
 		2A63A9C62480EAEB009D3AF2 /* PhotoAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A63A9C52480EAEB009D3AF2 /* PhotoAlbumViewController.swift */; };
 		2A63A9C924812645009D3AF2 /* VTNetworkController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A63A9C824812645009D3AF2 /* VTNetworkController.swift */; };
 		2A63A9CB24812662009D3AF2 /* VTDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A63A9CA24812662009D3AF2 /* VTDataController.swift */; };
+		2A6EAD64248370E80030D39F /* PhotoAlbumCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A6EAD63248370E80030D39F /* PhotoAlbumCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		2A63A9C52480EAEB009D3AF2 /* PhotoAlbumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumViewController.swift; sourceTree = "<group>"; };
 		2A63A9C824812645009D3AF2 /* VTNetworkController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VTNetworkController.swift; sourceTree = "<group>"; };
 		2A63A9CA24812662009D3AF2 /* VTDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VTDataController.swift; sourceTree = "<group>"; };
+		2A6EAD63248370E80030D39F /* PhotoAlbumCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +98,7 @@
 		2A50CA9E2480988800F9AC81 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				2A6EAD62248370770030D39F /* PhotoAlbumCollectionViewCell */,
 				2A50CA8D248097F400F9AC81 /* Main.storyboard */,
 				2A50CA95248097F800F9AC81 /* LaunchScreen.storyboard */,
 			);
@@ -162,6 +165,14 @@
 				2A63A9CA24812662009D3AF2 /* VTDataController.swift */,
 			);
 			path = Controllers;
+			sourceTree = "<group>";
+		};
+		2A6EAD62248370770030D39F /* PhotoAlbumCollectionViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				2A6EAD63248370E80030D39F /* PhotoAlbumCollectionViewCell.swift */,
+			);
+			path = PhotoAlbumCollectionViewCell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -235,6 +246,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2A6EAD64248370E80030D39F /* PhotoAlbumCollectionViewCell.swift in Sources */,
 				2A50CAA42480A30E00F9AC81 /* LocationsMapViewController.swift in Sources */,
 				2A50CAAD2480D5BE00F9AC81 /* PhotoAlbumMapViewController.swift in Sources */,
 				2A089A3D2482550000E768C1 /* PhotosSearchResults.swift in Sources */,

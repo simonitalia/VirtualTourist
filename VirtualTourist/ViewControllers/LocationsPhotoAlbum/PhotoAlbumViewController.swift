@@ -15,9 +15,17 @@ class PhotoAlbumViewController: UIViewController {
     private let cellIdentifier = "PhotoCell"
     var annotation: MKAnnotation!
     
-    
-    //MARK:- Storyboard Outlets
+
+    //MARK:- Storyboard Connections
+    //outlets
     @IBOutlet weak var photoAlbumCollectionView: UICollectionView!
+    @IBOutlet weak var newCollectionButton: UIBarButtonItem!
+    
+
+    //actions
+    @IBAction func newCollectionButtonTapped(_ sender: Any) {
+        
+    }
     
     
     //MARK: View Lifecycle
@@ -106,7 +114,9 @@ extension PhotoAlbumViewController: UICollectionViewDataSource {
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return UICollectionViewCell()
+        
+        let cell = UICollectionViewCell()
+        return cell
     }
     
 }

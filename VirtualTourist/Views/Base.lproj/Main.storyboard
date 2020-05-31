@@ -75,13 +75,34 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PhotoCell" id="2uG-9A-DLB">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PhotoCell" id="2uG-9A-DLB" customClass="PhotoAlbumCollectionViewCell" customModule="VirtualTourist" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="MUZ-ko-aWD">
                                             <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="r5d-n5-bxn">
+                                                    <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                                    <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                </imageView>
+                                                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="qkd-dh-mcl">
+                                                    <rect key="frame" x="54" y="54" width="20" height="20"/>
+                                                </activityIndicatorView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="r5d-n5-bxn" firstAttribute="leading" secondItem="MUZ-ko-aWD" secondAttribute="leading" id="2rX-xM-xqu"/>
+                                                <constraint firstAttribute="bottom" secondItem="r5d-n5-bxn" secondAttribute="bottom" id="JAI-fy-8vQ"/>
+                                                <constraint firstItem="r5d-n5-bxn" firstAttribute="top" secondItem="MUZ-ko-aWD" secondAttribute="top" id="Lyl-4H-f4m"/>
+                                                <constraint firstAttribute="trailing" secondItem="r5d-n5-bxn" secondAttribute="trailing" id="M9s-9Q-Mkb"/>
+                                                <constraint firstItem="qkd-dh-mcl" firstAttribute="centerY" secondItem="MUZ-ko-aWD" secondAttribute="centerY" id="syy-pa-bjm"/>
+                                                <constraint firstItem="qkd-dh-mcl" firstAttribute="centerX" secondItem="MUZ-ko-aWD" secondAttribute="centerX" id="zXx-vA-IBz"/>
+                                            </constraints>
                                         </collectionViewCellContentView>
+                                        <connections>
+                                            <outlet property="photoActivityIndicator" destination="qkd-dh-mcl" id="hBv-At-181"/>
+                                            <outlet property="photoImageView" destination="r5d-n5-bxn" id="WkL-7D-YMA"/>
+                                        </connections>
                                     </collectionViewCell>
                                 </cells>
                                 <connections>
@@ -93,7 +114,11 @@
                                 <rect key="frame" x="0.0" y="436" width="320" height="44"/>
                                 <items>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="St7-PW-hlC"/>
-                                    <barButtonItem title="New Collection" id="YKZ-BR-97N"/>
+                                    <barButtonItem title="New Collection" id="YKZ-BR-97N">
+                                        <connections>
+                                            <action selector="newCollectionButtonTapped:" destination="tIO-gR-9FY" id="ntq-bd-ACW"/>
+                                        </connections>
+                                    </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="1SP-dt-631"/>
                                 </items>
                             </toolbar>
@@ -115,6 +140,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="HPK-Sb-PZ4"/>
                     <connections>
+                        <outlet property="newCollectionButton" destination="YKZ-BR-97N" id="vfz-R2-4Ne"/>
                         <outlet property="photoAlbumCollectionView" destination="ykv-2f-1KI" id="AUc-dp-frI"/>
                     </connections>
                 </viewController>
@@ -128,7 +154,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="JPz-9T-MQV" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ops-fc-yfD">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
