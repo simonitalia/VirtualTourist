@@ -35,12 +35,25 @@ class LocationsMapViewController: UIViewController {
     //MARK:- VC Setup
     private func configureVC() {
         locationsMapView.delegate = self
-        
     }
     
     
     private func configureUI() {
-        
+        performGetPhotos()
+    }
+    
+    
+    private func performGetPhotos() {
+        VTNetworkController.shared.getPhotos(for: (lat: 40.709441, lon: -73.964896)) { (success, error) in
+            
+            if let _ = success {
+                
+            }
+            
+            if let _ = error {
+                
+            }
+        }
     }
     
 }

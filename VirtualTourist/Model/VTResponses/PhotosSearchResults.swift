@@ -9,30 +9,30 @@
 import Foundation
 
 
-struct SearchResult: Codable {
-    let photo: Photo
+struct PhotosSearchResults: Codable {
+    let photos: Photos
     let status: String
     
     enum CodingKeys: String, CodingKey {
-        case photo
+        case photos
         case status = "stat"
     }
 }
 
 
+struct Photos: Codable {
+    let photo: [Photo]
+}
+
+
 struct Photo: Codable {
     let id: String
-    let urls: [PhotoUrl]
-}
-
-
-struct PhotoUrl: Codable {
-    let type: String
-    let url: String
+    let title: String
+    let imageURL: String
     
     enum CodingKeys: String, CodingKey {
-        case type
-        case url = "_content"
+        case id
+        case title
+        case imageURL = "url_m" //medium size url
     }
 }
-

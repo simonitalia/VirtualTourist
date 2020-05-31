@@ -13,6 +13,8 @@ class VTNetworkController {
     //accessible class properties
     static var shared = VTNetworkController()
     
+    var photos = [PhotosSearchResults]()
+    
     //private class propeeties
     private enum httpMethod: String {
         case get = "GET"
@@ -28,7 +30,7 @@ class VTNetworkController {
         //url components
         enum URLComponent {
             static let scheme = "https"
-            static let host = "https://www.flickr.com"
+            static let host = "www.flickr.com"
         }
         
         //api endpoint paths
@@ -109,7 +111,7 @@ class VTNetworkController {
     
     
     //search by lat / lon coordinates
-    func getPhotosForLocation(for location: (lat: Double, lon: Double), completion: @escaping (Result<Bool, Error>) -> Void) {
+    func getPhotos(for location: (lat: Double, lon: Double), completion: @escaping (Bool?, String?) -> Void) {
         
         guard let url = Endpoint.searchByLocation(latitude: location.lat, longitude: location.lon).url else {
             print("Internal Error! Endpoint url could not be constructed.")
@@ -118,11 +120,51 @@ class VTNetworkController {
         
         print("EnpointUrl: \(url)") //to debug
         
+        let request = URLRequest(url: url)
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            
+            //handle general (eg: network) error
+            if let error = error {
+                completion(nil, error.localizedDescription)
+                return
+            }
+            
+            //bad http response
+            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200  else {
+                completion(nil, error?.localizedDescription)
+                return
+            }
+            
+            //no data returned
+            guard let data = data else {
+                completion(nil, error?.localizedDescription)
+                return
+            }
+            
+            //handle successful response
+            do {
+                let decoder = JSONDecoder()
+                
+                 //strip results of bad chars
+                let prefix = "jsonFlickrApi("
+                let suffix = ")"
+                let start = prefix.count
+                let end = data.count - suffix.count
+                let range = start..<end
+                let newData = data.subdata(in: range)
+                
+                //decode data
+                let _ = try decoder.decode(PhotosSearchResults.self, from: newData)
+                print("Sucess! Photos for location successfully fetched")
+                completion(true, nil)
+                
+            } catch {
+                print("Error! \(error.localizedDescription)")
+                completion(nil, error.localizedDescription)
+            }
+        }
         
-        
-        
-        
-        
+        task.resume()
     }
     
     
