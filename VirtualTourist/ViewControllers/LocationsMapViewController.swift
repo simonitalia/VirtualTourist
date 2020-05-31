@@ -12,6 +12,11 @@ import MapKit
 
 class LocationsMapViewController: UIViewController {
     
+    //MARK:- Class Properties
+    enum SegueIdentifier {
+        static let segueToPhotoAlbumViewController = "LocationsMapVCToPhotoAlbumVC"
+    }
+    
     //MARK:- Storyboard Connections
     //outlets
     @IBOutlet weak var locationsMapView: MKMapView!
@@ -27,8 +32,6 @@ class LocationsMapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureVC()
-        configureUI()
-
     }
     
     
@@ -37,24 +40,6 @@ class LocationsMapViewController: UIViewController {
         locationsMapView.delegate = self
     }
     
-    
-    private func configureUI() {
-        performGetPhotos()
-    }
-    
-    
-    private func performGetPhotos() {
-        VTNetworkController.shared.getPhotos(for: (lat: 40.709441, lon: -73.964896)) { (success, error) in
-            
-            if let _ = success {
-                
-            }
-            
-            if let _ = error {
-                
-            }
-        }
-    }
     
 }
 
@@ -101,4 +86,15 @@ extension LocationsMapViewController: MKMapViewDelegate  {
 
         return pinView
     }
+    
+    
+    //track annotation view taps
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+//        var annotationTapped = view.annotation
+        
+        performSegue(withIdentifier: SegueIdentifier.segueToPhotoAlbumViewController, sender: self)
+    
+    }
+
+    
 }

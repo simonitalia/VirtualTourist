@@ -14,6 +14,7 @@ class PhotoAlbumViewController: UIViewController {
     private let cellIdentifier = "PhotoCell"
     
     
+    
     //MARK:- Storyboard Outlets
     @IBOutlet weak var photoAlbumCollectionView: UICollectionView!
     
@@ -34,6 +35,23 @@ class PhotoAlbumViewController: UIViewController {
     func configureCollectionView() {
         // Register cell classes
         self.photoAlbumCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
+        
+        //trigger fetch of photos
+//        performGetPhotos()
+    }
+    
+    
+    private func performGetPhotos() {
+        VTNetworkController.shared.getPhotos(for: (lat: 40.709441, lon: -73.964896)) { (success, error) in
+            
+            if let _ = success {
+                
+            }
+            
+            if let _ = error {
+                
+            }
+        }
     }
     
 }

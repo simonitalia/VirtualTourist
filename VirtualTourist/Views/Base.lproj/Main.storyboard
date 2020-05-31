@@ -33,15 +33,10 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
-                    <navigationItem key="navigationItem" title="My Locations" id="8Es-B3-hPT">
-                        <barButtonItem key="rightBarButtonItem" image="photo.on.rectangle" catalog="system" id="Qty-gF-1LK">
-                            <connections>
-                                <segue destination="tIO-gR-9FY" kind="show" id="yWA-RL-IVQ"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="My Locations" id="8Es-B3-hPT"/>
                     <connections>
                         <outlet property="locationsMapView" destination="2ik-WP-NOl" id="yaI-Tu-eGj"/>
+                        <segue destination="tIO-gR-9FY" kind="show" identifier="LocationsMapVCToPhotoAlbumVC" id="Sce-Wi-dwa"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -122,7 +117,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="JPz-9T-MQV" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ops-fc-yfD">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -164,7 +159,4 @@
             <point key="canvasLocation" x="1599" y="763"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="photo.on.rectangle" catalog="system" width="32" height="32"/>
-    </resources>
 </document>
