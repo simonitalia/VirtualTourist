@@ -17,6 +17,8 @@ class LocationsMapViewController: UIViewController {
         static let segueToPhotoAlbumViewController = "LocationsMapVCToPhotoAlbumVC"
     }
     
+    private var annotationTapped: MKAnnotation!
+    
     //MARK:- Storyboard Connections
     //outlets
     @IBOutlet weak var locationsMapView: MKMapView!
@@ -41,6 +43,15 @@ class LocationsMapViewController: UIViewController {
     }
     
     
+    //MARK: Navigation Setup
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let annotation = self.annotationTapped else { return }
+        
+        if segue.identifier == SegueIdentifier.segueToPhotoAlbumViewController {
+            let vc = segue.destination as! PhotoAlbumViewController
+            vc.annotation = annotation
+        }
+    }
 }
 
 
@@ -90,10 +101,12 @@ extension LocationsMapViewController: MKMapViewDelegate  {
     
     //track annotation view taps
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-//        var annotationTapped = view.annotation
         
+        //capture annotation tapped for sending to detinationVC
+        annotationTapped = view.annotation
+        
+        //trigger segue
         performSegue(withIdentifier: SegueIdentifier.segueToPhotoAlbumViewController, sender: self)
-    
     }
 
     

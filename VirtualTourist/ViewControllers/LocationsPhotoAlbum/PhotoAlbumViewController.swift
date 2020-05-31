@@ -7,12 +7,13 @@
 //
 
 import UIKit
+import MapKit
 
 class PhotoAlbumViewController: UIViewController {
     
     //MARK:- Class Properties
     private let cellIdentifier = "PhotoCell"
-    
+    var annotation: MKAnnotation!
     
     
     //MARK:- Storyboard Outlets
@@ -37,12 +38,15 @@ class PhotoAlbumViewController: UIViewController {
         self.photoAlbumCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
         
         //trigger fetch of photos
-//        performGetPhotos()
+        performGetPhotos()
     }
     
     
     private func performGetPhotos() {
-        VTNetworkController.shared.getPhotos(for: (lat: 40.709441, lon: -73.964896)) { (success, error) in
+        guard let annotation = self.annotation else { return }
+        let lat = annotation.coordinate.latitude
+        let lon = annotation.coordinate.latitude
+        VTNetworkController.shared.getPhotos(for: (lat: lat, lon: lon)) { (success, error) in
             
             if let _ = success {
                 
@@ -53,7 +57,6 @@ class PhotoAlbumViewController: UIViewController {
             }
         }
     }
-    
 }
 
 
