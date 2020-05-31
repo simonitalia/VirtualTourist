@@ -11,6 +11,11 @@ import MapKit
 
 class PhotoAlbumMapViewController: UIViewController {
     
+    //MARK: Class Properties
+    private var annotation: MKAnnotation! {
+        return PhotoAlbumViewController.annotation
+    }
+    
     //MARK:- Storyboard Connections
     //outlets
     @IBOutlet weak var mapView: MKMapView!
@@ -19,8 +24,22 @@ class PhotoAlbumMapViewController: UIViewController {
      //MARK:- View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        configureVC()
+        configureUI()
         
+    }
+    
+    
+    private func configureVC() {
+        mapView.delegate = self
+    }
+    
+    
+    private func configureUI() {
+        if let annotation = self.annotation {
+            mapView.setMapPointAnnotation(at: annotation.coordinate)
+            mapView.centerCoordinate = annotation.coordinate //move map to coordinates
+        }
     }
     
     
@@ -31,3 +50,4 @@ class PhotoAlbumMapViewController: UIViewController {
     }
     
 }
+

@@ -21,13 +21,13 @@ class LocationsMapViewController: UIViewController {
     
     //MARK:- Storyboard Connections
     //outlets
-    @IBOutlet weak var locationsMapView: MKMapView!
+    @IBOutlet weak var mapView: MKMapView!
     
     
     //actions
     @IBAction func locationsMapLongPressed(_ sender: Any) {
         let mapCoordinates = getMapCoordinatesFrom(longPressGestureRecognizer: sender as! UILongPressGestureRecognizer)
-        setLocationMapPointAnnotation(at: mapCoordinates)
+        mapView.setMapPointAnnotation(at: mapCoordinates)
     }
     
     //MARK:- View Lifecycle
@@ -39,7 +39,7 @@ class LocationsMapViewController: UIViewController {
     
     //MARK:- VC Setup
     private func configureVC() {
-        locationsMapView.delegate = self
+        mapView.delegate = self
     }
     
     
@@ -48,8 +48,7 @@ class LocationsMapViewController: UIViewController {
         guard let annotation = self.annotationTapped else { return }
         
         if segue.identifier == SegueIdentifier.segueToPhotoAlbumViewController {
-            let vc = segue.destination as! PhotoAlbumViewController
-            vc.annotation = annotation
+            PhotoAlbumViewController.annotation = annotation
         }
     }
 }
@@ -59,46 +58,15 @@ class LocationsMapViewController: UIViewController {
 extension LocationsMapViewController {
     
     private func getMapCoordinatesFrom(longPressGestureRecognizer touchPoint: UILongPressGestureRecognizer) -> CLLocationCoordinate2D {
-        let touchPoint: CGPoint = touchPoint.location(in: locationsMapView)
-        let mapCoordinates: CLLocationCoordinate2D = locationsMapView.convert(touchPoint, toCoordinateFrom: locationsMapView)
+        let touchPoint: CGPoint = touchPoint.location(in: mapView)
+        let mapCoordinates: CLLocationCoordinate2D = mapView.convert(touchPoint, toCoordinateFrom: mapView)
         return mapCoordinates
-    }
-    
-    
-    //once annotatioon is added to map view, delegate will add to map
-    private func setLocationMapPointAnnotation(at coordinates: CLLocationCoordinate2D) {
-        let annotation = MKPointAnnotation()
-        annotation.coordinate = coordinates
-        
-        //add annotation to map view
-        DispatchQueue.main.async {
-            self.locationsMapView.addAnnotation(annotation) //done on main thread so pins appear on view/map load
-        }
     }
 }
 
 
 //MARK:- MKMAPView Delegate
-extension LocationsMapViewController: MKMapViewDelegate  {
-
-    //cretaes and sets pin views on map when annotations added to map view
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        guard annotation is MKPointAnnotation else { return nil }
-
-        let reuseID = "pin"
-        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseID)
-
-        if pinView == nil {
-            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseID)
-            pinView!.canShowCallout = true
-        } else {
-            pinView!.annotation = annotation
-        }
-
-        return pinView
-    }
-    
-    
+extension LocationsMapViewController  {
     //track annotation view taps
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         
@@ -108,6 +76,4 @@ extension LocationsMapViewController: MKMapViewDelegate  {
         //trigger segue
         performSegue(withIdentifier: SegueIdentifier.segueToPhotoAlbumViewController, sender: self)
     }
-
-    
 }

@@ -22,6 +22,8 @@
 		2A63A9C924812645009D3AF2 /* VTNetworkController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A63A9C824812645009D3AF2 /* VTNetworkController.swift */; };
 		2A63A9CB24812662009D3AF2 /* VTDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A63A9CA24812662009D3AF2 /* VTDataController.swift */; };
 		2A6EAD64248370E80030D39F /* PhotoAlbumCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A6EAD63248370E80030D39F /* PhotoAlbumCollectionViewCell.swift */; };
+		2A6EAD66248378480030D39F /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A6EAD65248378480030D39F /* UIViewController+Extensions.swift */; };
+		2A6EAD6824837CA30030D39F /* MKMapView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A6EAD6724837CA30030D39F /* MKMapView+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +44,8 @@
 		2A63A9C824812645009D3AF2 /* VTNetworkController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VTNetworkController.swift; sourceTree = "<group>"; };
 		2A63A9CA24812662009D3AF2 /* VTDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VTDataController.swift; sourceTree = "<group>"; };
 		2A6EAD63248370E80030D39F /* PhotoAlbumCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumCollectionViewCell.swift; sourceTree = "<group>"; };
+		2A6EAD65248378480030D39F /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
+		2A6EAD6724837CA30030D39F /* MKMapView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKMapView+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +93,7 @@
 				2A50CAA1248098D500F9AC81 /* Model */,
 				2A50CA9E2480988800F9AC81 /* Views */,
 				2A50CAA2248098E600F9AC81 /* ViewControllers */,
+				2A6EAD65248378480030D39F /* UIViewController+Extensions.swift */,
 				2A50CA9F2480989600F9AC81 /* Assets */,
 				2A50CA98248097F800F9AC81 /* Info.plist */,
 			);
@@ -101,6 +106,7 @@
 				2A6EAD62248370770030D39F /* PhotoAlbumCollectionViewCell */,
 				2A50CA8D248097F400F9AC81 /* Main.storyboard */,
 				2A50CA95248097F800F9AC81 /* LaunchScreen.storyboard */,
+				2A6EAD6724837CA30030D39F /* MKMapView+Extensions.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -248,8 +254,10 @@
 			files = (
 				2A6EAD64248370E80030D39F /* PhotoAlbumCollectionViewCell.swift in Sources */,
 				2A50CAA42480A30E00F9AC81 /* LocationsMapViewController.swift in Sources */,
+				2A6EAD6824837CA30030D39F /* MKMapView+Extensions.swift in Sources */,
 				2A50CAAD2480D5BE00F9AC81 /* PhotoAlbumMapViewController.swift in Sources */,
 				2A089A3D2482550000E768C1 /* PhotosSearchResults.swift in Sources */,
+				2A6EAD66248378480030D39F /* UIViewController+Extensions.swift in Sources */,
 				2A089A40248260AC00E768C1 /* VTError.swift in Sources */,
 				2A63A9C924812645009D3AF2 /* VTNetworkController.swift in Sources */,
 				2A50CA92248097F400F9AC81 /* VirtualTourist.xcdatamodeld in Sources */,

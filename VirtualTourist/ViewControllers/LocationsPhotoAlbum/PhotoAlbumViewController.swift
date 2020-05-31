@@ -13,7 +13,7 @@ class PhotoAlbumViewController: UIViewController {
     
     //MARK:- Class Properties
     private let cellIdentifier = "PhotoCell"
-    var annotation: MKAnnotation!
+    static var annotation: MKAnnotation!
     
 
     //MARK:- Storyboard Connections
@@ -51,7 +51,7 @@ class PhotoAlbumViewController: UIViewController {
     
     
     private func performGetPhotos() {
-        guard let annotation = self.annotation else { return }
+        guard let annotation = PhotoAlbumViewController.annotation else { return }
         let lat = annotation.coordinate.latitude
         let lon = annotation.coordinate.latitude
         VTNetworkController.shared.getPhotos(for: (lat: lat, lon: lon)) { (success, error) in
