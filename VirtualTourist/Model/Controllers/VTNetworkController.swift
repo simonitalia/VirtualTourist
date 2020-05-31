@@ -117,8 +117,6 @@ class VTNetworkController {
             return
         }
         
-        print("EnpointUrl: \(url)") //to debug
-        
         let request = URLRequest(url: url)
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             

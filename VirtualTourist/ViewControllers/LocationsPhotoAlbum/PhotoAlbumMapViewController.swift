@@ -13,7 +13,8 @@ class PhotoAlbumMapViewController: UIViewController {
     
     //MARK: Class Properties
     private var annotation: MKAnnotation! {
-        return PhotoAlbumViewController.annotation
+        guard let annotation = PhotoAlbumViewController.annotation else { return nil }
+        return annotation
     }
     
     //MARK:- Storyboard Connections
@@ -36,10 +37,11 @@ class PhotoAlbumMapViewController: UIViewController {
     
     
     private func configureUI() {
-        if let annotation = self.annotation {
-            mapView.setMapPointAnnotation(at: annotation.coordinate)
-            mapView.centerCoordinate = annotation.coordinate //move map to coordinates
-        }
+        
+        //set annotation
+        guard let annotation = self.annotation else { return }
+        mapView.setMapPointAnnotation(at: annotation.coordinate)
+        mapView.centerCoordinate = annotation.coordinate //move map to coordinates
     }
     
     
@@ -48,6 +50,5 @@ class PhotoAlbumMapViewController: UIViewController {
         mapView.delegate = nil
         print("PhotoAlbumMapViewController viewWillDisappear called")
     }
-    
 }
 
