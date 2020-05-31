@@ -13,7 +13,7 @@ class VTNetworkController {
     //accessible class properties
     static var shared = VTNetworkController()
     
-    var photos = [PhotosSearchResults]()
+    var photos: PhotosSearchResults!
     
     //private class propeeties
     private enum httpMethod: String {
@@ -123,14 +123,16 @@ class VTNetworkController {
         let request = URLRequest(url: url)
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             
-            //handle general (eg: network) error
+            //handle general error (eg: network error)
             if let error = error {
+                print("Request Error! \(error.localizedDescription).")
                 completion(nil, error.localizedDescription)
                 return
             }
             
             //bad http response
             guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200  else {
+                print("httpResponse Error! \(error?.localizedDescription ?? "unknown error").")
                 completion(nil, error?.localizedDescription)
                 return
             }
@@ -141,30 +143,55 @@ class VTNetworkController {
                 return
             }
             
-            //handle successful response
+            //handle successful data response
             do {
                 let decoder = JSONDecoder()
-                
-                 //strip results of bad chars
-                let prefix = "jsonFlickrApi("
-                let suffix = ")"
-                let start = prefix.count
-                let end = data.count - suffix.count
-                let range = start..<end
-                let newData = data.subdata(in: range)
+                let newData = self.newDataObject(from: data)
                 
                 //decode data
-                let _ = try decoder.decode(PhotosSearchResults.self, from: newData)
-                print("Sucess! Photos for location successfully fetched")
+                let results = try decoder.decode(PhotosSearchResults.self, from: newData)
+                VTNetworkController.shared.photos = results
+                print("Sucess! Photos for location successfully fetched.")
                 completion(true, nil)
+                return
                 
             } catch {
-                print("Error! \(error.localizedDescription)")
+                //error response from server
+                do {
+                    let decoder = JSONDecoder()
+                    let newData = self.newDataObject(from: data)
+                    
+                    //decode data
+                    let serverError = try decoder.decode(VTError.self, from: newData)
+                    print("Server Error! Server reponded with error message: \(serverError.message)")
+                    completion(nil, serverError.message)
+                    return
+                    
+                } catch {
+                    //Error results decoding error
+                    print("Decoding Error! Failed to decode server error response: \(error.localizedDescription).")
+                    completion(nil, error.localizedDescription)
+                }
+                
+                //Photos reults decoding error
+                print("Decoding Error! Failed to decode photos results: \(error.localizedDescription).")
                 completion(nil, error.localizedDescription)
             }
         }
         
         task.resume()
+    }
+    
+    
+    private func newDataObject(from data: Data) -> Data {
+        
+        //remove unneccessary characters from response
+        let prefix = "jsonFlickrApi("
+        let suffix = ")"
+        let start = prefix.count
+        let end = data.count - suffix.count
+        let range = start..<end
+        return data.subdata(in: range)
     }
     
     
