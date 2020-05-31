@@ -12,7 +12,7 @@ class VTNetworkController {
     
     //accessible class properties
     static var shared = VTNetworkController()
-    var photos: PhotosSearchResults!
+    var photos = [Photo]()
     
     //private class propeeties
     private enum httpMethod: String {
@@ -147,7 +147,7 @@ class VTNetworkController {
                 
                 //decode data
                 let results = try decoder.decode(PhotosSearchResults.self, from: newData)
-                VTNetworkController.shared.photos = results
+                VTNetworkController.shared.photos = results.photos.photos
                 print("Sucess! Photos for location successfully fetched.")
                 completion(true, nil)
                 return

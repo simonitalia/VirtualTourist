@@ -15,6 +15,10 @@ class PhotoAlbumViewController: UIViewController {
     private let cellIdentifier = "PhotoCell"
     static var annotation: MKAnnotation!
     
+    private var photos: [Photo] {
+        return VTNetworkController.shared.photos
+    }
+    
 
     //MARK:- Storyboard Connections
     //outlets
@@ -36,14 +40,18 @@ class PhotoAlbumViewController: UIViewController {
     
     
     //MARK:- ViewController Setup
-    func configureVC() {
+    private func configureVC() {
         configureCollectionView()
     }
     
     
-    func configureCollectionView() {
+    private func configureCollectionView() {
         // Register cell classes
         self.photoAlbumCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
+        
+        //setup layout
+        let layout = configureCompositionalLayout()
+        photoAlbumCollectionView.setCollectionViewLayout(layout, animated: false)
         
         //trigger fetch of photos
         performGetPhotos()
@@ -95,37 +103,45 @@ extension PhotoAlbumViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
     
     }
-    
-    
 }
 
 
 //MARK: CollectionView Data Source
 extension PhotoAlbumViewController: UICollectionViewDataSource {
-    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 0
+        return photos.count
     }
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = UICollectionViewCell()
-        return cell
+//        let cell = UICollectionViewCell() as! PhotoAlbumCollectionViewCell
+//        return cell
+        return UICollectionViewCell()
     }
-    
 }
 
 
-// MARK: - Navigation
+// MARK:- Helpers
 extension PhotoAlbumViewController {
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
+    
+    //collection view layout setup
+    private func configureCompositionalLayout() -> UICollectionViewLayout {
+        let layout = UICollectionViewCompositionalLayout { (section: Int, environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+            let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: NSCollectionLayoutDimension.fractionalWidth(1.0), heightDimension: NSCollectionLayoutDimension.absolute(105)))
+            item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),  heightDimension: .absolute(100))
+            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 3)
+            let section = NSCollectionLayoutSection(group: group)
+            section.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
+            return section
+        }
+        
+        return layout
     }
 }
-
