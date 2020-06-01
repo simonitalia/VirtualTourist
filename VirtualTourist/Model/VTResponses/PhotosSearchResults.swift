@@ -10,17 +10,17 @@ import Foundation
 
 
 struct PhotosSearchResults: Codable {
-    let photos: Photos
+    let photosResponse: PhotosResponse
     let status: String
     
     enum CodingKeys: String, CodingKey {
-        case photos
+        case photosResponse = "photos"
         case status = "stat"
     }
 }
 
 
-struct Photos: Codable {
+struct PhotosResponse: Codable {
     let page: Int
     let pages: Int
     let perPage: Int

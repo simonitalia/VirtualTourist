@@ -44,6 +44,7 @@ class VTNetworkController {
             static let text = "text"
             static let latitude = "lat"
             static let longitude = "lon"
+            static let page = "page"
             static let photosContentType = (key: "content_type", value: "1")
             static let responseFormatJSON = (key: "format", value: "json")
             static let imageUrllOriginal = (key: "extras", value: "url_o")
@@ -54,7 +55,7 @@ class VTNetworkController {
         
         //search method
         case searchBy(query: String)
-        case searchByLocation(latitude: Double, longitude: Double)
+        case searchByLocation(latitude: Double, longitude: Double, page: Int)
     
         //compute endpoint url
         var url: URL? {
@@ -72,13 +73,14 @@ class VTNetworkController {
                 
                 return components.url
             
-            case .searchByLocation(let latitude, let longitude):
+            case .searchByLocation(let latitude, let longitude, let page):
                 var components = self.getURLComponents(appendingWith: URLPath.rest)
                 components.queryItems = [
                     URLQueryItem(name: QueryParameter.method, value: APIMethod.Photos.search),
                     URLQueryItem(name: QueryParameter.apiKey.key, value: QueryParameter.apiKey.value),
                     URLQueryItem(name: QueryParameter.latitude, value: "\(latitude)"),
                     URLQueryItem(name: QueryParameter.longitude, value: "\(longitude)"),
+                    URLQueryItem(name: QueryParameter.page, value: "\(page)"),
                     URLQueryItem(name: QueryParameter.photosContentType.key, value: QueryParameter.photosContentType.value),
                     URLQueryItem(name: QueryParameter.responseFormatJSON.key, value: QueryParameter.responseFormatJSON.value),
                     URLQueryItem(name: QueryParameter.imageUrllMedium.key, value: QueryParameter.imageUrllMedium.value) //get medium size image
@@ -110,9 +112,9 @@ class VTNetworkController {
     
     
     //search by lat / lon coordinates
-    func getPhotos(for location: (lat: Double, lon: Double), completion: @escaping (Result<PhotosSearchResults, VTError>) -> Void) {
+    func getPhotos(for location: (lat: Double, lon: Double), page: Int=1, completion: @escaping (Result<PhotosSearchResults, VTError>) -> Void) {
         
-        guard let url = Endpoint.searchByLocation(latitude: location.lat, longitude: location.lon).url else {
+        guard let url = Endpoint.searchByLocation(latitude: location.lat, longitude: location.lon, page: page).url else {
             print("Internal Error! Endpoint url could not be constructed.")
             return
         }

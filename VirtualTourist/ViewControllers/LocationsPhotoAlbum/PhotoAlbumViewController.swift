@@ -18,7 +18,7 @@ class PhotoAlbumViewController: UIViewController {
     private var searchResults: PhotosSearchResults!
     private var photos: [Photo] {
         guard let results = searchResults else { return [] }
-        return results.photos.photos
+        return results.photosResponse.photos
     }
         
     
@@ -101,8 +101,8 @@ class PhotoAlbumViewController: UIViewController {
             
             switch result {
             case .success(let searchResults):
-//                self.photos = searchResults.photos.photos
                 self.searchResults = searchResults
+                print("Photos page: \(searchResults.photosResponse.page) of \(searchResults.photosResponse.pages)")
                 self.configureUI()
                 
             case .failure(let error):
