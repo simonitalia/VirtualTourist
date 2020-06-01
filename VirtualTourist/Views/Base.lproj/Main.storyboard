@@ -109,6 +109,9 @@
                                     <outlet property="delegate" destination="tIO-gR-9FY" id="C69-FJ-FGx"/>
                                 </connections>
                             </collectionView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="KaZ-vE-cLg">
+                                <rect key="frame" x="141.5" y="321.5" width="37" height="37"/>
+                            </activityIndicatorView>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JUL-4r-Xi8">
                                 <rect key="frame" x="0.0" y="436" width="320" height="44"/>
                                 <items>
@@ -129,16 +132,19 @@
                             <constraint firstItem="JUL-4r-Xi8" firstAttribute="bottom" secondItem="PTr-Sk-kLY" secondAttribute="bottom" id="Jee-wv-h9P"/>
                             <constraint firstItem="ykv-2f-1KI" firstAttribute="leading" secondItem="PTr-Sk-kLY" secondAttribute="leading" id="N9f-bs-XCS"/>
                             <constraint firstItem="ykv-2f-1KI" firstAttribute="top" secondItem="JyY-jU-azx" secondAttribute="bottom" id="P3K-UN-Sch"/>
+                            <constraint firstItem="KaZ-vE-cLg" firstAttribute="centerY" secondItem="ykv-2f-1KI" secondAttribute="centerY" id="RQh-1C-xUM"/>
                             <constraint firstItem="JyY-jU-azx" firstAttribute="trailing" secondItem="PTr-Sk-kLY" secondAttribute="trailing" id="STW-ho-sgf"/>
                             <constraint firstItem="JUL-4r-Xi8" firstAttribute="leading" secondItem="PTr-Sk-kLY" secondAttribute="leading" id="ZZi-xA-uwf"/>
                             <constraint firstItem="PTr-Sk-kLY" firstAttribute="trailing" secondItem="ykv-2f-1KI" secondAttribute="trailing" id="a2O-uo-FVN"/>
                             <constraint firstItem="JUL-4r-Xi8" firstAttribute="top" secondItem="ykv-2f-1KI" secondAttribute="bottom" id="j9m-Qa-YVD"/>
                             <constraint firstItem="JUL-4r-Xi8" firstAttribute="trailing" secondItem="PTr-Sk-kLY" secondAttribute="trailing" id="tV8-VG-r4C"/>
+                            <constraint firstItem="KaZ-vE-cLg" firstAttribute="centerX" secondItem="ykv-2f-1KI" secondAttribute="centerX" id="tVu-lt-ahX"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="PTr-Sk-kLY"/>
                     </view>
                     <navigationItem key="navigationItem" id="HPK-Sb-PZ4"/>
                     <connections>
+                        <outlet property="collectionViewActivityIndicator" destination="KaZ-vE-cLg" id="cft-8c-Ac6"/>
                         <outlet property="newCollectionButton" destination="YKZ-BR-97N" id="vfz-R2-4Ne"/>
                         <outlet property="photoAlbumCollectionView" destination="ykv-2f-1KI" id="AUc-dp-frI"/>
                     </connections>

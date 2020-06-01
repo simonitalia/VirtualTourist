@@ -22,6 +22,7 @@ class PhotoAlbumViewController: UIViewController {
     //outlets
     @IBOutlet weak var photoAlbumCollectionView: UICollectionView!
     @IBOutlet weak var newCollectionButton: UIBarButtonItem!
+    @IBOutlet weak var collectionViewActivityIndicator: UIActivityIndicatorView!
     
 
     //actions
@@ -39,8 +40,8 @@ class PhotoAlbumViewController: UIViewController {
     
     //MARK:- ViewController Setup
     private func configureVC() {
-        photoAlbumCollectionView.delegate = self
-        photoAlbumCollectionView.dataSource = self
+//        photoAlbumCollectionView.delegate = self
+//        photoAlbumCollectionView.dataSource = self
         configureCollectionView()
     }
     
@@ -65,11 +66,18 @@ class PhotoAlbumViewController: UIViewController {
     private func performGetPhotos() {
         guard photos.isEmpty else { return }
         guard let annotation = PhotoAlbumViewController.annotation else { return }
+        
+        //show / start animating activity indicator
+        collectionViewActivityIndicator(animate: true)
+        
         let lat = annotation.coordinate.latitude
         let lon = annotation.coordinate.longitude
         
         VTNetworkController.shared.getPhotos(for: (lat: lat, lon: lon)) { [weak self] result in
             guard let self = self else { return }
+            
+            //stop / hide animating activity indicator
+            self.collectionViewActivityIndicator(animate: false)
             
             switch result {
             case .success(let searchResults):
@@ -161,5 +169,18 @@ extension PhotoAlbumViewController {
         }
         
         return layout
+    }
+    
+    
+    //set activity indicator view state
+    private func collectionViewActivityIndicator(animate: Bool) {
+        
+        DispatchQueue.main.async {
+            //unhide / hide viw
+            animate ? (self.collectionViewActivityIndicator.isHidden = !animate) : (self.collectionViewActivityIndicator.isHidden = !animate)
+            
+            //stop / start animation
+            animate ? self.collectionViewActivityIndicator.startAnimating() : self.collectionViewActivityIndicator.stopAnimating()
+        }
     }
 }
