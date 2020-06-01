@@ -38,7 +38,7 @@ class PhotoAlbumViewController: UIViewController {
     @IBAction func newCollectionButtonTapped(_ sender: Any) {
         guard searchResults != nil else { return }
         guard searchResults.photosResponse.pages > 1 else {
-            self.presentUserAlert(with: "No More Photos", and: "There are no other photos for this location.")
+            self.presentUserAlert(title: "No More Photos", message: "There are no other photos for this location.")
             return
         }
         
@@ -115,7 +115,7 @@ class PhotoAlbumViewController: UIViewController {
                 self.configureUI()
                 
             case .failure(let error):
-                self.presentUserAlert(with: "Something went wrong", and: error.rawValue)
+                self.presentUserAlert(title: "Something went wrong", message: error.rawValue)
             }
         }
     }
@@ -221,5 +221,4 @@ extension PhotoAlbumViewController {
 
         return randomPage
     }
-    
 }

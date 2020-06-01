@@ -30,7 +30,7 @@ extension UIViewController: MKMapViewDelegate  {
     }
     
     
-    func presentUserAlert(with title: String, and message: String) {
+    func presentUserAlert(title: String, message: String) {
         DispatchQueue.main.async {
             let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
             ac.addAction(UIAlertAction(title: "OK", style: .default))
