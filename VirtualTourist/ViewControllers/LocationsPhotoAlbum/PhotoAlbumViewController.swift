@@ -23,6 +23,7 @@ class PhotoAlbumViewController: UIViewController {
     @IBOutlet weak var photoAlbumCollectionView: UICollectionView!
     @IBOutlet weak var newCollectionButton: UIBarButtonItem!
     @IBOutlet weak var collectionViewActivityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var emptyStateView: UIView!
     
 
     //actions
@@ -38,6 +39,14 @@ class PhotoAlbumViewController: UIViewController {
     }
     
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if !emptyStateView.isHidden {
+            self.setEmptyStateView(false)
+        }
+    }
+    
+    
     //MARK:- ViewController Setup
     private func configureVC() {
         photoAlbumCollectionView.delegate = self
@@ -48,7 +57,16 @@ class PhotoAlbumViewController: UIViewController {
     
     private func configureUI() {
         DispatchQueue.main.async {
-            self.photoAlbumCollectionView.reloadData()
+            
+            //if photos
+            switch self.photos.isEmpty {
+            case false:
+                self.photoAlbumCollectionView.reloadData()
+            
+                //if no photos, show empty state view
+            case true:
+                self.setEmptyStateView(true)
+            }
         }
     }
     
@@ -184,4 +202,11 @@ extension PhotoAlbumViewController {
             animate ? self.collectionViewActivityIndicator.startAnimating() : self.collectionViewActivityIndicator.stopAnimating()
         }
     }
+    
+    
+    private func setEmptyStateView(_ display: Bool) {
+        emptyStateView.isHidden = !display
+        photoAlbumCollectionView.isHidden = display
+    }
+    
 }

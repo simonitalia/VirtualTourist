@@ -109,9 +109,9 @@
 		2A50CA9E2480988800F9AC81 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				2A6EAD62248370770030D39F /* PhotoAlbumCollectionViewCell */,
 				2A50CA8D248097F400F9AC81 /* Main.storyboard */,
 				2A50CA95248097F800F9AC81 /* LaunchScreen.storyboard */,
+				2A6EAD63248370E80030D39F /* PhotoAlbumCollectionViewCell.swift */,
 				2A6EAD6724837CA30030D39F /* MKMapView+Extensions.swift */,
 			);
 			path = Views;
@@ -178,14 +178,6 @@
 				2A63A9CA24812662009D3AF2 /* VTDataController.swift */,
 			);
 			path = Controllers;
-			sourceTree = "<group>";
-		};
-		2A6EAD62248370770030D39F /* PhotoAlbumCollectionViewCell */ = {
-			isa = PBXGroup;
-			children = (
-				2A6EAD63248370E80030D39F /* PhotoAlbumCollectionViewCell.swift */,
-			);
-			path = PhotoAlbumCollectionViewCell;
 			sourceTree = "<group>";
 		};
 		2A6EAD692483AC6C0030D39F /* Images */ = {
