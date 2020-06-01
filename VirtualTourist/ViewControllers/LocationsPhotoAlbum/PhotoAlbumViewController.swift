@@ -32,7 +32,11 @@ class PhotoAlbumViewController: UIViewController {
 
     //actions
     @IBAction func newCollectionButtonTapped(_ sender: Any) {
-        guard searchResults.photosResponse.pages > 1 else { return }
+        guard searchResults.photosResponse.pages > 1 else {
+            self.presentUserAlert(with: "No More Photos", and: "There are no other photos for this location.")
+            return
+        }
+        
         performGetPhotos(forPage: getRandomPage())
     }
     
@@ -106,9 +110,7 @@ class PhotoAlbumViewController: UIViewController {
                 self.configureUI()
                 
             case .failure(let error):
-                let ac = UIAlertController(title: "Something went wrong", message: error.rawValue, preferredStyle: .alert)
-                ac.addAction(UIAlertAction(title: "OK", style: .default))
-                self.present(ac, animated: true)
+                self.presentUserAlert(with: "Something went wrong", and: error.rawValue)
             }
         }
     }

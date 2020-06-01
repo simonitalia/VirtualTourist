@@ -28,4 +28,14 @@ extension UIViewController: MKMapViewDelegate  {
 
         return pinView
     }
+    
+    
+    func presentUserAlert(with title: String, and message: String) {
+        DispatchQueue.main.async {
+            let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .default))
+            self.present(ac, animated: true)
+        }
+    }
+    
 }
