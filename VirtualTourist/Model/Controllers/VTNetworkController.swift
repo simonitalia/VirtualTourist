@@ -112,7 +112,7 @@ class VTNetworkController {
     
     
     //search by lat / lon coordinates
-    func getPhotos(for location: (lat: Double, lon: Double), page: Int=1, completion: @escaping (Result<PhotosSearchResults, VTError>) -> Void) {
+    func getPhotos(for location: (lat: Double, lon: Double), page: Int, completion: @escaping (Result<PhotosSearchResults, VTError>) -> Void) {
         
         guard let url = Endpoint.searchByLocation(latitude: location.lat, longitude: location.lon, page: page).url else {
             print("Internal Error! Endpoint url could not be constructed.")

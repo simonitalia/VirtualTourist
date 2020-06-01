@@ -32,7 +32,8 @@ class PhotoAlbumViewController: UIViewController {
 
     //actions
     @IBAction func newCollectionButtonTapped(_ sender: Any) {
-        
+        guard searchResults.photosResponse.pages > 1 else { return }
+        performGetPhotos(forPage: getRandomPage())
     }
     
     
@@ -83,8 +84,7 @@ class PhotoAlbumViewController: UIViewController {
     }
     
     
-    private func performGetPhotos() {
-        guard photos.isEmpty else { return }
+    private func performGetPhotos(forPage number: Int=1) {
         guard let annotation = PhotoAlbumViewController.annotation else { return }
         
         //show / start animating activity indicator
@@ -93,7 +93,7 @@ class PhotoAlbumViewController: UIViewController {
         let lat = annotation.coordinate.latitude
         let lon = annotation.coordinate.longitude
         
-        VTNetworkController.shared.getPhotos(for: (lat: lat, lon: lon)) { [weak self] result in
+        VTNetworkController.shared.getPhotos(for: (lat: lat, lon: lon), page: number) { [weak self] result in
             guard let self = self else { return }
             
             //stop / hide animating activity indicator
@@ -214,6 +214,19 @@ extension PhotoAlbumViewController {
             self.emptyStateView.isHidden = !display
             self.photoAlbumCollectionView.isHidden = display
         }
+    }
+    
+    
+    private func getRandomPage() -> Int {
+        let currentPage = searchResults.photosResponse.page
+        let pageRange = 1...searchResults.photosResponse.pages
+        var randomPage = Int.random(in: pageRange)
+        
+        while randomPage == currentPage {
+            randomPage = getRandomPage()
+        }
+
+        return randomPage
     }
     
 }
