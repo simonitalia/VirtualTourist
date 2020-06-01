@@ -15,21 +15,7 @@ class PhotoAlbumCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var photoActivityIndicator: UIActivityIndicatorView!
     
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        if let image = UIImage(named: "camera") { //default image
-            setPhotoImageView(with: image)
-        }
-    }
-    
-    
-    //required init
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    
+
     func setPhotoImageView(with image: UIImage) {
         photoImageView.image = image
     }
@@ -41,5 +27,27 @@ class PhotoAlbumCollectionViewCell: UICollectionViewCell {
         
         //stop / start animation
         isAnimating ? photoActivityIndicator.startAnimating() : photoActivityIndicator.stopAnimating()
+    }
+    
+    
+    func performGetPhotoImage(from urlString: String) -> UIImage? {
+        
+        var cellImage = UIImage()
+            
+            VTNetworkController.shared.getPhotoImage(from: urlString) { (image) in
+                
+                //set cellImage to downloaded image
+                if let image = image {
+                    cellImage = image
+
+                //set cellImage to default image
+                } else {
+                    if let image = UIImage(named: "no-image-outline") {
+                        cellImage = image
+                    }
+                }
+            }
+        
+        return cellImage
     }
 }

@@ -8,11 +8,11 @@
 
 import UIKit
 
+
 class VTNetworkController {
     
     //accessible class properties
     static var shared = VTNetworkController()
-    var photos = [Photo]()
     
     //private class propeeties
     private enum httpMethod: String {
@@ -110,7 +110,7 @@ class VTNetworkController {
     
     
     //search by lat / lon coordinates
-    func getPhotos(for location: (lat: Double, lon: Double), completion: @escaping (Bool?, String?) -> Void) {
+    func getPhotos(for location: (lat: Double, lon: Double), completion: @escaping (Result<PhotosSearchResults, VTError>) -> Void) {
         
         guard let url = Endpoint.searchByLocation(latitude: location.lat, longitude: location.lon).url else {
             print("Internal Error! Endpoint url could not be constructed.")
@@ -123,20 +123,20 @@ class VTNetworkController {
             //handle general error (eg: network error)
             if let error = error {
                 print("Request Error! \(error.localizedDescription).")
-                completion(nil, error.localizedDescription)
+                completion(.failure(.requestError))
                 return
             }
             
             //bad http response
             guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200  else {
                 print("httpResponse Error! \(error?.localizedDescription ?? "unknown error").")
-                completion(nil, error?.localizedDescription)
+                completion(.failure(.badHTTResponse))
                 return
             }
             
             //no data returned
             guard let data = data else {
-                completion(nil, error?.localizedDescription)
+                completion(.failure(.invalidData))
                 return
             }
             
@@ -146,10 +146,9 @@ class VTNetworkController {
                 let newData = self.newDataObject(from: data)
                 
                 //decode data
-                let results = try decoder.decode(PhotosSearchResults.self, from: newData)
-                VTNetworkController.shared.photos = results.photos.photos
+                let searchResults = try decoder.decode(PhotosSearchResults.self, from: newData)
                 print("Sucess! Photos for location successfully fetched.")
-                completion(true, nil)
+                completion(.success(searchResults))
                 return
                 
             } catch {
@@ -158,21 +157,19 @@ class VTNetworkController {
                     let decoder = JSONDecoder()
                     let newData = self.newDataObject(from: data)
                     
-                    //decode data
-                    let serverError = try decoder.decode(VTError.self, from: newData)
+                    //decode error response data
+                    let serverError = try decoder.decode(VTError.VTServerErrorResponse.self, from: newData)
                     print("Server Error! Server reponded with error message: \(serverError.message)")
-                    completion(nil, serverError.message)
-                    return
+                    if let error = VTError(rawValue: serverError.message) {
+                        completion(.failure(error))
+                        return
+                    }
                     
                 } catch {
-                    //Error results decoding error
+                    //error results decoding error
                     print("Decoding Error! Failed to decode server error response: \(error.localizedDescription).")
-                    completion(nil, error.localizedDescription)
+                    completion(.failure(.jsonDecodingError))
                 }
-                
-                //Photos reults decoding error
-                print("Decoding Error! Failed to decode photos results: \(error.localizedDescription).")
-                completion(nil, error.localizedDescription)
             }
         }
         
@@ -192,30 +189,31 @@ class VTNetworkController {
     }
     
     
-    func getPhotoImage(from urlString: String, completion: @escaping (UIImage?, Error?) -> Void) {
+    func getPhotoImage(from urlString: String, completion: @escaping (UIImage?) -> Void) {
         guard let url = URL(string: urlString) else { return }
 
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
 
             //check for error
             if let error = error {
-                completion(nil, error)
+                print("Error fetching image: \(error.localizedDescription) ")
+                completion(nil)
                 return
             }
 
             //check for server response code 200, else bail out
             guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
-                completion(nil, error)
+                completion(nil)
                 return
             }
 
             if let data = data {
                 guard let image = UIImage(data: data) else {
-                    completion(nil, error)
+                    completion(nil)
                     return
                 }
                 
-                completion(image, nil)
+                completion(image)
             }
         }
 

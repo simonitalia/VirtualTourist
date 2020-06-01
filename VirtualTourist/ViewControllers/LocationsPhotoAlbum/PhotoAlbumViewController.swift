@@ -15,11 +15,9 @@ class PhotoAlbumViewController: UIViewController {
     private let cellIdentifier = "PhotoCell"
     static var annotation: MKAnnotation!
     
-    private var photos: [Photo] {
-        return VTNetworkController.shared.photos
-    }
+    private var photos = [Photo]()
     
-
+    
     //MARK:- Storyboard Connections
     //outlets
     @IBOutlet weak var photoAlbumCollectionView: UICollectionView!
@@ -41,14 +39,20 @@ class PhotoAlbumViewController: UIViewController {
     
     //MARK:- ViewController Setup
     private func configureVC() {
+        photoAlbumCollectionView.delegate = self
+        photoAlbumCollectionView.dataSource = self
         configureCollectionView()
     }
     
     
+    private func configureUI() {
+        DispatchQueue.main.async {
+            self.photoAlbumCollectionView.reloadData()
+        }
+    }
+    
+    
     private func configureCollectionView() {
-        // Register cell classes
-        self.photoAlbumCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
-        
         //setup layout
         let layout = configureCompositionalLayout()
         photoAlbumCollectionView.setCollectionViewLayout(layout, animated: false)
@@ -59,17 +63,21 @@ class PhotoAlbumViewController: UIViewController {
     
     
     private func performGetPhotos() {
+        guard photos.isEmpty else { return }
         guard let annotation = PhotoAlbumViewController.annotation else { return }
         let lat = annotation.coordinate.latitude
-        let lon = annotation.coordinate.latitude
-        VTNetworkController.shared.getPhotos(for: (lat: lat, lon: lon)) { (success, error) in
+        let lon = annotation.coordinate.longitude
+        
+        VTNetworkController.shared.getPhotos(for: (lat: lat, lon: lon)) { [weak self] result in
+            guard let self = self else { return }
             
-            if let _ = success {
+            switch result {
+            case .success(let searchResults):
+                self.photos = searchResults.photos.photos
+                self.configureUI()
                 
-            }
-            
-            if let _ = error {
-                
+            case .failure(let error):
+                print(error.rawValue)
             }
         }
     }
@@ -119,10 +127,20 @@ extension PhotoAlbumViewController: UICollectionViewDataSource {
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+
+        //get photo object
+        let photo = photos[indexPath.row]
         
-//        let cell = UICollectionViewCell() as! PhotoAlbumCollectionViewCell
-//        return cell
-        return UICollectionViewCell()
+        //configure cell
+        let cell = photoAlbumCollectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as! PhotoAlbumCollectionViewCell
+        
+        //fetch image and set to cell
+        let imageURL = photo.imageURL
+        if let image = cell.performGetPhotoImage(from: imageURL) {
+            cell.photoImageView.image = image
+        }
+        
+        return cell
     }
 }
 

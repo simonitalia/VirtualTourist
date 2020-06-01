@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2A089A3D2482550000E768C1 /* PhotosSearchResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A089A3C2482550000E768C1 /* PhotosSearchResults.swift */; };
-		2A089A40248260AC00E768C1 /* VTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A089A3F248260AC00E768C1 /* VTError.swift */; };
+		2A089A40248260AC00E768C1 /* VTServerErrorResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A089A3F248260AC00E768C1 /* VTServerErrorResponse.swift */; };
 		2A50CA88248097F400F9AC81 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A50CA87248097F400F9AC81 /* AppDelegate.swift */; };
 		2A50CA8A248097F400F9AC81 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A50CA89248097F400F9AC81 /* SceneDelegate.swift */; };
 		2A50CA8F248097F400F9AC81 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2A50CA8D248097F400F9AC81 /* Main.storyboard */; };
@@ -24,11 +24,14 @@
 		2A6EAD64248370E80030D39F /* PhotoAlbumCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A6EAD63248370E80030D39F /* PhotoAlbumCollectionViewCell.swift */; };
 		2A6EAD66248378480030D39F /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A6EAD65248378480030D39F /* UIViewController+Extensions.swift */; };
 		2A6EAD6824837CA30030D39F /* MKMapView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A6EAD6724837CA30030D39F /* MKMapView+Extensions.swift */; };
+		2A6EAD6D2483ACD00030D39F /* VirtualTouristIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A6EAD6C2483ACD00030D39F /* VirtualTouristIcon.png */; };
+		2A6EAD772483BC0D0030D39F /* camera-outline.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A6EAD762483BC0D0030D39F /* camera-outline.png */; };
+		2A6EAD7B2483BCAA0030D39F /* no-image-outline.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A6EAD7A2483BCAA0030D39F /* no-image-outline.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2A089A3C2482550000E768C1 /* PhotosSearchResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosSearchResults.swift; sourceTree = "<group>"; };
-		2A089A3F248260AC00E768C1 /* VTError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VTError.swift; sourceTree = "<group>"; };
+		2A089A3F248260AC00E768C1 /* VTServerErrorResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VTServerErrorResponse.swift; sourceTree = "<group>"; };
 		2A50CA84248097F400F9AC81 /* VirtualTourist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirtualTourist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A50CA87248097F400F9AC81 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2A50CA89248097F400F9AC81 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -46,6 +49,9 @@
 		2A6EAD63248370E80030D39F /* PhotoAlbumCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumCollectionViewCell.swift; sourceTree = "<group>"; };
 		2A6EAD65248378480030D39F /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
 		2A6EAD6724837CA30030D39F /* MKMapView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKMapView+Extensions.swift"; sourceTree = "<group>"; };
+		2A6EAD6C2483ACD00030D39F /* VirtualTouristIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = VirtualTouristIcon.png; sourceTree = "<group>"; };
+		2A6EAD762483BC0D0030D39F /* camera-outline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera-outline.png"; sourceTree = "<group>"; };
+		2A6EAD7A2483BCAA0030D39F /* no-image-outline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "no-image-outline.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,7 +70,7 @@
 			isa = PBXGroup;
 			children = (
 				2A089A3C2482550000E768C1 /* PhotosSearchResults.swift */,
-				2A089A3F248260AC00E768C1 /* VTError.swift */,
+				2A089A3F248260AC00E768C1 /* VTServerErrorResponse.swift */,
 			);
 			path = VTResponses;
 			sourceTree = "<group>";
@@ -114,6 +120,7 @@
 		2A50CA9F2480989600F9AC81 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				2A6EAD692483AC6C0030D39F /* Images */,
 				2A50CA93248097F800F9AC81 /* Assets.xcassets */,
 			);
 			path = Assets;
@@ -181,6 +188,16 @@
 			path = PhotoAlbumCollectionViewCell;
 			sourceTree = "<group>";
 		};
+		2A6EAD692483AC6C0030D39F /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				2A6EAD762483BC0D0030D39F /* camera-outline.png */,
+				2A6EAD7A2483BCAA0030D39F /* no-image-outline.png */,
+				2A6EAD6C2483ACD00030D39F /* VirtualTouristIcon.png */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -241,6 +258,9 @@
 			files = (
 				2A50CA97248097F800F9AC81 /* LaunchScreen.storyboard in Resources */,
 				2A50CA94248097F800F9AC81 /* Assets.xcassets in Resources */,
+				2A6EAD7B2483BCAA0030D39F /* no-image-outline.png in Resources */,
+				2A6EAD772483BC0D0030D39F /* camera-outline.png in Resources */,
+				2A6EAD6D2483ACD00030D39F /* VirtualTouristIcon.png in Resources */,
 				2A50CA8F248097F400F9AC81 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -258,7 +278,7 @@
 				2A50CAAD2480D5BE00F9AC81 /* PhotoAlbumMapViewController.swift in Sources */,
 				2A089A3D2482550000E768C1 /* PhotosSearchResults.swift in Sources */,
 				2A6EAD66248378480030D39F /* UIViewController+Extensions.swift in Sources */,
-				2A089A40248260AC00E768C1 /* VTError.swift in Sources */,
+				2A089A40248260AC00E768C1 /* VTServerErrorResponse.swift in Sources */,
 				2A63A9C924812645009D3AF2 /* VTNetworkController.swift in Sources */,
 				2A50CA92248097F400F9AC81 /* VirtualTourist.xcdatamodeld in Sources */,
 				2A50CA88248097F400F9AC81 /* AppDelegate.swift in Sources */,
