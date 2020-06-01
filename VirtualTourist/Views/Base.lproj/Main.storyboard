@@ -84,7 +84,6 @@
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="camera-outline.png" translatesAutoresizingMaskIntoConstraints="NO" id="r5d-n5-bxn">
                                                     <rect key="frame" x="0.0" y="0.0" width="48" height="48"/>
-                                                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </imageView>
                                                 <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="qkd-dh-mcl">
                                                     <rect key="frame" x="14" y="14" width="20" height="20"/>

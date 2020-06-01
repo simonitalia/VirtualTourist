@@ -21,20 +21,30 @@ class PhotoAlbumCollectionViewCell: UICollectionViewCell {
     }
     
     
-    func photoActivityIndicator(state isAnimating: Bool) {
-        //unhide / hide viw
-        isAnimating ? (photoActivityIndicator.isHidden = !isAnimating) : (photoActivityIndicator.isHidden = !isAnimating)
+    private func photoActivityIndicator(animate: Bool) {
         
-        //stop / start animation
-        isAnimating ? photoActivityIndicator.startAnimating() : photoActivityIndicator.stopAnimating()
+        DispatchQueue.main.async {
+            //unhide / hide viw
+            animate ? (self.photoActivityIndicator.isHidden = !animate) : (self.photoActivityIndicator.isHidden = !animate)
+            
+            //stop / start animation
+            animate ? self.photoActivityIndicator.startAnimating() : self.photoActivityIndicator.stopAnimating()
+        }
     }
     
     
     func performGetPhotoImage(from urlString: String) -> UIImage? {
         
+        //start / show activity indicator
+        photoActivityIndicator(animate: true)
+        
         var cellImage = UIImage()
             
-            VTNetworkController.shared.getPhotoImage(from: urlString) { (image) in
+            VTNetworkController.shared.getPhotoImage(from: urlString) { [weak self] (image) in
+                guard let self = self else { return }
+                
+                //stop / hide activity indicator
+                self.photoActivityIndicator(animate: false)
                 
                 //set cellImage to downloaded image
                 if let image = image {
