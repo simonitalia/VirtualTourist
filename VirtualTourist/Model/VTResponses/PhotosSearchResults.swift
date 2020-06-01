@@ -10,7 +10,7 @@ import Foundation
 
 
 struct PhotosSearchResults: Codable {
-    let photosResponse: PhotosResponse
+    var photosResponse: PhotosResponse
     let status: String
     
     enum CodingKeys: String, CodingKey {
@@ -25,7 +25,7 @@ struct PhotosResponse: Codable {
     let pages: Int
     let perPage: Int
     let total: String
-    let photos: [Photo]
+    var photos: [Photo]
     
     enum CodingKeys: String, CodingKey {
         case page
