@@ -15,8 +15,12 @@ class PhotoAlbumViewController: UIViewController {
     private let cellIdentifier = "PhotoCell"
     static var annotation: MKAnnotation!
     
-    private var photos = [Photo]()
-    
+    private var searchResults: PhotosSearchResults!
+    private var photos: [Photo] {
+        guard let results = searchResults else { return [] }
+        return results.photos.photos
+    }
+        
     
     //MARK:- Storyboard Connections
     //outlets
@@ -49,8 +53,6 @@ class PhotoAlbumViewController: UIViewController {
     
     //MARK:- ViewController Setup
     private func configureVC() {
-        photoAlbumCollectionView.delegate = self
-        photoAlbumCollectionView.dataSource = self
         configureCollectionView()
     }
     
@@ -99,11 +101,14 @@ class PhotoAlbumViewController: UIViewController {
             
             switch result {
             case .success(let searchResults):
-                self.photos = searchResults.photos.photos
+//                self.photos = searchResults.photos.photos
+                self.searchResults = searchResults
                 self.configureUI()
                 
             case .failure(let error):
-                print(error.rawValue)
+                let ac = UIAlertController(title: "Something went wrong", message: error.rawValue, preferredStyle: .alert)
+                ac.addAction(UIAlertAction(title: "OK", style: .default))
+                self.present(ac, animated: true)
             }
         }
     }
@@ -205,8 +210,10 @@ extension PhotoAlbumViewController {
     
     
     private func setEmptyStateView(_ display: Bool) {
-        emptyStateView.isHidden = !display
-        photoAlbumCollectionView.isHidden = display
+        DispatchQueue.main.async {
+            self.emptyStateView.isHidden = !display
+            self.photoAlbumCollectionView.isHidden = display
+        }
     }
     
 }
