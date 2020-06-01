@@ -81,7 +81,7 @@ class VTNetworkController {
                     URLQueryItem(name: QueryParameter.longitude, value: "\(longitude)"),
                     URLQueryItem(name: QueryParameter.photosContentType.key, value: QueryParameter.photosContentType.value),
                     URLQueryItem(name: QueryParameter.responseFormatJSON.key, value: QueryParameter.responseFormatJSON.value),
-                    URLQueryItem(name: QueryParameter.imageUrllMedium.key, value: QueryParameter.imageUrllMedium.value)
+                    URLQueryItem(name: QueryParameter.imageUrllMedium.key, value: QueryParameter.imageUrllMedium.value) //get medium size image
                 ]
                 
                 return components.url

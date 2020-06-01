@@ -40,8 +40,8 @@ class PhotoAlbumViewController: UIViewController {
     
     //MARK:- ViewController Setup
     private func configureVC() {
-//        photoAlbumCollectionView.delegate = self
-//        photoAlbumCollectionView.dataSource = self
+        photoAlbumCollectionView.delegate = self
+        photoAlbumCollectionView.dataSource = self
         configureCollectionView()
     }
     
@@ -146,6 +146,7 @@ extension PhotoAlbumViewController: UICollectionViewDataSource {
         let imageURL = photo.imageURL
         if let image = cell.performGetPhotoImage(from: imageURL) {
             cell.photoImageView.image = image
+            cell.setNeedsLayout()
         }
         
         return cell
@@ -172,14 +173,12 @@ extension PhotoAlbumViewController {
     }
     
     
-    //set activity indicator view state
+    //set view UI elements state
     private func collectionViewActivityIndicator(animate: Bool) {
         
         DispatchQueue.main.async {
-            //unhide / hide viw
-            animate ? (self.collectionViewActivityIndicator.isHidden = !animate) : (self.collectionViewActivityIndicator.isHidden = !animate)
-            
-            //stop / start animation
+            self.collectionViewActivityIndicator.isHidden = !animate
+            self.newCollectionButton.isEnabled = !animate
             animate ? self.collectionViewActivityIndicator.startAnimating() : self.collectionViewActivityIndicator.stopAnimating()
         }
     }

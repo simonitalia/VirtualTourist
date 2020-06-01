@@ -24,10 +24,7 @@ class PhotoAlbumCollectionViewCell: UICollectionViewCell {
     private func photoActivityIndicator(animate: Bool) {
         
         DispatchQueue.main.async {
-            //unhide / hide viw
-            animate ? (self.photoActivityIndicator.isHidden = !animate) : (self.photoActivityIndicator.isHidden = !animate)
-            
-            //stop / start animation
+            self.photoActivityIndicator.isHidden = !animate
             animate ? self.photoActivityIndicator.startAnimating() : self.photoActivityIndicator.stopAnimating()
         }
     }
