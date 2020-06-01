@@ -142,13 +142,15 @@ extension PhotoAlbumViewController: UICollectionViewDataSource {
         //configure cell
         let cell = photoAlbumCollectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as! PhotoAlbumCollectionViewCell
         
-        //fetch image and set to cell
-        let imageURL = photo.imageURL
-        if let image = cell.performGetPhotoImage(from: imageURL) {
-            cell.photoImageView.image = image
-            cell.setNeedsLayout()
+        //set cell to placeholder image whilst real photo image downloads
+        if let image = UIImage(named: "camera-outline") {
+            cell.setPhotoImageView(with: image)
         }
         
+        //fetch photo image and set to cell
+        let imageURL = photo.imageURL
+        cell.performGetPhotoImage(from: imageURL)
+    
         return cell
     }
 }
