@@ -18,6 +18,9 @@ class LocationsMapViewController: UIViewController {
     }
     
     private var annotationTapped: MKAnnotation!
+    private var region: MKCoordinateRegion? {
+        return AppDelegate.region
+    }
     
     //MARK:- Storyboard Connections
     //outlets
@@ -37,9 +40,23 @@ class LocationsMapViewController: UIViewController {
     }
     
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureUI()
+    }
+    
+    
     //MARK:- VC Setup
     private func configureVC() {
         mapView.delegate = self
+    }
+    
+    
+    func configureUI() {
+        //set region (if saved)
+        if let region = region {
+            mapView.region = region
+        }
     }
     
     
@@ -67,6 +84,7 @@ extension LocationsMapViewController {
 
 //MARK:- MKMAPView Delegate
 extension LocationsMapViewController  {
+    
     //track annotation view taps
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         
@@ -75,5 +93,13 @@ extension LocationsMapViewController  {
         
         //trigger segue
         performSegue(withIdentifier: SegueIdentifier.segueToPhotoAlbumViewController, sender: self)
+        
+        //trigger save of map region
+        UserSettingsDataPersistenceManager.shared.saveMapRegion()
+    }
+    
+    //track when the user moves the map and save the region
+    func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
+        AppDelegate.region = mapView.region //set current region
     }
 }

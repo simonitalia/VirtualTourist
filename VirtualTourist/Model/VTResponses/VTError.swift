@@ -15,6 +15,8 @@ enum VTError: String, Error {
     case requestError = "We encountered an error. Please try again."
     case invalidData = "Remote server returned invalid data."//no data returned
     case jsonDecodingError = "Failed to parse data returned from server."
+    case unableToLoadMapRegion = "Unable to load map region from user defaults."
+    case unableToSaveMapRegion = "Unable to ssave map region to user defaults"
 }
 
 

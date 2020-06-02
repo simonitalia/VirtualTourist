@@ -10,6 +10,19 @@ import Foundation
 import MapKit
 
 
+extension UIViewController {
+    
+    func presentUserAlert(title: String, message: String) {
+        DispatchQueue.main.async {
+            let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .default))
+            self.present(ac, animated: true)
+        }
+    }
+}
+
+
+//MARK:- MapView Delegate
 extension UIViewController: MKMapViewDelegate  {
 
     //cretaes and sets pin views on map when annotations added to map view
@@ -28,14 +41,4 @@ extension UIViewController: MKMapViewDelegate  {
 
         return pinView
     }
-    
-    
-    func presentUserAlert(title: String, message: String) {
-        DispatchQueue.main.async {
-            let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
-            ac.addAction(UIAlertAction(title: "OK", style: .default))
-            self.present(ac, animated: true)
-        }
-    }
-    
 }

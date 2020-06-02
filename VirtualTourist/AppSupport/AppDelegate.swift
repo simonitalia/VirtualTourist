@@ -7,13 +7,29 @@
 //
 
 import UIKit
+import MapKit
 import CoreData
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    
+    //global / app wide accessible properties
+    static var region: MKCoordinateRegion?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        //load region from user defaults
+        UserSettingsDataPersistenceManager.shared.loadMapRegion { (result) in
+            switch result {
+            case .success(let region):
+                AppDelegate.region = region
+            
+            case .failure(let error):
+                print(error.rawValue)
+            }
+        }
+        
         return true
     }
 
@@ -29,6 +45,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the user discards a scene session.
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
+        
+        
     }
 
     // MARK: - Core Data stack

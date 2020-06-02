@@ -31,6 +31,13 @@ class PhotoAlbumMapViewController: UIViewController {
     }
     
     
+    override func viewWillDisappear(_ animated: Bool) {
+        mapView.annotations.forEach{mapView.removeAnnotation($0)}
+        mapView.delegate = nil
+        print("PhotoAlbumMapViewController viewWillDisappear called")
+    }
+    
+    
     private func configureVC() {
         mapView.delegate = self
     }
@@ -42,13 +49,6 @@ class PhotoAlbumMapViewController: UIViewController {
         guard let annotation = self.annotation else { return }
         mapView.setMapPointAnnotation(at: annotation.coordinate)
         mapView.centerCoordinate = annotation.coordinate //move map to coordinates
-    }
-    
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        mapView.annotations.forEach{mapView.removeAnnotation($0)}
-        mapView.delegate = nil
-        print("PhotoAlbumMapViewController viewWillDisappear called")
     }
 }
 
