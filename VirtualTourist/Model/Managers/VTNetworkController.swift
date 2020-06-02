@@ -101,6 +101,9 @@ class VTNetworkController {
     }
     
     
+    private init() {} //guard external initialization
+    
+    
     //general search by text
     func getPhotos(for text: String, completion: @escaping (Result<Bool, Error>) -> Void) {
         guard let url = Endpoint.searchBy(query: text).url else {
@@ -149,7 +152,7 @@ class VTNetworkController {
                 
                 //decode data
                 let searchResults = try decoder.decode(PhotosSearchResults.self, from: newData)
-                print("Sucess! Photos for location successfully fetched.")
+                print("Success! Photos for location successfully fetched.")
                 completion(.success(searchResults))
                 return
                 
@@ -192,8 +195,16 @@ class VTNetworkController {
     
     
     func getPhotoImage(from urlString: String, completion: @escaping (UIImage?) -> Void) {
+       
+        //load image from temp cache (if downloaded and cached)
+        let imageCacheKey = NSString(string: urlString)
+        if let image = CacheManager.shared.imageCache.object(forKey: imageCacheKey) {
+           completion(image)
+           return
+        }
+        
         guard let url = URL(string: urlString) else { return }
-
+        
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
 
             //check for error
@@ -215,6 +226,8 @@ class VTNetworkController {
                     return
                 }
                 
+                //save image to imageCache (using its urlString as the key)
+                CacheManager.shared.imageCache.setObject(image, forKey: imageCacheKey)
                 completion(image)
             }
         }
