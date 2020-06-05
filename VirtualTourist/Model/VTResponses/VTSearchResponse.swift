@@ -9,18 +9,18 @@
 import Foundation
 
 
-struct PhotosSearchResults: Codable {
-    var photosResponse: PhotosResponse
+struct VTSearchResponse: Codable {
+    var results: PhotoAlbum
     let status: String
     
     enum CodingKeys: String, CodingKey {
-        case photosResponse = "photos"
+        case results = "photos"
         case status = "stat"
     }
 }
 
 
-struct PhotosResponse: Codable {
+struct PhotoAlbum: Codable {
     let page: Int
     let pages: Int
     let perPage: Int

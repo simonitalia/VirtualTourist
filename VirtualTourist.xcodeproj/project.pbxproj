@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2A089A3D2482550000E768C1 /* PhotosSearchResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A089A3C2482550000E768C1 /* PhotosSearchResults.swift */; };
+		2A089A3D2482550000E768C1 /* VTSearchResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A089A3C2482550000E768C1 /* VTSearchResponse.swift */; };
 		2A089A40248260AC00E768C1 /* VTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A089A3F248260AC00E768C1 /* VTError.swift */; };
 		2A50CA88248097F400F9AC81 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A50CA87248097F400F9AC81 /* AppDelegate.swift */; };
 		2A50CA8A248097F400F9AC81 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A50CA89248097F400F9AC81 /* SceneDelegate.swift */; };
@@ -33,7 +33,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2A089A3C2482550000E768C1 /* PhotosSearchResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosSearchResults.swift; sourceTree = "<group>"; };
+		2A089A3C2482550000E768C1 /* VTSearchResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VTSearchResponse.swift; sourceTree = "<group>"; };
 		2A089A3F248260AC00E768C1 /* VTError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VTError.swift; sourceTree = "<group>"; };
 		2A50CA84248097F400F9AC81 /* VirtualTourist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirtualTourist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A50CA87248097F400F9AC81 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -75,7 +75,7 @@
 		2A089A3E2482550500E768C1 /* VTResponses */ = {
 			isa = PBXGroup;
 			children = (
-				2A089A3C2482550000E768C1 /* PhotosSearchResults.swift */,
+				2A089A3C2482550000E768C1 /* VTSearchResponse.swift */,
 				2A089A3F248260AC00E768C1 /* VTError.swift */,
 			);
 			path = VTResponses;
@@ -349,7 +349,7 @@
 				2A50CAA42480A30E00F9AC81 /* LocationsMapViewController.swift in Sources */,
 				2A6EAD6824837CA30030D39F /* MKMapView+Extensions.swift in Sources */,
 				2A50CAAD2480D5BE00F9AC81 /* PhotoAlbumMapViewController.swift in Sources */,
-				2A089A3D2482550000E768C1 /* PhotosSearchResults.swift in Sources */,
+				2A089A3D2482550000E768C1 /* VTSearchResponse.swift in Sources */,
 				2A6EAD66248378480030D39F /* UIViewController+Extensions.swift in Sources */,
 				2A6EAD882485ED290030D39F /* CacheManager.swift in Sources */,
 				2A089A40248260AC00E768C1 /* VTError.swift in Sources */,
