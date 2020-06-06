@@ -10,7 +10,7 @@ import Foundation
 
 
 struct VTSearchResponse: Codable {
-    var results: PhotoAlbum
+    var results: PhotoAlbumObject
     let status: String
     
     enum CodingKeys: String, CodingKey {
@@ -20,12 +20,12 @@ struct VTSearchResponse: Codable {
 }
 
 
-struct PhotoAlbum: Codable {
+struct PhotoAlbumObject: Codable {
     let page: Int
     let pages: Int
     let perPage: Int
     let total: String
-    var photos: [Photo]
+    var photos: [PhotoObject]
     
     enum CodingKeys: String, CodingKey {
         case page
@@ -37,7 +37,7 @@ struct PhotoAlbum: Codable {
 }
 
 
-struct Photo: Codable {
+struct PhotoObject: Codable {
     let id: String
     let title: String
     let imageURL: String

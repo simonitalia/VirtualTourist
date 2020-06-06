@@ -8,15 +8,18 @@
 
 import UIKit
 import MapKit
+import CoreData
 
 class PhotoAlbumViewController: UIViewController {
     
     //MARK:- Class Properties
+    private var container: NSPersistentContainer = (UIApplication.shared.delegate as? AppDelegate)!.persistentContainer
+    
     private let cellIdentifier = "PhotoCell"
     static var annotation: MKAnnotation!
     
     private var searchResponse: VTSearchResponse!
-    private var photos: [Photo] {
+    private var photos: [PhotoObject] {
         get {
             guard let search = searchResponse else { return [] }
             return search.results.photos
@@ -89,11 +92,11 @@ class PhotoAlbumViewController: UIViewController {
         photoAlbumCollectionView.setCollectionViewLayout(layout, animated: false)
         
         //trigger fetch of photos
-        performGetPhotos()
+        performSelector(inBackground: #selector(performGetPhotos), with: nil)
     }
     
     
-    private func performGetPhotos(forPage number: Int=1) {
+    @objc private func performGetPhotos(forPage number: Int=1) {
         guard let annotation = PhotoAlbumViewController.annotation else { return }
         
         //show / start animating activity indicator
@@ -110,14 +113,19 @@ class PhotoAlbumViewController: UIViewController {
             
             switch result {
             case .success(let searchResponse):
-                self.searchResponse = searchResponse
-                print("Photos page: \(searchResponse.results.page) of \(searchResponse.results.pages)")
-                self.configureUI()
+                self.updateDataSource(with: searchResponse)
                 
             case .failure(let error):
                 self.presentUserAlert(title: "Something went wrong", message: error.rawValue)
             }
         }
+    }
+    
+    
+    func updateDataSource(with searchResponse: VTSearchResponse) {
+        self.searchResponse = searchResponse
+        print("Photos page: \(searchResponse.results.page) of \(searchResponse.results.pages)")
+        configureUI()
     }
 }
 
@@ -127,13 +135,13 @@ extension PhotoAlbumViewController: UICollectionViewDelegate {
     
     //support deleting item in collection
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        searchResponse.results.photos.remove(at: indexPath.item)
-        photoAlbumCollectionView.deleteItems(at: [indexPath])
-        
-        //display empty state
-        if photos.isEmpty && searchResponse.results.pages < 2 {
-            self.setEmptyStateView(true)
-        }
+//        searchResponse.results.photos.remove(at: indexPath.item)
+//        photoAlbumCollectionView.deleteItems(at: [indexPath])
+//        
+//        //display empty state
+//        if photos.isEmpty && searchResponse.results.pages < 2 {
+//            self.setEmptyStateView(true)
+//        }
     }
 }
 

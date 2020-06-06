@@ -12,7 +12,6 @@
 		2A50CA88248097F400F9AC81 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A50CA87248097F400F9AC81 /* AppDelegate.swift */; };
 		2A50CA8A248097F400F9AC81 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A50CA89248097F400F9AC81 /* SceneDelegate.swift */; };
 		2A50CA8F248097F400F9AC81 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2A50CA8D248097F400F9AC81 /* Main.storyboard */; };
-		2A50CA92248097F400F9AC81 /* VirtualTourist.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2A50CA90248097F400F9AC81 /* VirtualTourist.xcdatamodeld */; };
 		2A50CA94248097F800F9AC81 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2A50CA93248097F800F9AC81 /* Assets.xcassets */; };
 		2A50CA97248097F800F9AC81 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2A50CA95248097F800F9AC81 /* LaunchScreen.storyboard */; };
 		2A50CAA42480A30E00F9AC81 /* LocationsMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A50CAA32480A30E00F9AC81 /* LocationsMapViewController.swift */; };
@@ -20,7 +19,6 @@
 		2A50CAAD2480D5BE00F9AC81 /* PhotoAlbumMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A50CAAC2480D5BE00F9AC81 /* PhotoAlbumMapViewController.swift */; };
 		2A63A9C62480EAEB009D3AF2 /* PhotoAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A63A9C52480EAEB009D3AF2 /* PhotoAlbumViewController.swift */; };
 		2A63A9C924812645009D3AF2 /* VTNetworkController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A63A9C824812645009D3AF2 /* VTNetworkController.swift */; };
-		2A63A9CB24812662009D3AF2 /* VTDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A63A9CA24812662009D3AF2 /* VTDataController.swift */; };
 		2A6EAD64248370E80030D39F /* PhotoAlbumCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A6EAD63248370E80030D39F /* PhotoAlbumCollectionViewCell.swift */; };
 		2A6EAD66248378480030D39F /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A6EAD65248378480030D39F /* UIViewController+Extensions.swift */; };
 		2A6EAD6824837CA30030D39F /* MKMapView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A6EAD6724837CA30030D39F /* MKMapView+Extensions.swift */; };
@@ -30,6 +28,10 @@
 		2A6EAD882485ED290030D39F /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A6EAD872485ED290030D39F /* CacheManager.swift */; };
 		2A6EAD8A2485F0E60030D39F /* UserSettingsDataPersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A6EAD892485F0E60030D39F /* UserSettingsDataPersistenceManager.swift */; };
 		2A6EAD8C24861FE40030D39F /* MapRegion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A6EAD8B24861FE40030D39F /* MapRegion.swift */; };
+		2A8AA880248A604400ACBC81 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A8AA87F248A604400ACBC81 /* Photo.swift */; };
+		2A8AA882248A606E00ACBC81 /* PhotoAlbum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A8AA881248A606E00ACBC81 /* PhotoAlbum.swift */; };
+		2A8AA884248A62E300ACBC81 /* CoreDataPhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A8AA883248A62E300ACBC81 /* CoreDataPhotoViewController.swift */; };
+		2A8AA885248A8E7800ACBC81 /* VirtualTourist.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2A50CA90248097F400F9AC81 /* VirtualTourist.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,7 +50,6 @@
 		2A50CAAC2480D5BE00F9AC81 /* PhotoAlbumMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumMapViewController.swift; sourceTree = "<group>"; };
 		2A63A9C52480EAEB009D3AF2 /* PhotoAlbumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumViewController.swift; sourceTree = "<group>"; };
 		2A63A9C824812645009D3AF2 /* VTNetworkController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VTNetworkController.swift; sourceTree = "<group>"; };
-		2A63A9CA24812662009D3AF2 /* VTDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VTDataController.swift; sourceTree = "<group>"; };
 		2A6EAD63248370E80030D39F /* PhotoAlbumCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumCollectionViewCell.swift; sourceTree = "<group>"; };
 		2A6EAD65248378480030D39F /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
 		2A6EAD6724837CA30030D39F /* MKMapView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKMapView+Extensions.swift"; sourceTree = "<group>"; };
@@ -58,6 +59,9 @@
 		2A6EAD872485ED290030D39F /* CacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
 		2A6EAD892485F0E60030D39F /* UserSettingsDataPersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettingsDataPersistenceManager.swift; sourceTree = "<group>"; };
 		2A6EAD8B24861FE40030D39F /* MapRegion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapRegion.swift; sourceTree = "<group>"; };
+		2A8AA87F248A604400ACBC81 /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
+		2A8AA881248A606E00ACBC81 /* PhotoAlbum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbum.swift; sourceTree = "<group>"; };
+		2A8AA883248A62E300ACBC81 /* CoreDataPhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataPhotoViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,6 +176,7 @@
 			isa = PBXGroup;
 			children = (
 				2A63A9C52480EAEB009D3AF2 /* PhotoAlbumViewController.swift */,
+				2A8AA883248A62E300ACBC81 /* CoreDataPhotoViewController.swift */,
 				2A50CAAC2480D5BE00F9AC81 /* PhotoAlbumMapViewController.swift */,
 			);
 			path = LocationsPhotoAlbum;
@@ -248,7 +253,8 @@
 		2A6EAD852485EB380030D39F /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
-				2A63A9CA24812662009D3AF2 /* VTDataController.swift */,
+				2A8AA881248A606E00ACBC81 /* PhotoAlbum.swift */,
+				2A8AA87F248A604400ACBC81 /* Photo.swift */,
 				2A50CA90248097F400F9AC81 /* VirtualTourist.xcdatamodeld */,
 			);
 			path = CoreData;
@@ -345,7 +351,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2A8AA880248A604400ACBC81 /* Photo.swift in Sources */,
 				2A6EAD64248370E80030D39F /* PhotoAlbumCollectionViewCell.swift in Sources */,
+				2A8AA885248A8E7800ACBC81 /* VirtualTourist.xcdatamodeld in Sources */,
 				2A50CAA42480A30E00F9AC81 /* LocationsMapViewController.swift in Sources */,
 				2A6EAD6824837CA30030D39F /* MKMapView+Extensions.swift in Sources */,
 				2A50CAAD2480D5BE00F9AC81 /* PhotoAlbumMapViewController.swift in Sources */,
@@ -354,10 +362,10 @@
 				2A6EAD882485ED290030D39F /* CacheManager.swift in Sources */,
 				2A089A40248260AC00E768C1 /* VTError.swift in Sources */,
 				2A63A9C924812645009D3AF2 /* VTNetworkController.swift in Sources */,
-				2A50CA92248097F400F9AC81 /* VirtualTourist.xcdatamodeld in Sources */,
+				2A8AA882248A606E00ACBC81 /* PhotoAlbum.swift in Sources */,
 				2A50CA88248097F400F9AC81 /* AppDelegate.swift in Sources */,
-				2A63A9CB24812662009D3AF2 /* VTDataController.swift in Sources */,
 				2A6EAD8C24861FE40030D39F /* MapRegion.swift in Sources */,
+				2A8AA884248A62E300ACBC81 /* CoreDataPhotoViewController.swift in Sources */,
 				2A50CA8A248097F400F9AC81 /* SceneDelegate.swift in Sources */,
 				2A6EAD8A2485F0E60030D39F /* UserSettingsDataPersistenceManager.swift in Sources */,
 				2A63A9C62480EAEB009D3AF2 /* PhotoAlbumViewController.swift in Sources */,
