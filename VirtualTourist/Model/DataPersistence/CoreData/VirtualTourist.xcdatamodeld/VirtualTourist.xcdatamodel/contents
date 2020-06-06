@@ -5,7 +5,7 @@
         <attribute name="image" optional="YES" attributeType="Binary"/>
         <attribute name="imageURL" attributeType="String"/>
         <attribute name="title" attributeType="String"/>
-        <relationship name="photoAlbumName" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PhotoAlbum" inverseName="photos" inverseEntity="PhotoAlbum"/>
+        <relationship name="photoAlbum" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PhotoAlbum" inverseName="photos" inverseEntity="PhotoAlbum"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="id"/>
@@ -13,14 +13,15 @@
         </uniquenessConstraints>
     </entity>
     <entity name="PhotoAlbum" representedClassName=".PhotoAlbum" syncable="YES" codeGenerationType="category">
+        <attribute name="identifier" attributeType="String"/>
         <attribute name="page" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="pages" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="perPage" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="total" attributeType="String"/>
-        <relationship name="photos" toMany="YES" deletionRule="Cascade" destinationEntity="Photo" inverseName="photoAlbumName" inverseEntity="Photo"/>
+        <relationship name="photos" toMany="YES" deletionRule="Cascade" destinationEntity="Photo" inverseName="photoAlbum" inverseEntity="Photo"/>
     </entity>
     <elements>
         <element name="Photo" positionX="164.50390625" positionY="-59.76171875" width="128" height="118"/>
-        <element name="PhotoAlbum" positionX="-142.51953125" positionY="-62.56640625" width="128" height="118"/>
+        <element name="PhotoAlbum" positionX="-142.51953125" positionY="-62.56640625" width="128" height="133"/>
     </elements>
 </model>

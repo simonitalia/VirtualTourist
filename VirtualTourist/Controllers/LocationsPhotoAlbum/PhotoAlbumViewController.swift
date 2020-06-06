@@ -18,13 +18,14 @@ class PhotoAlbumViewController: UIViewController {
     private let cellIdentifier = "PhotoCell"
     static var annotation: MKAnnotation!
     
-    private var searchResponse: VTSearchResponse!
-    private var photos: [PhotoObject] {
+//    private var searchResponse: SearchResponse!
+    private var photoAlbum: PhotoCollection!
+    private var photos: [PhotoItem] {
         get {
-            guard let search = searchResponse else { return [] }
-            return search.results.photos
+            guard let photoAlbum = photoAlbum else { return [] }
+            return photoAlbum.photoItems
         }
-        
+
         set { return }
     }
         
@@ -39,8 +40,8 @@ class PhotoAlbumViewController: UIViewController {
 
     //actions
     @IBAction func newCollectionButtonTapped(_ sender: Any) {
-        guard searchResponse != nil else { return }
-        guard searchResponse.results.pages > 1 else {
+        guard photoAlbum != nil else { return }
+        guard photoAlbum.pages > 1 else {
             self.presentUserAlert(title: "No More Photos", message: "There are no other photos for this location.")
             return
         }
@@ -112,8 +113,8 @@ class PhotoAlbumViewController: UIViewController {
             self.collectionViewActivityIndicator(animate: false)
             
             switch result {
-            case .success(let searchResponse):
-                self.updateDataSource(with: searchResponse)
+            case .success(let photoAlbum):
+                self.updateDataSource(with: photoAlbum)
                 
             case .failure(let error):
                 self.presentUserAlert(title: "Something went wrong", message: error.rawValue)
@@ -122,9 +123,9 @@ class PhotoAlbumViewController: UIViewController {
     }
     
     
-    func updateDataSource(with searchResponse: VTSearchResponse) {
-        self.searchResponse = searchResponse
-        print("Photos page: \(searchResponse.results.page) of \(searchResponse.results.pages)")
+    func updateDataSource(with photoAlbum: PhotoCollection) {
+        self.photoAlbum = photoAlbum
+        print("Photos page: \(photoAlbum.page) of \(photoAlbum.pages)")
         configureUI()
     }
 }
@@ -219,8 +220,8 @@ extension PhotoAlbumViewController {
     
     
     private func getRandomPage() -> Int {
-        let currentPage = searchResponse.results.page
-        let pageRange = 1...searchResponse.results.pages
+        let currentPage = photoAlbum.page
+        let pageRange = 1...photoAlbum.pages
         var randomPage = Int.random(in: pageRange)
         
         while randomPage == currentPage {

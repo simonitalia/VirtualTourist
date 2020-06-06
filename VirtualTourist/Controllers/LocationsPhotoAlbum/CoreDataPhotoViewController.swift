@@ -15,20 +15,20 @@ class CoreDataPhotoViewController: PhotoAlbumViewController {
     private var container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
     
     
-    override func updateDataSource(with searchResponse: VTSearchResponse) {
-        super.updateDataSource(with: searchResponse)
-        updateDatabase(with: searchResponse)
+    override func updateDataSource(with photoAlbum: PhotoCollection) {
+        super.updateDataSource(with: photoAlbum)
+        updateDatabase(with: photoAlbum)
     }
     
     
-    private func updateDatabase(with searchResponse: VTSearchResponse) {
+    private func updateDatabase(with photoAlbum: PhotoCollection) {
         print("Loading database started...")
         container?.performBackgroundTask { [weak self] context in
             guard let self = self else { return }
-            for photoObject in searchResponse.results.photos {
+            for photoItem in photoAlbum.photoItems {
                 
                 do {
-                    _ = try Photo.fetchPhoto(matching: photoObject, in: context)
+                    _ = try Photo.fetchPhoto(matching: photoItem, in: context)
                 
                 } catch {
                      fatalError("Error! Fetch could not be performed: \(error.localizedDescription)")
@@ -47,6 +47,8 @@ class CoreDataPhotoViewController: PhotoAlbumViewController {
     }
 }
 
+
+//MARK:- Helpers
 extension CoreDataPhotoViewController {
     private func printDatabaseStats() {
         if let context = container?.viewContext {

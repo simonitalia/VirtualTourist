@@ -115,7 +115,7 @@ class VTNetworkController {
     
     
     //search by lat / lon coordinates
-    func getPhotos(for location: (lat: Double, lon: Double), page: Int, completion: @escaping (Result<VTSearchResponse, VTError>) -> Void) {
+    func getPhotos(for location: (lat: Double, lon: Double), page: Int, completion: @escaping (Result<PhotoCollection, VTError>) -> Void) {
         
         guard let url = Endpoint.searchByLocation(latitude: location.lat, longitude: location.lon, page: page).url else {
             print("Internal Error! Endpoint url could not be constructed.")
@@ -151,9 +151,14 @@ class VTNetworkController {
                 let newData = self.newDataObject(from: data)
                 
                 //decode data
-                let searchResults = try decoder.decode(VTSearchResponse.self, from: newData)
+                let searchReponse = try decoder.decode(SearchResponse.self, from: newData)
                 print("Success! Photos for location successfully fetched.")
-                completion(.success(searchResults))
+                
+                //generate collection object and pass back
+                let photoCollection = self.createPhotoCollection(from: searchReponse)
+                
+            
+                completion(.success(photoCollection))
                 return
                 
             } catch {
@@ -179,18 +184,6 @@ class VTNetworkController {
         }
         
         task.resume()
-    }
-    
-    
-    private func newDataObject(from data: Data) -> Data {
-        
-        //remove unneccessary characters from response
-        let prefix = "jsonFlickrApi("
-        let suffix = ")"
-        let start = prefix.count
-        let end = data.count - suffix.count
-        let range = start..<end
-        return data.subdata(in: range)
     }
     
     
@@ -233,5 +226,34 @@ class VTNetworkController {
         }
 
         task.resume()
+    }
+}
+
+
+//MARK:- Helpers
+extension VTNetworkController {
+    
+    private func newDataObject(from data: Data) -> Data {
+        
+        //remove unneccessary characters from response
+        let prefix = "jsonFlickrApi("
+        let suffix = ")"
+        let start = prefix.count
+        let end = data.count - suffix.count
+        let range = start..<end
+        return data.subdata(in: range)
+    }
+    
+    
+    private func createPhotoCollection(from searchReponse: SearchResponse) -> PhotoCollection {
+        
+        var items = [PhotoItem]()
+        searchReponse.results.Items.forEach {
+            let photo = PhotoItem($0)
+            items.append(photo)
+        }
+        
+        let collection = searchReponse.results
+        return PhotoCollection(collection, photoItems: items)
     }
 }

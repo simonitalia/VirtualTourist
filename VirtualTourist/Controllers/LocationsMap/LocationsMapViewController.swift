@@ -33,6 +33,7 @@ class LocationsMapViewController: UIViewController {
         mapView.setMapPointAnnotation(at: mapCoordinates)
     }
     
+    
     //MARK:- View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()

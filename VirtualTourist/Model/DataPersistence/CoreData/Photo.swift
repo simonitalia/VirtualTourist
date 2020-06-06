@@ -11,9 +11,9 @@ import CoreData
 
 class Photo: NSManagedObject {
     
-    class func fetchPhoto(matching photoObject: PhotoObject, in context: NSManagedObjectContext) throws -> Photo {
+    class func fetchPhoto(matching photoItem: PhotoItem, in context: NSManagedObjectContext) throws -> Photo {
         let request: NSFetchRequest<Photo> = Photo.fetchRequest()
-        request.predicate = NSPredicate(format: "id = %@", photoObject.id)
+        request.predicate = NSPredicate(format: "id = %@", photoItem.id)
         
         //try to find requestd photo in core data
         do {
@@ -29,9 +29,11 @@ class Photo: NSManagedObject {
         
         //create photo in core data
         let photo = Photo(context: context)
-        photo.id = photoObject.id
-        photo.imageURL = photoObject.imageURL
-        photo.title = photoObject.title
+        photo.id = photoItem.id
+        photo.imageURL = photoItem.imageURL
+        photo.title = photoItem.title
+//        photo.image = Data(photoItem.image)
+       
         return photo
     }
     

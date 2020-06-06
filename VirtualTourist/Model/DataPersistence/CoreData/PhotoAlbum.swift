@@ -11,9 +11,9 @@ import CoreData
 
 class PhotoAlbum: NSManagedObject {
 
-    class func fetchPhotoAlbum(matching photoAlbumObject: PhotoAlbumObject, in context: NSManagedObjectContext) throws -> PhotoAlbum {
+    class func fetchPhotoAlbum(matching photoAlbum: PhotoCollection, in context: NSManagedObjectContext) throws -> PhotoAlbum {
         let request: NSFetchRequest<PhotoAlbum> = PhotoAlbum.fetchRequest()
-        request.predicate = NSPredicate(format: "page = %@", photoAlbumObject.page)
+        request.predicate = NSPredicate(format: "id = %@", photoAlbum.id)
         
         //try to find requestd photo in core data
         do {
@@ -27,13 +27,15 @@ class PhotoAlbum: NSManagedObject {
             throw error //send error back to call site
         }
         
-        //create photo in core data
+        //create photo album in core data
         let album = PhotoAlbum(context: context)
-        album.page = Int64(photoAlbumObject.page)
-        album.pages = Int64(photoAlbumObject.pages)
-        album.perPage = Int64(photoAlbumObject.perPage)
-        album.total = photoAlbumObject.total
-        album.photos = NSSet(object: photoAlbumObject.photos)
+        album.page = Int64(photoAlbum.page)
+        album.pages = Int64(photoAlbum.pages)
+        album.perPage = Int64(photoAlbum.perPage)
+        album.total = photoAlbum.total
+        album.photos = NSSet(object: photoAlbum.photoItems)
+        album.identifier = photoAlbum.id
+        
         return album
     }
 }
