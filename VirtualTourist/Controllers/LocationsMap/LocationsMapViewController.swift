@@ -8,9 +8,14 @@
 
 import UIKit
 import MapKit
+import CoreData
 
 
 class LocationsMapViewController: UIViewController {
+    
+    //MARK:- Core Data Properties
+    var container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
+    
     
     //MARK:- Class Properties
     enum SegueIdentifier {
@@ -21,6 +26,7 @@ class LocationsMapViewController: UIViewController {
     private var region: MKCoordinateRegion? {
         return AppDelegate.region
     }
+    
     
     //MARK:- Storyboard Connections
     //outlets
@@ -47,6 +53,17 @@ class LocationsMapViewController: UIViewController {
     }
     
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        updateDatabase(with: annotationTapped)
+    }
+    
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+    }
+    
+    
     //MARK:- VC Setup
     private func configureVC() {
         mapView.delegate = self
@@ -54,7 +71,7 @@ class LocationsMapViewController: UIViewController {
     
     
     func configureUI() {
-        //set region (if saved)
+        //set region (if set)
         if let region = region {
             mapView.region = region
         }
@@ -72,7 +89,42 @@ class LocationsMapViewController: UIViewController {
 }
 
 
-//MARK: - Helpers
+//MARK:- CoreData Delegate + Helpers
+extension LocationsMapViewController: NSFetchedResultsControllerDelegate {
+    
+    private func updateDatabase(with tappedAnnotation: MKAnnotation) {
+        guard let annotation = annotationTapped else { return }
+        
+        print("starting database load...")
+        container?.performBackgroundTask {  [weak self] context in
+            _ = try? Pin.fetchOrCreatePin(using: annotation, in: context)
+            
+            try? context.save()
+            print("done loading database...")
+            self?.printDatabaseStatistics()
+        }
+    }
+    
+    
+    private func printDatabaseStatistics() {
+        if let context = container?.viewContext {
+            context.perform {
+                if Thread.isMainThread {
+                    print("on main thread")
+                } else {
+                    print("off main thread")
+                }
+                
+                if let pinCount = try? context.count(for: Pin.fetchRequest()) {
+                    print("\(pinCount) pins")
+                }
+            }
+        }
+    }
+}
+
+
+//MARK:- Helpers
 extension LocationsMapViewController {
     
     private func getMapCoordinatesFrom(longPressGestureRecognizer touchPoint: UILongPressGestureRecognizer) -> CLLocationCoordinate2D {
@@ -85,6 +137,10 @@ extension LocationsMapViewController {
 
 //MARK:- MKMAPView Delegate
 extension LocationsMapViewController  {
+    
+    //track when a new annotation is added to the map
+    func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {}
+    
     
     //track annotation view taps
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {

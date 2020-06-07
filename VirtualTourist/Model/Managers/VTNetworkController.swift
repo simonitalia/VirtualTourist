@@ -157,7 +157,6 @@ class VTNetworkController {
                 //generate collection object and pass back
                 let photoCollection = self.createPhotoCollection(from: searchReponse)
                 
-            
                 completion(.success(photoCollection))
                 return
                 

@@ -13,10 +13,11 @@ import CoreData
 class PhotoAlbumViewController: UIViewController {
     
     //MARK:- Class Properties
-    private var container: NSPersistentContainer = (UIApplication.shared.delegate as? AppDelegate)!.persistentContainer
+//    private var container: NSPersistentContainer = (UIApplication.shared.delegate as? AppDelegate)!.persistentContainer
     
     private let cellIdentifier = "PhotoCell"
     static var annotation: MKAnnotation!
+    
     
 //    private var searchResponse: SearchResponse!
     private var photoAlbum: PhotoCollection!

@@ -8,6 +8,7 @@
 
 import UIKit
 
+//custom object for storing data after retieval from remote server (parsed from SearchRessponse data model)
 struct PhotoCollection {
     let id = UUID().uuidString
     let page: Int
@@ -16,6 +17,7 @@ struct PhotoCollection {
     let total: String
     let photoItems: [PhotoItem]
 
+    //initialized from Results and PhotoItems
     init(_ searchResults: Results, photoItems: [PhotoItem]) {
         page = searchResults.page
         pages = searchResults.pages
@@ -26,6 +28,7 @@ struct PhotoCollection {
 }
 
 
+//intialized fom Item
 struct PhotoItem {
     let id: String
     let title: String
@@ -38,8 +41,3 @@ struct PhotoItem {
         imageURL = item.imageURL
     }
 }
-
-
-
-
-

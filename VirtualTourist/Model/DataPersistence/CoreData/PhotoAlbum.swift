@@ -15,11 +15,11 @@ class PhotoAlbum: NSManagedObject {
         let request: NSFetchRequest<PhotoAlbum> = PhotoAlbum.fetchRequest()
         request.predicate = NSPredicate(format: "id = %@", photoAlbum.id)
         
-        //try to find requestd photo in core data
+        //try to find requestd album in core data
         do {
             let fetchedAlbum = try context.fetch(request)
             if fetchedAlbum.count > 0 {
-                assert(fetchedAlbum.count == 1, "Issue with Database. fetched photos should be unique")
+                assert(fetchedAlbum.count == 1, "Issue with Database. Fetched Albums should be unique")
                 return fetchedAlbum[0] //return record, should only be 1 record
             }
         

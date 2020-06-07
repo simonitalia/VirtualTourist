@@ -37,4 +37,7 @@ class Photo: NSManagedObject {
         return photo
     }
     
+    
+    
+    
 }

@@ -18,10 +18,19 @@
         <attribute name="pages" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="perPage" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="total" attributeType="String"/>
-        <relationship name="photos" toMany="YES" deletionRule="Cascade" destinationEntity="Photo" inverseName="photoAlbum" inverseEntity="Photo"/>
+        <relationship name="photos" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Photo" inverseName="photoAlbum" inverseEntity="Photo"/>
+        <relationship name="pin" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="Pin" inverseName="photoAlbum" inverseEntity="Pin"/>
+    </entity>
+    <entity name="Pin" representedClassName=".Pin" syncable="YES" codeGenerationType="category">
+        <attribute name="identifier" attributeType="String"/>
+        <attribute name="latitude" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="locationName" attributeType="String"/>
+        <attribute name="longitude" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="photoAlbum" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="PhotoAlbum" inverseName="pin" inverseEntity="PhotoAlbum"/>
     </entity>
     <elements>
         <element name="Photo" positionX="164.50390625" positionY="-59.76171875" width="128" height="118"/>
-        <element name="PhotoAlbum" positionX="-142.51953125" positionY="-62.56640625" width="128" height="133"/>
+        <element name="PhotoAlbum" positionX="-142.51953125" positionY="-62.56640625" width="128" height="148"/>
+        <element name="Pin" positionX="-143.76171875" positionY="-224.19140625" width="128" height="118"/>
     </elements>
 </model>

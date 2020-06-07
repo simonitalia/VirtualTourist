@@ -12,6 +12,7 @@ import CoreData
 //this class manages data object interactions with core data
 class CoreDataPhotoViewController: PhotoAlbumViewController {
 
+    //reference to container
     private var container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
     
     
