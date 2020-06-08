@@ -13,7 +13,9 @@ class PhotoAlbumViewController: UIViewController {
     
     //MARK:- Class Properties
     private let cellIdentifier = "PhotoCell"
-    static var annotation: MKAnnotation!
+    
+    //shared property with mapVC (passed in by LocationsMapVC)
+    static var annotation: MKAnnotation?
     
     private var searchResults: SearchResponse!
     private var photos: [PhotoItemResponse] {

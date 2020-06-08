@@ -6,22 +6,27 @@
         <attribute name="image_url" optional="YES" attributeType="Binary"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <relationship name="photoCollection" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PhotoCollection" inverseName="photos" inverseEntity="PhotoCollection"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="identifier"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
     <entity name="PhotoCollection" representedClassName=".PhotoCollection" syncable="YES" codeGenerationType="class">
         <attribute name="page" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="pages" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="photos" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Photo" inverseName="photoCollection" inverseEntity="Photo"/>
-        <relationship name="pin" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="PinAnnotation" inverseName="photoCollection" inverseEntity="PinAnnotation"/>
+        <relationship name="pin" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="Pin" inverseName="photoCollection" inverseEntity="Pin"/>
     </entity>
-    <entity name="PinAnnotation" representedClassName=".Pin" syncable="YES" codeGenerationType="class">
-        <attribute name="identifier" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+    <entity name="Pin" representedClassName=".Pin" syncable="YES" codeGenerationType="class">
+        <attribute name="identifier" optional="YES" attributeType="String"/>
         <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="locationName" optional="YES" attributeType="String"/>
         <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <relationship name="photoCollection" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="PhotoCollection" inverseName="pin" inverseEntity="PhotoCollection"/>
     </entity>
     <elements>
-        <element name="PinAnnotation" positionX="-64.76953125" positionY="-186.17578125" width="128" height="118"/>
+        <element name="Pin" positionX="-64.76953125" positionY="-186.17578125" width="128" height="118"/>
         <element name="PhotoCollection" positionX="-55.37890625" positionY="11.83203125" width="128" height="103"/>
         <element name="Photo" positionX="166.73046875" positionY="12.62109375" width="128" height="118"/>
     </elements>

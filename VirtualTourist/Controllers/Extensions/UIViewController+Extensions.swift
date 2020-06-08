@@ -6,8 +6,9 @@
 //  Copyright © 2020 SDI Group Inc. All rights reserved.
 //
 
-import Foundation
+
 import MapKit
+import CoreData
 
 
 extension UIViewController {
@@ -34,11 +35,37 @@ extension UIViewController: MKMapViewDelegate  {
 
         if pinView == nil {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseID)
-            pinView!.canShowCallout = true
+            pinView!.canShowCallout = false
         } else {
             pinView!.annotation = annotation
         }
 
         return pinView
+    }
+}
+
+
+//MARK: CoreData
+extension UIViewController {
+    func printCoreDataStatistics(context: NSManagedObjectContext) {
+        context.perform {
+            if Thread.isMainThread {
+                print("on main thread")
+            } else {
+                print("off main thread")
+            }
+            
+            if let pins = try? context.count(for: Pin.fetchRequest()) {
+                print("Pins in core data: \(pins).")
+            }
+            
+            if let collections = try? context.count(for: PhotoCollection.fetchRequest()) {
+                print("Collections in core data: \(collections).")
+            }
+            
+            if let photos = try? context.count(for: Photo.fetchRequest()) {
+                print("Photos in core data: \(photos).")
+            }
+        }
     }
 }

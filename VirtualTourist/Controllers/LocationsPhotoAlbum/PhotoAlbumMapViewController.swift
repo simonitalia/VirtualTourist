@@ -12,7 +12,7 @@ import MapKit
 class PhotoAlbumMapViewController: UIViewController {
     
     //MARK: Class Properties
-    private var annotation: MKAnnotation! {
+    private var annotation: MKAnnotation? {
         guard let annotation = PhotoAlbumViewController.annotation else { return nil }
         return annotation
     }
@@ -27,14 +27,20 @@ class PhotoAlbumMapViewController: UIViewController {
         super.viewDidLoad()
         configureVC()
         configureUI()
-        
     }
     
     
     override func viewWillDisappear(_ animated: Bool) {
-        mapView.annotations.forEach{mapView.removeAnnotation($0)}
+        super.viewWillDisappear(animated)
+        
+        mapView.annotations.forEach{ mapView.removeAnnotation($0) }
         mapView.delegate = nil
         print("PhotoAlbumMapViewController viewWillDisappear called")
+    }
+    
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
     }
     
     
@@ -45,9 +51,8 @@ class PhotoAlbumMapViewController: UIViewController {
     
     private func configureUI() {
         
-        //set annotation
-        guard let annotation = self.annotation else { return }
-        mapView.setMapPointAnnotation(at: annotation.coordinate)
+        guard let annotation = annotation else { return }
+        mapView.updateMapView(with: [annotation])
         mapView.centerCoordinate = annotation.coordinate //move map to coordinates
     }
 }

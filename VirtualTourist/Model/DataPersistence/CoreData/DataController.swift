@@ -12,18 +12,18 @@ import CoreData
 class DataController {
     static let shared = DataController(modelName: "VirtualTourist")
     
-    let persistentContainer:NSPersistentContainer
+    let container: NSPersistentContainer
     
     var viewContext:NSManagedObjectContext {
-        return persistentContainer.viewContext
+        return container.viewContext
     }
     
     let backgroundContext:NSManagedObjectContext!
     
     init(modelName:String) {
-        persistentContainer = NSPersistentContainer(name: modelName)
+        container = NSPersistentContainer(name: modelName)
         
-        backgroundContext = persistentContainer.newBackgroundContext()
+        backgroundContext = container.newBackgroundContext()
     }
     
     func configureContexts() {
@@ -35,7 +35,7 @@ class DataController {
     }
     
     func load(completion: (() -> Void)? = nil) {
-        persistentContainer.loadPersistentStores { storeDescription, error in
+        container.loadPersistentStores { storeDescription, error in
             guard error == nil else {
                 fatalError(error!.localizedDescription)
             }
@@ -50,7 +50,7 @@ class DataController {
 
 extension DataController {
     func autoSaveViewContext(interval:TimeInterval = 30) {
-        print("autosaving")
+        print("autosaving core data")
         
         guard interval > 0 else {
             print("cannot set negative autosave interval")
