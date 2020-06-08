@@ -15,11 +15,11 @@ class PhotoAlbumViewController: UIViewController {
     private let cellIdentifier = "PhotoCell"
     static var annotation: MKAnnotation!
     
-    private var searchResults: PhotosSearchResults!
-    private var photos: [Photo] {
+    private var searchResults: SearchResponse!
+    private var photos: [PhotoItemResponse] {
         get {
-            guard let results = searchResults else { return [] }
-            return results.photosResponse.photos
+            guard let searchResults = searchResults else { return [] }
+            return searchResults.photoCollection.photoItems
         }
         
         set { return }
@@ -37,7 +37,7 @@ class PhotoAlbumViewController: UIViewController {
     //actions
     @IBAction func newCollectionButtonTapped(_ sender: Any) {
         guard searchResults != nil else { return }
-        guard searchResults.photosResponse.pages > 1 else {
+        guard searchResults.photoCollection.pages > 1 else {
             self.presentUserAlert(title: "No More Photos", message: "There are no other photos for this location.")
             return
         }
@@ -111,7 +111,7 @@ class PhotoAlbumViewController: UIViewController {
             switch result {
             case .success(let searchResults):
                 self.searchResults = searchResults
-                print("Photos page: \(searchResults.photosResponse.page) of \(searchResults.photosResponse.pages)")
+                print("Photos page: \(searchResults.photoCollection.page) of \(searchResults.photoCollection.pages)")
                 self.configureUI()
                 
             case .failure(let error):
@@ -127,11 +127,11 @@ extension PhotoAlbumViewController: UICollectionViewDelegate {
     
     //support deleting item in collection
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        searchResults.photosResponse.photos.remove(at: indexPath.item)
+        searchResults.photoCollection.photoItems.remove(at: indexPath.item)
         photoAlbumCollectionView.deleteItems(at: [indexPath])
         
         //display empty state
-        if photos.isEmpty && searchResults.photosResponse.pages < 2 {
+        if photos.isEmpty && searchResults.photoCollection.pages < 2 {
             self.setEmptyStateView(true)
         }
     }
@@ -211,8 +211,8 @@ extension PhotoAlbumViewController {
     
     
     private func getRandomPage() -> Int {
-        let currentPage = searchResults.photosResponse.page
-        let pageRange = 1...searchResults.photosResponse.pages
+        let currentPage = searchResults.photoCollection.page
+        let pageRange = 1...searchResults.photoCollection.pages
         var randomPage = Int.random(in: pageRange)
         
         while randomPage == currentPage {

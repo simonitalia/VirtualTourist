@@ -12,6 +12,11 @@ import MapKit
 
 class LocationsMapViewController: UIViewController {
     
+    //MARK: Core Data
+    var dataController: DataController = {
+        return DataController.shared
+    }()
+    
     //MARK:- Class Properties
     enum SegueIdentifier {
         static let segueToPhotoAlbumViewController = "LocationsMapVCToPhotoAlbumVC"

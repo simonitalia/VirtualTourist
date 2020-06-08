@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2A089A3D2482550000E768C1 /* PhotosSearchResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A089A3C2482550000E768C1 /* PhotosSearchResults.swift */; };
+		2A089A3D2482550000E768C1 /* SearchResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A089A3C2482550000E768C1 /* SearchResponse.swift */; };
 		2A089A40248260AC00E768C1 /* VTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A089A3F248260AC00E768C1 /* VTError.swift */; };
 		2A50CA88248097F400F9AC81 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A50CA87248097F400F9AC81 /* AppDelegate.swift */; };
 		2A50CA8A248097F400F9AC81 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A50CA89248097F400F9AC81 /* SceneDelegate.swift */; };
@@ -20,7 +20,7 @@
 		2A50CAAD2480D5BE00F9AC81 /* PhotoAlbumMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A50CAAC2480D5BE00F9AC81 /* PhotoAlbumMapViewController.swift */; };
 		2A63A9C62480EAEB009D3AF2 /* PhotoAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A63A9C52480EAEB009D3AF2 /* PhotoAlbumViewController.swift */; };
 		2A63A9C924812645009D3AF2 /* VTNetworkController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A63A9C824812645009D3AF2 /* VTNetworkController.swift */; };
-		2A63A9CB24812662009D3AF2 /* VTDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A63A9CA24812662009D3AF2 /* VTDataController.swift */; };
+		2A63A9CB24812662009D3AF2 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A63A9CA24812662009D3AF2 /* DataController.swift */; };
 		2A6EAD64248370E80030D39F /* PhotoAlbumCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A6EAD63248370E80030D39F /* PhotoAlbumCollectionViewCell.swift */; };
 		2A6EAD66248378480030D39F /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A6EAD65248378480030D39F /* UIViewController+Extensions.swift */; };
 		2A6EAD6824837CA30030D39F /* MKMapView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A6EAD6724837CA30030D39F /* MKMapView+Extensions.swift */; };
@@ -33,7 +33,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2A089A3C2482550000E768C1 /* PhotosSearchResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosSearchResults.swift; sourceTree = "<group>"; };
+		2A089A3C2482550000E768C1 /* SearchResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResponse.swift; sourceTree = "<group>"; };
 		2A089A3F248260AC00E768C1 /* VTError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VTError.swift; sourceTree = "<group>"; };
 		2A50CA84248097F400F9AC81 /* VirtualTourist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirtualTourist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A50CA87248097F400F9AC81 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -48,7 +48,7 @@
 		2A50CAAC2480D5BE00F9AC81 /* PhotoAlbumMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumMapViewController.swift; sourceTree = "<group>"; };
 		2A63A9C52480EAEB009D3AF2 /* PhotoAlbumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumViewController.swift; sourceTree = "<group>"; };
 		2A63A9C824812645009D3AF2 /* VTNetworkController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VTNetworkController.swift; sourceTree = "<group>"; };
-		2A63A9CA24812662009D3AF2 /* VTDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VTDataController.swift; sourceTree = "<group>"; };
+		2A63A9CA24812662009D3AF2 /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
 		2A6EAD63248370E80030D39F /* PhotoAlbumCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumCollectionViewCell.swift; sourceTree = "<group>"; };
 		2A6EAD65248378480030D39F /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
 		2A6EAD6724837CA30030D39F /* MKMapView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKMapView+Extensions.swift"; sourceTree = "<group>"; };
@@ -75,7 +75,7 @@
 		2A089A3E2482550500E768C1 /* VTResponses */ = {
 			isa = PBXGroup;
 			children = (
-				2A089A3C2482550000E768C1 /* PhotosSearchResults.swift */,
+				2A089A3C2482550000E768C1 /* SearchResponse.swift */,
 				2A089A3F248260AC00E768C1 /* VTError.swift */,
 			);
 			path = VTResponses;
@@ -248,7 +248,7 @@
 		2A6EAD852485EB380030D39F /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
-				2A63A9CA24812662009D3AF2 /* VTDataController.swift */,
+				2A63A9CA24812662009D3AF2 /* DataController.swift */,
 				2A50CA90248097F400F9AC81 /* VirtualTourist.xcdatamodeld */,
 			);
 			path = CoreData;
@@ -349,14 +349,14 @@
 				2A50CAA42480A30E00F9AC81 /* LocationsMapViewController.swift in Sources */,
 				2A6EAD6824837CA30030D39F /* MKMapView+Extensions.swift in Sources */,
 				2A50CAAD2480D5BE00F9AC81 /* PhotoAlbumMapViewController.swift in Sources */,
-				2A089A3D2482550000E768C1 /* PhotosSearchResults.swift in Sources */,
+				2A089A3D2482550000E768C1 /* SearchResponse.swift in Sources */,
 				2A6EAD66248378480030D39F /* UIViewController+Extensions.swift in Sources */,
 				2A6EAD882485ED290030D39F /* CacheManager.swift in Sources */,
 				2A089A40248260AC00E768C1 /* VTError.swift in Sources */,
 				2A63A9C924812645009D3AF2 /* VTNetworkController.swift in Sources */,
 				2A50CA92248097F400F9AC81 /* VirtualTourist.xcdatamodeld in Sources */,
 				2A50CA88248097F400F9AC81 /* AppDelegate.swift in Sources */,
-				2A63A9CB24812662009D3AF2 /* VTDataController.swift in Sources */,
+				2A63A9CB24812662009D3AF2 /* DataController.swift in Sources */,
 				2A6EAD8C24861FE40030D39F /* MapRegion.swift in Sources */,
 				2A50CA8A248097F400F9AC81 /* SceneDelegate.swift in Sources */,
 				2A6EAD8A2485F0E60030D39F /* UserSettingsDataPersistenceManager.swift in Sources */,
