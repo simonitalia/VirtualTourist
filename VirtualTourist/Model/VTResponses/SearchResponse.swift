@@ -8,43 +8,12 @@
 
 import Foundation
 
-
-struct SearchResponse: Codable {
-    var photoCollection: CollectionResponse
+struct SearchResponse: Decodable {
+    var photoCollection: PhotoCollection
     let status: String
     
     enum CodingKeys: String, CodingKey {
         case photoCollection = "photos"
         case status = "stat"
-    }
-}
-
-
-struct CollectionResponse: Codable {
-    let page: Int
-    let pages: Int
-    let perPage: Int
-    let total: String
-    var photoItems: [PhotoItemResponse]
-    
-    enum CodingKeys: String, CodingKey {
-        case page
-        case pages
-        case perPage = "perpage"
-        case total
-        case photoItems = "photo"
-    }
-}
-
-
-struct PhotoItemResponse: Codable {
-    let id: String
-    let title: String
-    let imageURL: String
-    
-    enum CodingKeys: String, CodingKey {
-        case id
-        case title
-        case imageURL = "url_m" //medium size url
     }
 }
