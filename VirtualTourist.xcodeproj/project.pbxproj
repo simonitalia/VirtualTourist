@@ -30,7 +30,11 @@
 		2A6EAD882485ED290030D39F /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A6EAD872485ED290030D39F /* CacheManager.swift */; };
 		2A6EAD8A2485F0E60030D39F /* UserSettingsDataPersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A6EAD892485F0E60030D39F /* UserSettingsDataPersistenceManager.swift */; };
 		2A6EAD8C24861FE40030D39F /* MapRegion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A6EAD8B24861FE40030D39F /* MapRegion.swift */; };
-		2A89281F248E851500CADCD9 /* Pin+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A89281E248E851500CADCD9 /* Pin+Extensions.swift */; };
+		2A89281F248E851500CADCD9 /* Pin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A89281E248E851500CADCD9 /* Pin.swift */; };
+		2A892822248F1FC300CADCD9 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A892821248F1FC300CADCD9 /* Photo.swift */; };
+		2A892824248F1FD600CADCD9 /* PhotoCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A892823248F1FD600CADCD9 /* PhotoCollection.swift */; };
+		2A892826248F208400CADCD9 /* CodingUserInfoKey+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A892825248F208400CADCD9 /* CodingUserInfoKey+Extensions.swift */; };
+		2A9889AA248F696E00FD1481 /* PhotoAlbumDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A9889A9248F696E00FD1481 /* PhotoAlbumDataViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,7 +63,11 @@
 		2A6EAD872485ED290030D39F /* CacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
 		2A6EAD892485F0E60030D39F /* UserSettingsDataPersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettingsDataPersistenceManager.swift; sourceTree = "<group>"; };
 		2A6EAD8B24861FE40030D39F /* MapRegion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapRegion.swift; sourceTree = "<group>"; };
-		2A89281E248E851500CADCD9 /* Pin+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Pin+Extensions.swift"; sourceTree = "<group>"; };
+		2A89281E248E851500CADCD9 /* Pin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pin.swift; sourceTree = "<group>"; };
+		2A892821248F1FC300CADCD9 /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
+		2A892823248F1FD600CADCD9 /* PhotoCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollection.swift; sourceTree = "<group>"; };
+		2A892825248F208400CADCD9 /* CodingUserInfoKey+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CodingUserInfoKey+Extensions.swift"; sourceTree = "<group>"; };
+		2A9889A9248F696E00FD1481 /* PhotoAlbumDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumDataViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,8 +181,9 @@
 		2A50CAAE2480D62B00F9AC81 /* LocationsPhotoAlbum */ = {
 			isa = PBXGroup;
 			children = (
-				2A63A9C52480EAEB009D3AF2 /* PhotoAlbumViewController.swift */,
 				2A50CAAC2480D5BE00F9AC81 /* PhotoAlbumMapViewController.swift */,
+				2A63A9C52480EAEB009D3AF2 /* PhotoAlbumViewController.swift */,
+				2A9889A9248F696E00FD1481 /* PhotoAlbumDataViewController.swift */,
 			);
 			path = LocationsPhotoAlbum;
 			sourceTree = "<group>";
@@ -250,6 +259,7 @@
 		2A6EAD852485EB380030D39F /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
+				2A892820248F1F8500CADCD9 /* ManagedObjects */,
 				2A89281D248E84A400CADCD9 /* ManagedObjectExtensions */,
 				2A63A9CA24812662009D3AF2 /* DataController.swift */,
 				2A50CA90248097F400F9AC81 /* VirtualTourist.xcdatamodeld */,
@@ -270,6 +280,7 @@
 			isa = PBXGroup;
 			children = (
 				2A6EAD8B24861FE40030D39F /* MapRegion.swift */,
+				2A892825248F208400CADCD9 /* CodingUserInfoKey+Extensions.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -277,9 +288,18 @@
 		2A89281D248E84A400CADCD9 /* ManagedObjectExtensions */ = {
 			isa = PBXGroup;
 			children = (
-				2A89281E248E851500CADCD9 /* Pin+Extensions.swift */,
 			);
 			path = ManagedObjectExtensions;
+			sourceTree = "<group>";
+		};
+		2A892820248F1F8500CADCD9 /* ManagedObjects */ = {
+			isa = PBXGroup;
+			children = (
+				2A89281E248E851500CADCD9 /* Pin.swift */,
+				2A892823248F1FD600CADCD9 /* PhotoCollection.swift */,
+				2A892821248F1FC300CADCD9 /* Photo.swift */,
+			);
+			path = ManagedObjects;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -356,10 +376,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2A892824248F1FD600CADCD9 /* PhotoCollection.swift in Sources */,
 				2A6EAD64248370E80030D39F /* PhotoAlbumCollectionViewCell.swift in Sources */,
 				2A50CAA42480A30E00F9AC81 /* LocationsMapViewController.swift in Sources */,
-				2A89281F248E851500CADCD9 /* Pin+Extensions.swift in Sources */,
+				2A89281F248E851500CADCD9 /* Pin.swift in Sources */,
 				2A6EAD6824837CA30030D39F /* MKMapView+Extensions.swift in Sources */,
+				2A892826248F208400CADCD9 /* CodingUserInfoKey+Extensions.swift in Sources */,
+				2A9889AA248F696E00FD1481 /* PhotoAlbumDataViewController.swift in Sources */,
 				2A50CAAD2480D5BE00F9AC81 /* PhotoAlbumMapViewController.swift in Sources */,
 				2A089A3D2482550000E768C1 /* SearchResponse.swift in Sources */,
 				2A6EAD66248378480030D39F /* UIViewController+Extensions.swift in Sources */,
@@ -368,6 +391,7 @@
 				2A63A9C924812645009D3AF2 /* VTNetworkController.swift in Sources */,
 				2A50CA92248097F400F9AC81 /* VirtualTourist.xcdatamodeld in Sources */,
 				2A50CA88248097F400F9AC81 /* AppDelegate.swift in Sources */,
+				2A892822248F1FC300CADCD9 /* Photo.swift in Sources */,
 				2A63A9CB24812662009D3AF2 /* DataController.swift in Sources */,
 				2A6EAD8C24861FE40030D39F /* MapRegion.swift in Sources */,
 				2A50CA8A248097F400F9AC81 /* SceneDelegate.swift in Sources */,

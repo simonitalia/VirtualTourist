@@ -166,22 +166,6 @@ extension LocationsMapViewController: NSFetchedResultsControllerDelegate {
     }
     
 
-    private func updateCoreData(with annotation: MKAnnotation) {
-        dataController?.container.performBackgroundTask {  [weak self] context in
-
-            if let pin = try? Pin.fetchOrCreatePin(matching: annotation, in: context) {
-
-                if let annotation = self?.mapView.createMapPointAnnotation(from: pin) {
-                    self?.updateUI(with: [annotation])
-                }
-            }
-
-            try? context.save()
-            self?.printCoreDataStatistics(context: context)
-        }
-    }
-    
-    
     private func createNewCoreDataPin(with annotation: MKAnnotation) {
         guard let context = dataController?.container.viewContext else { return }
         let pin = Pin.createPin(with: annotation, in: context)

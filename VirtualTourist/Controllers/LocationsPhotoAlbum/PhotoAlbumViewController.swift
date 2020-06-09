@@ -17,16 +17,16 @@ class PhotoAlbumViewController: UIViewController {
     //shared property with mapVC (passed in by LocationsMapVC)
     static var annotation: MKAnnotation?
     
-    private var searchResults: SearchResponse!
-    private var photos: [PhotoItemResponse] {
+    private var photoCollection: PhotoCollection!
+    private var photos: [Photo]! {
         get {
-            guard let searchResults = searchResults else { return [] }
-            return searchResults.photoCollection.photoItems
+            guard let collection = photoCollection, let photos = collection.photos else { return [] }
+            return photos.allObjects as? [Photo]
         }
         
         set { return }
     }
-        
+    
     
     //MARK:- Storyboard Connections
     //outlets
@@ -38,8 +38,8 @@ class PhotoAlbumViewController: UIViewController {
 
     //actions
     @IBAction func newCollectionButtonTapped(_ sender: Any) {
-        guard searchResults != nil else { return }
-        guard searchResults.photoCollection.pages > 1 else {
+        guard photoCollection != nil else { return }
+        guard photoCollection.pages > 1 else {
             self.presentUserAlert(title: "No More Photos", message: "There are no other photos for this location.")
             return
         }
@@ -77,7 +77,7 @@ class PhotoAlbumViewController: UIViewController {
             case false:
                 self.photoAlbumCollectionView.reloadData()
             
-                //if no photos, show empty state view
+            //if no photos, show empty state view
             case true:
                 self.setEmptyStateView(true)
             }
@@ -111,15 +111,21 @@ class PhotoAlbumViewController: UIViewController {
             self.collectionViewActivityIndicator(animate: false)
             
             switch result {
-            case .success(let searchResults):
-                self.searchResults = searchResults
-                print("Photos page: \(searchResults.photoCollection.page) of \(searchResults.photoCollection.pages)")
-                self.configureUI()
+            case .success(let photoCollection):
+                print("Photos page: \(photoCollection.page) of \(photoCollection.pages)")
+                self.displayPhotos(with: photoCollection)
+                
                 
             case .failure(let error):
                 self.presentUserAlert(title: "Something went wrong", message: error.rawValue)
             }
         }
+    }
+    
+    
+    internal func displayPhotos(with photoCollection: PhotoCollection) {
+        self.photoCollection = photoCollection
+        self.configureUI()
     }
 }
 
@@ -129,13 +135,13 @@ extension PhotoAlbumViewController: UICollectionViewDelegate {
     
     //support deleting item in collection
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        searchResults.photoCollection.photoItems.remove(at: indexPath.item)
-        photoAlbumCollectionView.deleteItems(at: [indexPath])
-        
-        //display empty state
-        if photos.isEmpty && searchResults.photoCollection.pages < 2 {
-            self.setEmptyStateView(true)
-        }
+//        collection.photos.remove(at: indexPath.item)
+//        photoAlbumCollectionView.deleteItems(at: [indexPath])
+//
+//        //display empty state
+//        if photos.isEmpty && collection.pages < 2 {
+//            self.setEmptyStateView(true)
+//        }
     }
 }
 
@@ -166,8 +172,9 @@ extension PhotoAlbumViewController: UICollectionViewDataSource {
         }
         
         //fetch photo image and set to cell
-        let imageURL = photo.imageURL
-        cell.performGetPhotoImage(from: imageURL)
+        if let imageURL = photo.imageURL {
+            cell.performGetPhotoImage(from: imageURL)
+        }
     
         return cell
     }
@@ -213,14 +220,16 @@ extension PhotoAlbumViewController {
     
     
     private func getRandomPage() -> Int {
-        let currentPage = searchResults.photoCollection.page
-        let pageRange = 1...searchResults.photoCollection.pages
+        let pages = Int(photoCollection.pages)
+        let currentPage = Int(photoCollection.page)
+        
+        let pageRange = 1...pages
         var randomPage = Int.random(in: pageRange)
         
         while randomPage == currentPage {
             randomPage = getRandomPage()
         }
 
-        return randomPage
+        return Int(randomPage)
     }
 }
