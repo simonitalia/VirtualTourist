@@ -45,10 +45,11 @@ class LocationsMapViewController: UIViewController {
             if sender.state == .ended {
                 let mapCoordinate = getMapCoordinatesFrom(longPressGestureRecognizer: sender)
                 let annotation = mapView.createMapPointAnnotation(from: mapCoordinate) //get new annotation
-                updateCoreData(with: annotation) //create new pin with annotation
+                createNewCoreDataPin(with: annotation) //create new pin with annotation
             }
         }
     }
+    
     
     //MARK:- View Lifecycle
     override func viewDidLoad() {
@@ -58,7 +59,8 @@ class LocationsMapViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureVC() //load core data annotations
+        configureVC()
+        configureCoreData() //load core data annotations
     }
     
     
@@ -70,27 +72,26 @@ class LocationsMapViewController: UIViewController {
     }
     
     
-    //MARK:- VC Setup
-    private func configureVC() {
-        configureMapView()
+    //MARK:- Core Data Setup
+    private func configureCoreData() {
         congifureFetchedResultsController()
     }
     
     
+    //MARK:- VC Setup
+    private func configureVC() {
+        configureMapView()
+    }
+    
+    
     private func configureMapView() {
-        //set region (if saved)
         mapView.delegate = self
+        
+        //set region (if saved)
         if let region = region {
             mapView.region = region
         }
     }
-    
-    
-    //updateUI with annotations
-    private func updateUI(with annotations: [MKAnnotation]) {
-        mapView.updateMapView(with: annotations)
-    }
-    
 }
 
 
@@ -102,6 +103,13 @@ extension LocationsMapViewController {
         let mapCoordinates: CLLocationCoordinate2D = mapView.convert(touchPoint, toCoordinateFrom: mapView)
         return mapCoordinates
     }
+    
+    
+    //updateUI with annotations
+      private func updateUI(with annotations: [MKAnnotation]) {
+          mapView.updateMapView(with: annotations)
+      }
+    
     
     //Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {}
@@ -145,9 +153,9 @@ extension LocationsMapViewController: NSFetchedResultsControllerDelegate {
 
         do {
             try fetchedResultsController.performFetch()
-            print("\(fetchedResultsController.fetchedObjects?.count ?? 0) Pins fetched from core data.")
-
+        
             if let pins = fetchedResultsController.fetchedObjects {
+                print("\(pins.count) pins loaded from core data.")
                 let annotations = mapView.createMapPointAnnotations(from: pins)
                 self.updateUI(with: annotations)
             }
@@ -159,20 +167,29 @@ extension LocationsMapViewController: NSFetchedResultsControllerDelegate {
     
 
     private func updateCoreData(with annotation: MKAnnotation) {
-        print("starting database load...")
         dataController?.container.performBackgroundTask {  [weak self] context in
 
             if let pin = try? Pin.fetchOrCreatePin(matching: annotation, in: context) {
 
-                if let annotations = self?.mapView.createMapPointAnnotations(from: [pin]) {
-                    self?.updateUI(with: annotations)
+                if let annotation = self?.mapView.createMapPointAnnotation(from: pin) {
+                    self?.updateUI(with: [annotation])
                 }
             }
 
             try? context.save()
-            print("done loading database...")
             self?.printCoreDataStatistics(context: context)
         }
+    }
+    
+    
+    private func createNewCoreDataPin(with annotation: MKAnnotation) {
+        guard let context = dataController?.container.viewContext else { return }
+        let pin = Pin.createPin(with: annotation, in: context)
+        let annotation = self.mapView.createMapPointAnnotation(from: pin)
+        self.updateUI(with: [annotation])
+        
+        try? context.save()
+        self.printCoreDataStatistics(context: context)
     }
 }
 

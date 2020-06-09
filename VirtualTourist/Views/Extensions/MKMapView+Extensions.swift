@@ -11,7 +11,7 @@ import MapKit
 
 extension MKMapView {
     
-    //user derived annotations
+    //user derived annotation
     func createMapPointAnnotation(from mapCoordinate: CLLocationCoordinate2D) -> MKAnnotation {
         let annotation = MKPointAnnotation()
         annotation.coordinate = mapCoordinate
@@ -28,7 +28,7 @@ extension MKMapView {
     }
     
     
-    //core data derived annotations
+    //core data derived annotation
     func createMapPointAnnotation(from pin: Pin) -> MKAnnotation {
         let annotation = MKPointAnnotation()
         annotation.coordinate = CLLocationCoordinate2D(latitude: pin.latitude, longitude: pin.longitude)
@@ -38,6 +38,7 @@ extension MKMapView {
     }
     
     
+    //core data derived annotations
     func createMapPointAnnotations(from pins: [Pin]) -> [MKAnnotation] {
         var annotations = [MKAnnotation]()
         
@@ -53,7 +54,7 @@ extension MKMapView {
     }
     
     
-    //add annotation/s to mapView
+    //add single annotation to mapView
     func updateMapView(with annotation: MKAnnotation) {
         DispatchQueue.main.async {
             self.addAnnotation(annotation)
@@ -61,6 +62,7 @@ extension MKMapView {
     }
     
     
+    //add multiple annotation to mapView
     func updateMapView(with annotations: [MKAnnotation]) {
         DispatchQueue.main.async {
             self.addAnnotations(annotations)

@@ -56,15 +56,15 @@ extension UIViewController {
             }
             
             if let pins = try? context.count(for: Pin.fetchRequest()) {
-                print("Pins in core data: \(pins).")
+                print("\nPins in core data: \(pins).")
             }
             
             if let collections = try? context.count(for: PhotoCollection.fetchRequest()) {
-                print("Collections in core data: \(collections).")
+                print("\nCollections in core data: \(collections).")
             }
             
             if let photos = try? context.count(for: Photo.fetchRequest()) {
-                print("Photos in core data: \(photos).")
+                print("\nPhotos in core data: \(photos).")
             }
         }
     }
