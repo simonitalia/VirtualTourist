@@ -162,11 +162,7 @@ class VTNetworkController {
                 do {
                     let results = try decoder.decode(SearchResponse.self, from: newData)
                     print("Success! Photos for location successfully fetched.")
-                    
-//                    do {
-//                        try context?.save()
-//                        print("Bacground context saved")
-//                    }
+
                     
                     completion(.success(results.photoCollection))
                     return

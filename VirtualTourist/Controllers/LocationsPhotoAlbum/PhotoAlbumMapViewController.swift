@@ -13,7 +13,7 @@ class PhotoAlbumMapViewController: UIViewController {
     
     //MARK: Class Properties
     private var annotation: MKAnnotation? {
-        guard let annotation = PhotoAlbumViewController.annotation else { return nil }
+        guard let annotation = PhotoAlbumMasterViewController.annotation else { return nil }
         return annotation
     }
     

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2A040DE92490616F0023B5DB /* PhotoAlbumMasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A040DE82490616F0023B5DB /* PhotoAlbumMasterViewController.swift */; };
 		2A089A3D2482550000E768C1 /* SearchResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A089A3C2482550000E768C1 /* SearchResponse.swift */; };
 		2A089A40248260AC00E768C1 /* VTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A089A3F248260AC00E768C1 /* VTError.swift */; };
 		2A50CA88248097F400F9AC81 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A50CA87248097F400F9AC81 /* AppDelegate.swift */; };
@@ -18,7 +19,7 @@
 		2A50CAA42480A30E00F9AC81 /* LocationsMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A50CAA32480A30E00F9AC81 /* LocationsMapViewController.swift */; };
 		2A50CAA72480B6A700F9AC81 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A50CAA62480B6A700F9AC81 /* MapKit.framework */; };
 		2A50CAAD2480D5BE00F9AC81 /* PhotoAlbumMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A50CAAC2480D5BE00F9AC81 /* PhotoAlbumMapViewController.swift */; };
-		2A63A9C62480EAEB009D3AF2 /* PhotoAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A63A9C52480EAEB009D3AF2 /* PhotoAlbumViewController.swift */; };
+		2A63A9C62480EAEB009D3AF2 /* PhotoAlbumCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A63A9C52480EAEB009D3AF2 /* PhotoAlbumCollectionViewController.swift */; };
 		2A63A9C924812645009D3AF2 /* VTNetworkController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A63A9C824812645009D3AF2 /* VTNetworkController.swift */; };
 		2A63A9CB24812662009D3AF2 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A63A9CA24812662009D3AF2 /* DataController.swift */; };
 		2A6EAD64248370E80030D39F /* PhotoAlbumCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A6EAD63248370E80030D39F /* PhotoAlbumCollectionViewCell.swift */; };
@@ -38,6 +39,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2A040DE82490616F0023B5DB /* PhotoAlbumMasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumMasterViewController.swift; sourceTree = "<group>"; };
 		2A089A3C2482550000E768C1 /* SearchResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResponse.swift; sourceTree = "<group>"; };
 		2A089A3F248260AC00E768C1 /* VTError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VTError.swift; sourceTree = "<group>"; };
 		2A50CA84248097F400F9AC81 /* VirtualTourist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirtualTourist.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -51,7 +53,7 @@
 		2A50CAA32480A30E00F9AC81 /* LocationsMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsMapViewController.swift; sourceTree = "<group>"; };
 		2A50CAA62480B6A700F9AC81 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		2A50CAAC2480D5BE00F9AC81 /* PhotoAlbumMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumMapViewController.swift; sourceTree = "<group>"; };
-		2A63A9C52480EAEB009D3AF2 /* PhotoAlbumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumViewController.swift; sourceTree = "<group>"; };
+		2A63A9C52480EAEB009D3AF2 /* PhotoAlbumCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumCollectionViewController.swift; sourceTree = "<group>"; };
 		2A63A9C824812645009D3AF2 /* VTNetworkController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VTNetworkController.swift; sourceTree = "<group>"; };
 		2A63A9CA24812662009D3AF2 /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
 		2A6EAD63248370E80030D39F /* PhotoAlbumCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -181,8 +183,9 @@
 		2A50CAAE2480D62B00F9AC81 /* LocationsPhotoAlbum */ = {
 			isa = PBXGroup;
 			children = (
+				2A040DE82490616F0023B5DB /* PhotoAlbumMasterViewController.swift */,
 				2A50CAAC2480D5BE00F9AC81 /* PhotoAlbumMapViewController.swift */,
-				2A63A9C52480EAEB009D3AF2 /* PhotoAlbumViewController.swift */,
+				2A63A9C52480EAEB009D3AF2 /* PhotoAlbumCollectionViewController.swift */,
 				2A9889A9248F696E00FD1481 /* PhotoAlbumDataViewController.swift */,
 			);
 			path = LocationsPhotoAlbum;
@@ -377,6 +380,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2A892824248F1FD600CADCD9 /* PhotoCollection.swift in Sources */,
+				2A040DE92490616F0023B5DB /* PhotoAlbumMasterViewController.swift in Sources */,
 				2A6EAD64248370E80030D39F /* PhotoAlbumCollectionViewCell.swift in Sources */,
 				2A50CAA42480A30E00F9AC81 /* LocationsMapViewController.swift in Sources */,
 				2A89281F248E851500CADCD9 /* Pin.swift in Sources */,
@@ -396,7 +400,7 @@
 				2A6EAD8C24861FE40030D39F /* MapRegion.swift in Sources */,
 				2A50CA8A248097F400F9AC81 /* SceneDelegate.swift in Sources */,
 				2A6EAD8A2485F0E60030D39F /* UserSettingsDataPersistenceManager.swift in Sources */,
-				2A63A9C62480EAEB009D3AF2 /* PhotoAlbumViewController.swift in Sources */,
+				2A63A9C62480EAEB009D3AF2 /* PhotoAlbumCollectionViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

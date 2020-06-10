@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-class PhotoAlbumDataViewController: PhotoAlbumViewController {
+class PhotoAlbumDataViewController: PhotoAlbumCollectionViewController {
     
     
     //MARK:- Data Persistence Properties
@@ -22,7 +22,7 @@ class PhotoAlbumDataViewController: PhotoAlbumViewController {
     
     
     private let pinIdentifier: String? = {
-        guard let identifier = PhotoAlbumViewController.annotation?.subtitle else { return nil }
+        guard let identifier = PhotoAlbumMasterViewController.annotation?.subtitle else { return nil }
         print("Pin Identifier: \(String(describing: identifier))")
         return identifier
     }()

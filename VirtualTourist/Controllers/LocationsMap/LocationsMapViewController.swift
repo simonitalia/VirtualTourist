@@ -29,10 +29,18 @@ class LocationsMapViewController: UIViewController {
     
     
     //MARK:- Class Properties
-    enum SegueIdentifier {
-        static let segueToPhotoAlbumViewController = "LocationsMapVCToPhotoAlbumVC"
+    enum Identifier {
+        
+        enum Storybaord {
+            static let masterPhotoAlbumVC = "PhotoAlbumMasterVC"
+        }
+        
+        enum Segue {
+            static let toPhotoAlbumMasterVC = "LocationsMapVCToPhotoAlbumMasterVC"
+        }
     }
     
+    var annotationTapped: MKAnnotation?
     
     //MARK:- Storyboard Connections
     //outlets
@@ -112,7 +120,14 @@ extension LocationsMapViewController {
     
     
     //Navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {}
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == Identifier.Segue.toPhotoAlbumMasterVC {
+            if let _ = segue.destination as? PhotoAlbumMasterViewController {
+                PhotoAlbumMasterViewController.annotation = annotationTapped
+            }
+        }
+        
+    }
     
 }
 
@@ -124,13 +139,16 @@ extension LocationsMapViewController  {
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         
         //set destination VC annotation property
-        PhotoAlbumViewController.annotation = view.annotation
+//        PhotoAlbumCollectionViewController.annotation = view.annotation
+        
+        //set annotationTapped to pass to destinationVC on segue
+        annotationTapped = view.annotation
         
         //trigger save of map region
         UserSettingsDataPersistenceManager.shared.saveMapRegion()
         
         //trigger segue
-        performSegue(withIdentifier: SegueIdentifier.segueToPhotoAlbumViewController, sender: self)
+        performSegue(withIdentifier: Identifier.Segue.toPhotoAlbumMasterVC, sender: self)
     }
     
     //track when the user moves the map and save the region

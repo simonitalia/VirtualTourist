@@ -9,13 +9,15 @@
 import UIKit
 import MapKit
 
-class PhotoAlbumViewController: UIViewController {
+class PhotoAlbumCollectionViewController: UIViewController {
     
     //MARK:- Class Properties
     private let cellIdentifier = "PhotoCell"
     
-    //shared property with mapVC (passed in by LocationsMapVC)
-    static var annotation: MKAnnotation?
+    private var annotation: MKAnnotation? {
+        guard let annotation = PhotoAlbumMasterViewController.annotation else { return nil }
+        return annotation
+    }
     
     private var photoCollection: PhotoCollection!
     private var photos: [Photo]! {
@@ -96,7 +98,8 @@ class PhotoAlbumViewController: UIViewController {
     
     
     private func performGetPhotos(forPage number: Int=1) {
-        guard let annotation = PhotoAlbumViewController.annotation else { return }
+//        guard let annotation = PhotoAlbumMasterViewController.annotation else { return }
+        guard let annotation = annotation else { return }
         
         //show / start animating activity indicator
         collectionViewActivityIndicator(animate: true)
@@ -131,23 +134,23 @@ class PhotoAlbumViewController: UIViewController {
 
 
 //MARK: CollectionView Delegate
-extension PhotoAlbumViewController: UICollectionViewDelegate {
+extension PhotoAlbumCollectionViewController: UICollectionViewDelegate {
     
     //support deleting item in collection
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        collection.photos.remove(at: indexPath.item)
+//        photoCollection.photos.remove(at: indexPath.item)
 //        photoAlbumCollectionView.deleteItems(at: [indexPath])
-//
-//        //display empty state
-//        if photos.isEmpty && collection.pages < 2 {
-//            self.setEmptyStateView(true)
-//        }
+
+        //display empty state
+        if photos.isEmpty && photoCollection.pages < 2 {
+            self.setEmptyStateView(true)
+        }
     }
 }
 
 
 //MARK: CollectionView Data Source
-extension PhotoAlbumViewController: UICollectionViewDataSource {
+extension PhotoAlbumCollectionViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
@@ -182,7 +185,7 @@ extension PhotoAlbumViewController: UICollectionViewDataSource {
 
 
 // MARK:- Helpers
-extension PhotoAlbumViewController {
+extension PhotoAlbumCollectionViewController {
     
     //collection view layout setup
     private func configureCompositionalLayout() -> UICollectionViewLayout {
