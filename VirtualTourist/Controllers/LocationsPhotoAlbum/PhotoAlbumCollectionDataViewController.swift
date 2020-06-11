@@ -41,31 +41,33 @@ extension PhotoAlbumCollectionDataViewController {
     
     private func updateCoreData(with photoCollection: PhotoCollection) {
         print("starting database load...")
-        dataController?.container.performBackgroundTask { [weak self] context in
-
-            guard let pin = self?.pin, let photos = photoCollection.photos else {
-                print("Error! Unable to create new photo collection in Core Data. Pin identifier missing.")
-                return
-            }
-
+        
+        guard let pin = self.pin, let photos = photoCollection.photos else {
+            print("Error! Unable to create new photo collection in Core Data. Pin identifier missing.")
+            return
+        }
+        
+        if let context = dataController?.container.viewContext {
             do {
-                
-                //set fetched photo album in core data
+                           
+                //set fetched photo collection album in core data
                 let fetchedCollection = try PhotoCollection.fetchOrCreatePhotoCollection(matching: pin, using: photoCollection, in: context)
-                
-                if let photos = self?.convertNSSetPhotosToArray(photos: photos) {
-                    for photo in photos {
-                        _ = try Photo.fetchOrCreatePhoto(matching: photo, for: fetchedCollection, in: context)
-                    }
-                }
+               
+                //set photos in core data
+                if let photos = self.convertNSSetPhotosToArray(photos: photos) {
+                   for photo in photos {
+                       _ = try Photo.fetchOrCreatePhoto(matching: photo, for: fetchedCollection, in: context)
+                   }
+               }
 
-                print("Success! Pin fetched from Core Data. Attaching Photo Collection.")
-                print("done loading database...")
-                self?.updateCoreData(context: context)
+               //save to core data
+               print("Success! Pin fetched from Core Data. Attaching Photo Collection.")
+               print("done loading database...")
+                self.updateCoreData(context: context)
 
-            } catch {
-                print("Error! Fetching Pin from Core Data \(error.localizedDescription)")
-            }
+           } catch {
+               print("Error! Fetching Pin from Core Data \(error.localizedDescription)")
+           }
         }
     }
 }

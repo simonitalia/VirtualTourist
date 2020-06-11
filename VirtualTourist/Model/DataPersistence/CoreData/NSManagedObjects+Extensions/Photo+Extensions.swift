@@ -22,7 +22,7 @@ extension Photo {
             let photos = try context.fetch(request)
             if photos.count > 0 {
                 assert(photos.count == 1, "Issue with Database. Fetched photos should be unique.")
-                print("Photo found in core data.")
+//                print("Photo found in core data.")
                 return photos[0] //return record, should only be 1 record
             }
         
