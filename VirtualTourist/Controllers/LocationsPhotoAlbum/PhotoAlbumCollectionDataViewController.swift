@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-class PhotoAlbumDataViewController: PhotoAlbumCollectionViewController {
+class PhotoAlbumCollectionDataViewController: PhotoAlbumCollectionViewController {
     
     
     //MARK:- Data Persistence Properties
@@ -21,42 +21,43 @@ class PhotoAlbumDataViewController: PhotoAlbumCollectionViewController {
     private var fetchedResultsController: NSFetchedResultsController<PhotoCollection>!
     
     
-    private let pinIdentifier: String? = {
-        guard let identifier = PhotoAlbumMasterViewController.annotation?.subtitle else { return nil }
-        print("Pin Identifier: \(String(describing: identifier))")
-        return identifier
+    //MARK:- Class properties
+    private let pin: Pin? = {
+        return PhotoAlbumMasterViewController.pin
     }()
     
-    
+
     //MARK: Data Manager
     override func displayPhotos(with photoCollection: PhotoCollection) {
         super.displayPhotos(with: photoCollection)
         updateCoreData(with: photoCollection)
     }
     
+}
+
+
+//MARK:- Core Data Helpers
+extension PhotoAlbumCollectionDataViewController {
     
-    //MARK:- Core Data
-    private func updateCoreData(with collection: PhotoCollection) {
+    private func updateCoreData(with photoCollection: PhotoCollection) {
         print("starting database load...")
         dataController?.container.performBackgroundTask { [weak self] context in
-            
-            guard let identifier = self?.pinIdentifier else {
+
+            guard let pin = self?.pin else {
                 print("Error! Unable to create new photo collection in Core Data. Pin identifier missing.")
                 return
             }
-            
-            
+
             do {
-                _ = try PhotoCollection.createPhotoCollection(for: collection, matching: identifier, in: context)
-                print("Succes! Pin found in Core Data. Attaching to Photo Collection")
-                try? context.save()
-                
+                _ = try PhotoCollection.fetchOrCreatePhotoCollection(matching: pin, with: photoCollection, in: context)
+                print("Success! Pin fetched from Core Data. Attaching Photo Collection.")
                 print("done loading database...")
-                self?.printCoreDataStatistics(context: context)
-            
+                self?.updateCoreData(context: context)
+
             } catch {
                 print("Error! Fetching Pin from Core Data \(error.localizedDescription)")
             }
         }
     }
 }
+

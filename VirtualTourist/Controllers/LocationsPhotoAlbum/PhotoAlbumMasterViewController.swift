@@ -12,6 +12,7 @@ import MapKit
 
 class PhotoAlbumMasterViewController: UIViewController {
     
-    //shared property for PhotoAlbumCollectionVC + PhotoAlbumMapVC (passed in by LocationsMapVC)
-    static var annotation: MKAnnotation?
+    //MARK:- Class Properties
+    //shared for child VCs
+    static var pin: Pin?
 }

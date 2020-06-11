@@ -161,7 +161,7 @@ class VTNetworkController {
                 //decode data
                 do {
                     let results = try decoder.decode(SearchResponse.self, from: newData)
-                    print("Success! Photos for location successfully fetched.")
+                    print("Success! Photos for location successfully fetched from remote server.")
 
                     
                     completion(.success(results.photoCollection))
@@ -176,7 +176,7 @@ class VTNetworkController {
                     
                     //decode error response data
                     let serverError = try decoder.decode(VTError.VTServerErrorResponse.self, from: newData)
-                    print("Server Error! Server reponded with error message: \(serverError.message)")
+                    print("Server Error! Remote server reponded with error message: \(serverError.message)")
                     if let error = VTError(rawValue: serverError.message) {
                         completion(.failure(error))
                         return

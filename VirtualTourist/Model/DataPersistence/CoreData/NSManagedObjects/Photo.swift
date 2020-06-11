@@ -6,13 +6,13 @@
 //  Copyright © 2020 SDI Group Inc. All rights reserved.
 //
 
-import UIKit
+
 import CoreData
 
+
 class Photo: NSManagedObject, Codable {
-    
+
     //MARK:- Codable support
-    
     //map json keys to nsmanaged object keys
     enum CodingKeys: String, CodingKey {
         case id
@@ -20,8 +20,8 @@ class Photo: NSManagedObject, Codable {
         case imageURL = "url_m"
         case image
     }
-    
-    
+
+
     required convenience init(from decoder: Decoder) throws {
         guard let contextUserInfoKey = CodingUserInfoKey.context else { fatalError("cannot find context key") }
         guard let managedObjectContext = decoder.userInfo[contextUserInfoKey] as? NSManagedObjectContext else { fatalError("cannot Retrieve context") }
@@ -34,8 +34,8 @@ class Photo: NSManagedObject, Codable {
         self.title = try container.decode(String.self, forKey: .title)
         self.imageURL = try container.decode(String.self, forKey: .imageURL)
     }
-    
-    
+
+
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(self.id, forKey: .id)

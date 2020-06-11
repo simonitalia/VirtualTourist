@@ -15,7 +15,6 @@ extension MKMapView {
     func createMapPointAnnotation(from mapCoordinate: CLLocationCoordinate2D) -> MKAnnotation {
         let annotation = MKPointAnnotation()
         annotation.coordinate = mapCoordinate
-        annotation.subtitle = ""
         
         //set title to placemark locality name
         getPlacemark(for: mapCoordinate) { placemark in
@@ -51,14 +50,6 @@ extension MKMapView {
         }
         
         return annotations
-    }
-    
-    
-    //add single annotation to mapView
-    func updateMapView(with annotation: MKAnnotation) {
-        DispatchQueue.main.async {
-            self.addAnnotation(annotation)
-        }
     }
     
     

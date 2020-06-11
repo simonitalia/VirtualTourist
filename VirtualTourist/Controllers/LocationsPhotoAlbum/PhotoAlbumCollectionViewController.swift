@@ -14,10 +14,11 @@ class PhotoAlbumCollectionViewController: UIViewController {
     //MARK:- Class Properties
     private let cellIdentifier = "PhotoCell"
     
-    private var annotation: MKAnnotation? {
-        guard let annotation = PhotoAlbumMasterViewController.annotation else { return nil }
-        return annotation
+    
+    private var pin: Pin? {
+        return PhotoAlbumMasterViewController.pin
     }
+    
     
     private var photoCollection: PhotoCollection!
     private var photos: [Photo]! {
@@ -98,16 +99,12 @@ class PhotoAlbumCollectionViewController: UIViewController {
     
     
     private func performGetPhotos(forPage number: Int=1) {
-//        guard let annotation = PhotoAlbumMasterViewController.annotation else { return }
-        guard let annotation = annotation else { return }
+        guard let pin = pin else { return }
         
         //show / start animating activity indicator
         collectionViewActivityIndicator(animate: true)
         
-        let lat = annotation.coordinate.latitude
-        let lon = annotation.coordinate.longitude
-        
-        VTNetworkController.shared.getPhotos(for: (lat: lat, lon: lon), page: number) { [weak self] result in
+        VTNetworkController.shared.getPhotos(for: (lat: pin.latitude, lon: pin.longitude), page: number) { [weak self] result in
             guard let self = self else { return }
             
             //stop / hide animating activity indicator

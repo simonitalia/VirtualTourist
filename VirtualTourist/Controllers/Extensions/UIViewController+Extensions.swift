@@ -13,6 +13,8 @@ import CoreData
 
 extension UIViewController {
     
+    
+    //MARK:- UI Helpers
     func presentUserAlert(title: String, message: String) {
         DispatchQueue.main.async {
             let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -45,8 +47,17 @@ extension UIViewController: MKMapViewDelegate  {
 }
 
 
-//MARK: CoreData
+//MARK: CoreData Helpers
 extension UIViewController {
+    
+    //svae context to core data
+    func updateCoreData(context: NSManagedObjectContext) {
+        try? context.save()
+        self.printCoreDataStatistics(context: context)
+    }
+    
+    
+    //pull out stats from core data after save context
     func printCoreDataStatistics(context: NSManagedObjectContext) {
         context.perform {
             if Thread.isMainThread {
@@ -63,8 +74,8 @@ extension UIViewController {
                 print("\nCollections in core data: \(collections).")
             }
             
-            if let photos = try? context.count(for: Photo.fetchRequest()) {
-                print("\nPhotos in core data: \(photos).")
+            if let photos = try? context.fetch(Photo.fetchRequest()) {
+                print("\nPhotos in core data: \(photos.count).")
             }
         }
     }

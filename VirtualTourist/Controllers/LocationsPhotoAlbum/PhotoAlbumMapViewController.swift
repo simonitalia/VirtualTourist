@@ -12,10 +12,10 @@ import MapKit
 class PhotoAlbumMapViewController: UIViewController {
     
     //MARK: Class Properties
-    private var annotation: MKAnnotation? {
-        guard let annotation = PhotoAlbumMasterViewController.annotation else { return nil }
-        return annotation
+    private var pin: Pin? {
+        return PhotoAlbumMasterViewController.pin
     }
+    
     
     //MARK:- Storyboard Connections
     //outlets
@@ -50,8 +50,9 @@ class PhotoAlbumMapViewController: UIViewController {
     
     
     private func configureUI() {
+        guard let pin = pin else { return }
         
-        guard let annotation = annotation else { return }
+        let annotation = mapView.createMapPointAnnotation(from: pin)
         mapView.updateMapView(with: [annotation])
         mapView.centerCoordinate = annotation.coordinate //move map to coordinates
     }

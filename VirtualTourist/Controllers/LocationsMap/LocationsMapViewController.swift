@@ -40,7 +40,15 @@ class LocationsMapViewController: UIViewController {
         }
     }
     
-    var annotationTapped: MKAnnotation?
+    var pinTapped: MKAnnotation? {
+        didSet {
+            //trigger save of map region
+            UserSettingsDataPersistenceManager.shared.saveMapRegion()
+            
+            //trigger segue
+            performSegue(withIdentifier: Identifier.Segue.toPhotoAlbumMasterVC, sender: self)
+        }
+    }
     
     //MARK:- Storyboard Connections
     //outlets
@@ -52,8 +60,7 @@ class LocationsMapViewController: UIViewController {
         if let sender = sender as? UILongPressGestureRecognizer {
             if sender.state == .ended {
                 let mapCoordinate = getMapCoordinatesFrom(longPressGestureRecognizer: sender)
-                let annotation = mapView.createMapPointAnnotation(from: mapCoordinate) //get new annotation
-                createNewCoreDataPin(with: annotation) //create new pin with annotation
+                createPin(with: mapCoordinate)
             }
         }
     }
@@ -112,7 +119,7 @@ extension LocationsMapViewController {
         return mapCoordinates
     }
     
-    
+
     //updateUI with annotations
       private func updateUI(with annotations: [MKAnnotation]) {
           mapView.updateMapView(with: annotations)
@@ -123,12 +130,18 @@ extension LocationsMapViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == Identifier.Segue.toPhotoAlbumMasterVC {
             if let _ = segue.destination as? PhotoAlbumMasterViewController {
-                PhotoAlbumMasterViewController.annotation = annotationTapped
+                
+                //get pin to pass to destinationVC
+                guard let context = dataController?.container.viewContext else {
+                    fatalError("Context should not be nil")
+                }
+                
+                if let identifier = pinTapped?.subtitle {
+                    PhotoAlbumMasterViewController.pin = try? Pin.fetchPin(matching: identifier!, in: context)
+                }
             }
         }
-        
     }
-    
 }
 
 
@@ -138,17 +151,8 @@ extension LocationsMapViewController  {
     //track annotation view taps
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         
-        //set destination VC annotation property
-//        PhotoAlbumCollectionViewController.annotation = view.annotation
-        
         //set annotationTapped to pass to destinationVC on segue
-        annotationTapped = view.annotation
-        
-        //trigger save of map region
-        UserSettingsDataPersistenceManager.shared.saveMapRegion()
-        
-        //trigger segue
-        performSegue(withIdentifier: Identifier.Segue.toPhotoAlbumMasterVC, sender: self)
+        pinTapped = view.annotation
     }
     
     //track when the user moves the map and save the region
@@ -182,16 +186,21 @@ extension LocationsMapViewController: NSFetchedResultsControllerDelegate {
             fatalError("The fetch could not be performed: \(error.localizedDescription)")
         }
     }
+}
     
 
-    private func createNewCoreDataPin(with annotation: MKAnnotation) {
+//MARK:- Core Data Helpers
+extension LocationsMapViewController {
+    private func createPin(with mapCoordinate: CLLocationCoordinate2D) {
+        let annotation = mapView.createMapPointAnnotation(from: mapCoordinate)
+        
         guard let context = dataController?.container.viewContext else { return }
         let pin = Pin.createPin(with: annotation, in: context)
-        let annotation = self.mapView.createMapPointAnnotation(from: pin)
-        self.updateUI(with: [annotation])
         
-        try? context.save()
-        self.printCoreDataStatistics(context: context)
+        let pinAnnotation = self.mapView.createMapPointAnnotation(from: pin)
+        
+        updateCoreData(context: context)
+        updateUI(with: [pinAnnotation])
     }
 }
 
