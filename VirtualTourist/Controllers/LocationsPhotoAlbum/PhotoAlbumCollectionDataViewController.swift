@@ -43,13 +43,22 @@ extension PhotoAlbumCollectionDataViewController {
         print("starting database load...")
         dataController?.container.performBackgroundTask { [weak self] context in
 
-            guard let pin = self?.pin else {
+            guard let pin = self?.pin, let photos = photoCollection.photos else {
                 print("Error! Unable to create new photo collection in Core Data. Pin identifier missing.")
                 return
             }
 
             do {
-                _ = try PhotoCollection.fetchOrCreatePhotoCollection(matching: pin, with: photoCollection, in: context)
+                
+                //set fetched photo album in core data
+                let fetchedCollection = try PhotoCollection.fetchOrCreatePhotoCollection(matching: pin, using: photoCollection, in: context)
+                
+                if let photos = self?.convertNSSetPhotosToArray(photos: photos) {
+                    for photo in photos {
+                        _ = try Photo.fetchOrCreatePhoto(matching: photo, for: fetchedCollection, in: context)
+                    }
+                }
+
                 print("Success! Pin fetched from Core Data. Attaching Photo Collection.")
                 print("done loading database...")
                 self?.updateCoreData(context: context)

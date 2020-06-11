@@ -22,6 +22,7 @@ extension Pin {
     }
     
     
+    //lookup used by LocationsMapVC
     class func fetchPin(matching identifier: String, in context: NSManagedObjectContext) throws -> Pin? {
         guard identifier != "" else {
             fatalError("Error! Pin cannot be fetched. Identifier is missing.")
@@ -46,6 +47,7 @@ extension Pin {
     }
     
     
+    //Lookup ussed by PhotoAlbumCollectionDataVC
     class func fetchPin(matching pin: Pin, in context: NSManagedObjectContext) throws -> Pin? {
         guard let identifier = pin.identifier else {
             fatalError("Error! Pin cannot be fetched. Identifier is missing.")
@@ -67,35 +69,5 @@ extension Pin {
 
         print("Pin not found in core data.")
         return nil
-    }
-    
-
-    class func fetchOrCreatePin(matching pin: Pin, in context: NSManagedObjectContext) throws -> Pin? {
-
-        //lookup in lookup in core data
-        if let identifier = pin.identifier {
-            let request: NSFetchRequest<Pin> = Pin.fetchRequest()
-            request.predicate = NSPredicate(format: "identifier = %@", identifier)
-
-            do {
-                let pin = try context.fetch(request)
-                if pin.count > 0 {
-                    assert(pin.count == 1, "Database issue. Multiple pins with same identifer found.")
-                    print("Pin found in core data.")
-                    return pin[0]
-                }
-            } catch {
-                throw error //pass back error
-            }
-        }
-
-        print("Pin not found in core data, creating new pin.")
-        //create new if not found
-        let newPin = Pin(context: context)
-        newPin.identifier = UUID().uuidString
-        newPin.locationName = pin.locationName ?? "Location unknown"
-        newPin.latitude = pin.latitude
-        newPin.longitude = pin.longitude
-        return pin
     }
 }

@@ -50,7 +50,6 @@ class DataController {
 
 extension DataController {
     func autoSaveViewContext(interval:TimeInterval = 30) {
-        print("autosaving core data")
         
         guard interval > 0 else {
             print("cannot set negative autosave interval")
@@ -58,6 +57,7 @@ extension DataController {
         }
         
         if viewContext.hasChanges {
+            print("Changes detected in viewContext...autosaving core data.")
             try? viewContext.save()
         }
         

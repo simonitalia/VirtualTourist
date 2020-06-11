@@ -12,7 +12,9 @@ import UIKit
 
 extension Photo {
     
-    class func fetchPhoto(matching photo: Photo, in context: NSManagedObjectContext) throws -> Photo {
+    class func fetchOrCreatePhoto(matching photo: Photo, for photoCollection: PhotoCollection, in context: NSManagedObjectContext) throws -> Photo {
+        
+        //lookup in core data
         let request: NSFetchRequest<Photo> = Photo.fetchRequest()
         request.predicate = NSPredicate(format: "id = %@", photo.id!)
         
@@ -28,7 +30,25 @@ extension Photo {
             throw error //send error back to call site
         }
         
-        return photo
+        
+        print("Photo not found in core data. Creating new Photo.")
+        
+        //create new if not found
+        let newPhoto = Photo(context: context)
+        newPhoto.id = photo.id
+        newPhoto.title = photo.title
+        newPhoto.imageURL = photo.imageURL
+        newPhoto.photoCollection = photoCollection
+        
+        //get and convert image to data
+        if let urlString = photo.imageURL {
+            Photo.fetchImage(from: urlString) { image in
+                newPhoto.image = image.pngData()
+                print("Photo image saved to Core Data")
+            }
+        }
+        
+        return newPhoto
     }
     
     

@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-class PhotoAlbumMapViewController: UIViewController {
+class PhotoAlbumMapViewController: PhotoAlbumMasterViewController {
     
     //MARK: Class Properties
     private var pin: Pin? {

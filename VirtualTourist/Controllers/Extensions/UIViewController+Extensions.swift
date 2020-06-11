@@ -13,7 +13,6 @@ import CoreData
 
 extension UIViewController {
     
-    
     //MARK:- UI Helpers
     func presentUserAlert(title: String, message: String) {
         DispatchQueue.main.async {

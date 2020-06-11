@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-class PhotoAlbumCollectionViewController: UIViewController {
+class PhotoAlbumCollectionViewController: PhotoAlbumMasterViewController {
     
     //MARK:- Class Properties
     private let cellIdentifier = "PhotoCell"
@@ -24,7 +24,7 @@ class PhotoAlbumCollectionViewController: UIViewController {
     private var photos: [Photo]! {
         get {
             guard let collection = photoCollection, let photos = collection.photos else { return [] }
-            return photos.allObjects as? [Photo]
+            return convertNSSetPhotosToArray(photos: photos)
         }
         
         set { return }
@@ -231,5 +231,10 @@ extension PhotoAlbumCollectionViewController {
         }
 
         return Int(randomPage)
+    }
+    
+    
+    internal func convertNSSetPhotosToArray(photos: NSSet) -> [Photo]? {
+        return photos.allObjects as? [Photo]
     }
 }
