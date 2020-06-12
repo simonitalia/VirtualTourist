@@ -39,9 +39,7 @@ class PhotoAlbumMapViewController: PhotoAlbumMasterViewController {
     }
     
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-    }
+    override func viewDidDisappear(_ animated: Bool) {}
     
     
     private func configureVC() {

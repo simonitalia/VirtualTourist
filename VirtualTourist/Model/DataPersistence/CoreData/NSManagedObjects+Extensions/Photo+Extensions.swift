@@ -31,14 +31,14 @@ extension Photo {
         }
         
         
-        print("Photo not found in core data. Creating new Photo.")
+//        print("Photo not found in core data. Creating new Photo.")
         
         //create new if not found
         let newPhoto = Photo(context: context)
         newPhoto.id = photo.id
         newPhoto.title = photo.title
         newPhoto.imageURL = photo.imageURL
-        newPhoto.photoCollection = photoCollection
+        newPhoto.photoCollection = photoCollection //entity relationship
         
         //get and convert image to data
         if let urlString = photo.imageURL {

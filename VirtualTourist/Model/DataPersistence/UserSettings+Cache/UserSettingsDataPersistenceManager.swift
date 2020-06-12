@@ -12,7 +12,6 @@ import MapKit
 
 struct UserSettingsDataPersistenceManager {
     
-    
     //MARK:- Class Properties
     static let shared = UserSettingsDataPersistenceManager()
     private let userDefaults = UserDefaults.standard

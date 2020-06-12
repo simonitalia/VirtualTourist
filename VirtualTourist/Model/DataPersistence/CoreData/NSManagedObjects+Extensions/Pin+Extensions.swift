@@ -47,7 +47,7 @@ extension Pin {
     }
     
     
-    //Lookup ussed by PhotoAlbumCollectionDataVC
+    //lookup used by PhotoAlbumCollectionDataVC
     class func fetchPin(matching pin: Pin, in context: NSManagedObjectContext) throws -> Pin? {
         guard let identifier = pin.identifier else {
             fatalError("Error! Pin cannot be fetched. Identifier is missing.")

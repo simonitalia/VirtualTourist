@@ -15,11 +15,27 @@ class PhotoAlbumCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var photoActivityIndicator: UIActivityIndicatorView!
     
-
-    func setPhotoImageView(with image: UIImage) {
+    
+    func setPhotoImageViewToDefaultImage() {
         DispatchQueue.main.async {
-            self.photoImageView.image = image
-            self.setNeedsDisplay()
+            if let image = UIImage(named: "camera-outline") {
+                self.photoImageView.image = image
+                self.setNeedsDisplay()
+            }
+        }
+    }
+    
+
+    func setPhotoImageView(with image: UIImage?) {
+        
+        DispatchQueue.main.async {
+            if let image = image {
+                self.photoImageView.image = image
+                self.setNeedsDisplay()
+            
+            } else {
+                self.setPhotoImageViewToDefaultImage()
+            }
         }
     }
     
@@ -33,7 +49,11 @@ class PhotoAlbumCollectionViewCell: UICollectionViewCell {
     }
     
     
-    func performGetPhotoImage(from urlString: String) {
+    func performGetPhotoImage(from urlString: String?) {
+        guard let urlString = urlString else {
+            setPhotoImageViewToDefaultImage()
+            return
+        }
         
         //start / show activity indicator
         photoActivityIndicator(animate: true)
@@ -44,16 +64,8 @@ class PhotoAlbumCollectionViewCell: UICollectionViewCell {
             //stop / hide activity indicator
             self.photoActivityIndicator(animate: false)
             
-            //set cellImage to downloaded image
-            if let image = image {
-                self.setPhotoImageView(with: image)
-
-            //set cellImage to default image if no image for photo object
-            } else {
-                if let image = UIImage(named: "no-image-outline") {
-                    self.setPhotoImageView(with: image)
-                }
-            }
+            //pass downloaded image (or nil)
+            self.setPhotoImageView(with: image)
         }
     }
 }

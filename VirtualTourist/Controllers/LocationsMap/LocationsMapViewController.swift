@@ -81,9 +81,13 @@ class LocationsMapViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         mapView.annotations.forEach{ mapView.removeAnnotation($0) }
         mapView.delegate = nil
+        fetchedResultsController = nil
     }
     
     
@@ -162,15 +166,18 @@ extension LocationsMapViewController  {
 }
 
 
-//MARK:- Core Data Delegate
+//MARK:- Core Data
 extension LocationsMapViewController: NSFetchedResultsControllerDelegate {
     
+    //fetch  / load objects from core data on app launch
     fileprivate func congifureFetchedResultsController() {
+        guard let context = dataController?.viewContext else { return }
+        
         let fetchRequest:NSFetchRequest<Pin> = Pin.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: "locationName", ascending: false)
         fetchRequest.sortDescriptors = [sortDescriptor]
 
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController!.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
         fetchedResultsController.delegate = self
 
         do {

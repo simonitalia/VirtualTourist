@@ -8,19 +8,33 @@
 
 import UIKit
 import MapKit
+import CoreData
 
 class PhotoAlbumCollectionViewController: PhotoAlbumMasterViewController {
     
+    //MARK:- Data Persistence Properties
+    //Core Data
+//    var dataController: DataController? {
+//        return DataController.shared
+//    }
+    
+    private var fetchedResultsController: NSFetchedResultsController<PhotoCollection>!
+    
+    
     //MARK:- Class Properties
     private let cellIdentifier = "PhotoCell"
-    
     
     private var pin: Pin? {
         return PhotoAlbumMasterViewController.pin
     }
     
+    private var photoCollection: PhotoCollection! {
+        didSet {
+            //configure UI
+        }
+    }
     
-    private var photoCollection: PhotoCollection!
+    
     private var photos: [Photo]! {
         get {
             guard let collection = photoCollection, let photos = collection.photos else { return [] }
@@ -55,7 +69,11 @@ class PhotoAlbumCollectionViewController: PhotoAlbumMasterViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureVC()
+        configureCoreData()
     }
+    
+    
+    override func viewWillDisappear(_ animated: Bool) {}
     
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -63,12 +81,30 @@ class PhotoAlbumCollectionViewController: PhotoAlbumMasterViewController {
         if !emptyStateView.isHidden {
             self.setEmptyStateView(false)
         }
+        
+        fetchedResultsController = nil
+    }
+    
+    
+    //MARK:- Core Data Setup
+    private func configureCoreData() {
+//        congifureFetchedResultsController()
     }
     
     
     //MARK:- ViewController Setup
     private func configureVC() {
         configureCollectionView()
+    }
+    
+    
+    private func configureCollectionView() {
+        //setup layout
+        let layout = configureCompositionalLayout()
+        photoAlbumCollectionView.setCollectionViewLayout(layout, animated: false)
+        
+        //trigger fetch of photos
+        performGetPhotos()
     }
     
     
@@ -87,17 +123,7 @@ class PhotoAlbumCollectionViewController: PhotoAlbumMasterViewController {
         }
     }
     
-    
-    private func configureCollectionView() {
-        //setup layout
-        let layout = configureCompositionalLayout()
-        photoAlbumCollectionView.setCollectionViewLayout(layout, animated: false)
-        
-        //trigger fetch of photos
-        performGetPhotos()
-    }
-    
-    
+
     private func performGetPhotos(forPage number: Int=1) {
         guard let pin = pin else { return }
         
@@ -146,15 +172,19 @@ extension PhotoAlbumCollectionViewController: UICollectionViewDelegate {
 }
 
 
-//MARK: CollectionView Data Source
+//MARK:- CollectionView Data Source
+
 extension PhotoAlbumCollectionViewController: UICollectionViewDataSource {
+    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
+//        return fetchedResultsController.sections?.count ?? 0
     }
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return photos.count
+//        return fetchedResultsController.sections?[0].numberOfObjects ?? 0
     }
     
     
@@ -165,19 +195,49 @@ extension PhotoAlbumCollectionViewController: UICollectionViewDataSource {
         
         //configure cell
         let cell = photoAlbumCollectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as! PhotoAlbumCollectionViewCell
+
+        //set cell to default until photo image can be set
+        cell.setPhotoImageViewToDefaultImage()
         
-        //set cell to placeholder image whilst real photo image downloads
-        if let image = UIImage(named: "camera-outline") {
-            cell.setPhotoImageView(with: image)
+        //set cell image with actual photo
+        switch photo.image {
+        case nil:
+            cell.performGetPhotoImage(from: photo.imageURL)
+
+        default:
+            if let data = photo.image {
+                let image = UIImage(data: data)
+                cell.setPhotoImageView(with: image) //if set image fails, pass in nil
+            }
         }
         
-        //fetch photo image and set to cell
-        if let imageURL = photo.imageURL {
-            cell.performGetPhotoImage(from: imageURL)
-        }
-    
         return cell
     }
+}
+
+
+//MARK:- Core Data
+extension PhotoAlbumCollectionViewController: NSFetchedResultsControllerDelegate {
+    
+//    fileprivate func congifureFetchedResultsController() {
+//        guard let pin = pin, let context = dataController?.viewContext else { return }
+//
+//        let fetchRequest:NSFetchRequest<PhotoCollection> = PhotoCollection.fetchRequest()
+//        let predicate = NSPredicate(format: "pin == %@", pin)
+//        fetchRequest.predicate = predicate
+//
+//        let sortDescriptor = NSSortDescriptor(key: "title", ascending: true)
+//        fetchRequest.sortDescriptors = [sortDescriptor]
+//
+//        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+//        fetchedResultsController.delegate = self
+//
+//        do {
+//            try fetchedResultsController.performFetch()
+//        } catch {
+//            fatalError("The fetch could not be performed: \(error.localizedDescription)")
+//        }
+//    }
 }
 
 

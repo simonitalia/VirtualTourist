@@ -36,7 +36,7 @@ extension PhotoCollection {
         newCollection.page = photoCollection.page
         newCollection.pages = photoCollection.pages
         newCollection.total = photoCollection.total
-        newCollection.pin = pin
+        newCollection.pin = pin //entity relationship
         return newCollection
     }
 }

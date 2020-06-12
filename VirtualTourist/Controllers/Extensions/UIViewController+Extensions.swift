@@ -56,7 +56,7 @@ extension UIViewController {
     }
     
     
-    //pull out stats from core data after save context
+    //pull out stats from core data after save
     func printCoreDataStatistics(context: NSManagedObjectContext) {
         context.perform {
             if Thread.isMainThread {

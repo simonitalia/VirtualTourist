@@ -14,5 +14,17 @@ class PhotoAlbumMasterViewController: UIViewController {
     
     //MARK:- Class Properties
     //shared for child VCs
-    static var pin: Pin?
+    static var pin: Pin? {
+        didSet {
+            guard let pin = pin else { return }
+            switch pin.photoCollection {
+            case nil:
+                print("pin.photoCollection is nil")
+                
+            default:
+                print("pin.photoCollection not nil")
+                break
+            }
+        }
+    }
 }
