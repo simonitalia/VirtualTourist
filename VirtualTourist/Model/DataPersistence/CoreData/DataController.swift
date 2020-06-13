@@ -66,3 +66,30 @@ extension DataController {
         }
     }
 }
+
+//MARK:- Print CoreData Stats
+
+extension DataController {
+    
+    func printCoreDataStatistics() {
+        viewContext.perform {
+            if Thread.isMainThread {
+                print("\nPerforming context task on... main thread.")
+            } else {
+                print("\nPerforming context task on... background thread.")
+            }
+            
+            if let pins = try? self.viewContext.count(for: Pin.fetchRequest()) {
+                print("Pins in core data: \(pins).")
+            }
+            
+            if let collections = try? self.viewContext.count(for: PhotoCollection.fetchRequest()) {
+                print("Collections in core data: \(collections).")
+            }
+            
+            if let photos = try? self.viewContext.fetch(Photo.fetchRequest()) {
+                print("Photos in core data: \(photos.count).")
+            }
+        }
+    }
+}

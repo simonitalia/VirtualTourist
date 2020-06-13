@@ -13,18 +13,18 @@ import CoreData
 
 class LocationsMapViewController: UIViewController {
     
-    //MARK:- Data Persistence Properties
-    //Core Data
-    var dataController: DataController? {
-        return DataController.shared
-    }
+    //MARK:- Storyboard Connections
+    //outlets
+    @IBOutlet weak var mapView: MKMapView!
     
-    var fetchedResultsController: NSFetchedResultsController<Pin>!
-    
-    
-    //User defaults
-    private var region: MKCoordinateRegion? {
-        return AppDelegate.region
+    //actions
+    @IBAction func locationsMapLongPressed(_ sender: Any) {
+        if let sender = sender as? UILongPressGestureRecognizer {
+            if sender.state == .ended {
+                let mapCoordinate = getMapCoordinatesFrom(longPressGestureRecognizer: sender)
+                createPin(with: mapCoordinate)
+            }
+        }
     }
     
     
@@ -50,19 +50,18 @@ class LocationsMapViewController: UIViewController {
         }
     }
     
-    //MARK:- Storyboard Connections
-    //outlets
-    @IBOutlet weak var mapView: MKMapView!
     
+    //MARK:- Data Persistence Properties
+    //Core Data
+    var dataController: DataController? {
+        return DataController.shared
+    }
     
-    //actions
-    @IBAction func locationsMapLongPressed(_ sender: Any) {
-        if let sender = sender as? UILongPressGestureRecognizer {
-            if sender.state == .ended {
-                let mapCoordinate = getMapCoordinatesFrom(longPressGestureRecognizer: sender)
-                createPin(with: mapCoordinate)
-            }
-        }
+    var fetchedResultsController: NSFetchedResultsController<Pin>?
+    
+    //User defaults
+    private var region: MKCoordinateRegion? {
+        return AppDelegate.region
     }
     
     
@@ -169,8 +168,8 @@ extension LocationsMapViewController  {
 //MARK:- Core Data
 extension LocationsMapViewController: NSFetchedResultsControllerDelegate {
     
-    //fetch  / load objects from core data on app launch
-    fileprivate func congifureFetchedResultsController() {
+    //fetch / load objects from core data on app launch
+    private func congifureFetchedResultsController() {
         guard let context = dataController?.viewContext else { return }
         
         let fetchRequest:NSFetchRequest<Pin> = Pin.fetchRequest()
@@ -178,12 +177,12 @@ extension LocationsMapViewController: NSFetchedResultsControllerDelegate {
         fetchRequest.sortDescriptors = [sortDescriptor]
 
         fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
-        fetchedResultsController.delegate = self
+        fetchedResultsController?.delegate = self
 
         do {
-            try fetchedResultsController.performFetch()
+            try fetchedResultsController?.performFetch()
         
-            if let pins = fetchedResultsController.fetchedObjects {
+            if let pins = fetchedResultsController?.fetchedObjects {
                 print("\(pins.count) pins loaded from core data.")
                 let annotations = mapView.createMapPointAnnotations(from: pins)
                 self.updateUI(with: annotations)
@@ -206,8 +205,12 @@ extension LocationsMapViewController {
         
         let pinAnnotation = self.mapView.createMapPointAnnotation(from: pin)
         
-        updateCoreData(context: context)
+        //updateUI
         updateUI(with: [pinAnnotation])
+        
+        //update core data
+        try? dataController?.container.viewContext.save()
+        dataController?.printCoreDataStatistics()
     }
 }
 

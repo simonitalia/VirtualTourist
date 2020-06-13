@@ -13,16 +13,16 @@ import MapKit
 class PhotoAlbumMasterViewController: UIViewController {
     
     //MARK:- Class Properties
-    //shared for child VCs
+    //shared bewteen applicable PhotoAlbumVCs
     static var pin: Pin? {
         didSet {
             guard let pin = pin else { return }
             switch pin.photoCollection {
             case nil:
-                print("pin.photoCollection is nil")
+                print("\nPin photoCollection is nil")
                 
             default:
-                print("pin.photoCollection not nil")
+                print("\nPin photoCollection not nil")
                 break
             }
         }

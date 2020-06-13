@@ -49,23 +49,25 @@ class PhotoAlbumCollectionViewCell: UICollectionViewCell {
     }
     
     
-    func performGetPhotoImage(from urlString: String?) {
-        guard let urlString = urlString else {
-            setPhotoImageViewToDefaultImage()
-            return
-        }
+    func performGetPhotoImage(for photo: Photo) {
+        guard let _ = photo.imageURL else { return }
+           
+       //start / show activity indicator
+       photoActivityIndicator(animate: true)
+       
+       VTNetworkController.shared.getPhotoImage(for: photo) { [weak self] (result) in
+           guard let self = self else { return }
+           
+           //stop / hide activity indicator
+           self.photoActivityIndicator(animate: false)
         
-        //start / show activity indicator
-        photoActivityIndicator(animate: true)
-        
-        VTNetworkController.shared.getPhotoImage(from: urlString) { [weak self] (image) in
-            guard let self = self else { return }
+            switch result {
+            case .success(let image):
+                self.setPhotoImageView(with: image)
             
-            //stop / hide activity indicator
-            self.photoActivityIndicator(animate: false)
-            
-            //pass downloaded image (or nil)
-            self.setPhotoImageView(with: image)
+            case .failure(let error):
+                print(error.rawValue)
+            }
         }
     }
 }

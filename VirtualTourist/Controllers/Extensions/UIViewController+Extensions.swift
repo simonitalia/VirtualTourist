@@ -44,38 +44,3 @@ extension UIViewController: MKMapViewDelegate  {
         return pinView
     }
 }
-
-
-//MARK: CoreData Helpers
-extension UIViewController {
-    
-    //svae context to core data
-    func updateCoreData(context: NSManagedObjectContext) {
-        try? context.save()
-        self.printCoreDataStatistics(context: context)
-    }
-    
-    
-    //pull out stats from core data after save
-    func printCoreDataStatistics(context: NSManagedObjectContext) {
-        context.perform {
-            if Thread.isMainThread {
-                print("on main thread")
-            } else {
-                print("off main thread")
-            }
-            
-            if let pins = try? context.count(for: Pin.fetchRequest()) {
-                print("\nPins in core data: \(pins).")
-            }
-            
-            if let collections = try? context.count(for: PhotoCollection.fetchRequest()) {
-                print("\nCollections in core data: \(collections).")
-            }
-            
-            if let photos = try? context.fetch(Photo.fetchRequest()) {
-                print("\nPhotos in core data: \(photos.count).")
-            }
-        }
-    }
-}

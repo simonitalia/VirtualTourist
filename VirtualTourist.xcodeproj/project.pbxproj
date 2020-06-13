@@ -38,7 +38,6 @@
 		2A892822248F1FC300CADCD9 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A892821248F1FC300CADCD9 /* Photo.swift */; };
 		2A892824248F1FD600CADCD9 /* PhotoCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A892823248F1FD600CADCD9 /* PhotoCollection.swift */; };
 		2A892826248F208400CADCD9 /* CodingUserInfoKey+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A892825248F208400CADCD9 /* CodingUserInfoKey+Extensions.swift */; };
-		2A9889AA248F696E00FD1481 /* PhotoAlbumCollectionDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A9889A9248F696E00FD1481 /* PhotoAlbumCollectionDataViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -75,7 +74,6 @@
 		2A892821248F1FC300CADCD9 /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 		2A892823248F1FD600CADCD9 /* PhotoCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollection.swift; sourceTree = "<group>"; };
 		2A892825248F208400CADCD9 /* CodingUserInfoKey+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CodingUserInfoKey+Extensions.swift"; sourceTree = "<group>"; };
-		2A9889A9248F696E00FD1481 /* PhotoAlbumCollectionDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumCollectionDataViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -202,7 +200,6 @@
 				2A040DE82490616F0023B5DB /* PhotoAlbumMasterViewController.swift */,
 				2A50CAAC2480D5BE00F9AC81 /* PhotoAlbumMapViewController.swift */,
 				2A63A9C52480EAEB009D3AF2 /* PhotoAlbumCollectionViewController.swift */,
-				2A9889A9248F696E00FD1481 /* PhotoAlbumCollectionDataViewController.swift */,
 			);
 			path = LocationsPhotoAlbum;
 			sourceTree = "<group>";
@@ -278,9 +275,9 @@
 		2A6EAD852485EB380030D39F /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
+				2A63A9CA24812662009D3AF2 /* DataController.swift */,
 				2A892820248F1F8500CADCD9 /* NSManagedObjects */,
 				2A4DD015249162E400224B0B /* NSManagedObjects+Extensions */,
-				2A63A9CA24812662009D3AF2 /* DataController.swift */,
 				2A50CA90248097F400F9AC81 /* VirtualTourist.xcdatamodeld */,
 			);
 			path = CoreData;
@@ -397,7 +394,6 @@
 				2A89281F248E851500CADCD9 /* Pin.swift in Sources */,
 				2A6EAD6824837CA30030D39F /* MKMapView+Extensions.swift in Sources */,
 				2A892826248F208400CADCD9 /* CodingUserInfoKey+Extensions.swift in Sources */,
-				2A9889AA248F696E00FD1481 /* PhotoAlbumCollectionDataViewController.swift in Sources */,
 				2A50CAAD2480D5BE00F9AC81 /* PhotoAlbumMapViewController.swift in Sources */,
 				2A089A3D2482550000E768C1 /* SearchResponse.swift in Sources */,
 				2A6EAD66248378480030D39F /* UIViewController+Extensions.swift in Sources */,

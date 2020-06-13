@@ -12,6 +12,7 @@ import MapKit
 
 extension Pin {
     
+    
     class func createPin(with annotation: MKAnnotation, in context: NSManagedObjectContext) -> Pin {
         let pin = Pin(context: context)
         pin.identifier = UUID().uuidString
@@ -35,7 +36,7 @@ extension Pin {
             let pin = try context.fetch(request)
             if pin.count > 0 {
                 assert(pin.count == 1, "Database issue. Multiple pins with same identifer found.")
-                print("Pin found in core data.")
+                print("\nSuccess! Pin found in core data.")
                 return pin[0]
             }
         } catch {
@@ -60,7 +61,7 @@ extension Pin {
             let pin = try context.fetch(request)
             if pin.count > 0 {
                 assert(pin.count == 1, "Database issue. Multiple Pins with unique identifer found.")
-                print("Pin found in core data.")
+                print("\nSuccess! Pin found in core data.")
                 return pin[0]
             }
         } catch {

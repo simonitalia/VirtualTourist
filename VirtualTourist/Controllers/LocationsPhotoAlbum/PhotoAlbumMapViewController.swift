@@ -11,18 +11,18 @@ import MapKit
 
 class PhotoAlbumMapViewController: PhotoAlbumMasterViewController {
     
+    //MARK:- Storyboard Connections
+    //outlets
+    @IBOutlet weak var mapView: MKMapView!
+    
+    
     //MARK: Class Properties
     private var pin: Pin? {
         return PhotoAlbumMasterViewController.pin
     }
     
     
-    //MARK:- Storyboard Connections
-    //outlets
-    @IBOutlet weak var mapView: MKMapView!
-    
-    
-     //MARK:- View Lifecycle
+    //MARK:- View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureVC()

@@ -13,11 +13,11 @@
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="LocationsMapViewController" customModule="VirtualTourist" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="2ik-WP-NOl">
-                                <rect key="frame" x="0.0" y="44" width="600" height="556"/>
+                                <rect key="frame" x="0.0" y="44" width="320" height="436"/>
                                 <gestureRecognizers/>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="0yA-g9-7JG" appends="YES" id="GWC-u0-jud"/>
@@ -53,11 +53,11 @@
             <objects>
                 <viewController storyboardIdentifier="PhotoAlbumMasterVC" id="tIO-gR-9FY" customClass="PhotoAlbumMasterViewController" customModule="VirtualTourist" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jw3-97-8Z4">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JyY-jU-azx">
-                                <rect key="frame" x="0.0" y="44" width="600" height="200"/>
+                                <rect key="frame" x="0.0" y="44" width="320" height="200"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="200" id="m6u-cq-c17"/>
                                 </constraints>
@@ -66,7 +66,7 @@
                                 </connections>
                             </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ToB-gS-7Vm">
-                                <rect key="frame" x="0.0" y="244" width="600" height="356"/>
+                                <rect key="frame" x="0.0" y="244" width="320" height="236"/>
                                 <connections>
                                     <segue destination="5UH-0K-vkz" kind="embed" id="A4v-iV-clf"/>
                                 </connections>
@@ -96,7 +96,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="JPz-9T-MQV" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ops-fc-yfD">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="50"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -177,10 +177,10 @@
             </objects>
             <point key="canvasLocation" x="1598" y="1614"/>
         </scene>
-        <!--Photo Album Collection Data View Controller-->
+        <!--Photo Album Collection View Controller-->
         <scene sceneID="sk8-ox-AYg">
             <objects>
-                <viewController id="5UH-0K-vkz" customClass="PhotoAlbumCollectionDataViewController" customModule="VirtualTourist" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="5UH-0K-vkz" customClass="PhotoAlbumCollectionViewController" customModule="VirtualTourist" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="x6A-SE-78f">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="236"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -196,18 +196,18 @@
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PhotoCell" id="2uG-9A-DLB" customClass="PhotoAlbumCollectionViewCell" customModule="VirtualTourist" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="36" height="36"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="48" height="48"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="MUZ-ko-aWD">
-                                            <rect key="frame" x="0.0" y="0.0" width="36" height="36"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="48" height="48"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="camera-outline.png" translatesAutoresizingMaskIntoConstraints="NO" id="r5d-n5-bxn">
-                                                    <rect key="frame" x="0.0" y="0.0" width="36" height="36"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="48" height="48"/>
                                                     <color key="backgroundColor" white="0.95234910102739723" alpha="1" colorSpace="calibratedWhite"/>
                                                 </imageView>
                                                 <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="qkd-dh-mcl">
-                                                    <rect key="frame" x="8" y="8" width="20" height="20"/>
+                                                    <rect key="frame" x="14" y="14" width="20" height="20"/>
                                                 </activityIndicatorView>
                                             </subviews>
                                             <constraints>

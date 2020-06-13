@@ -22,7 +22,7 @@ extension PhotoCollection {
            let collection = try context.fetch(request)
            if collection.count > 0 {
                 assert(collection.count == 1, "Database issue. Multiple Photo Collections found.")
-                print("Photo Collection found in core data.")
+                print("Success! Photo Collection found in core data. Attaching to Pin.")
                 return collection[0]
            }
         } catch {
@@ -33,10 +33,10 @@ extension PhotoCollection {
 
         //create new if not found
         let newCollection = PhotoCollection(context: context)
+        newCollection.pin = pin //entity relationship
         newCollection.page = photoCollection.page
         newCollection.pages = photoCollection.pages
         newCollection.total = photoCollection.total
-        newCollection.pin = pin //entity relationship
         return newCollection
     }
 }

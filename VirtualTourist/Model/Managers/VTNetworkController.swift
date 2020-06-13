@@ -12,9 +12,13 @@ import CoreData
 class VTNetworkController {
     
     //MARK:- Core Data
+    
     private var dataController: DataController? {
         return DataController.shared
     }
+    
+    
+    //MARK:- Class Properties
     
     //accessible class properties
     static var shared = VTNetworkController()
@@ -117,81 +121,88 @@ class VTNetworkController {
         }
         print("EnpointUrl: \(url)") //to debug
     }
+  
     
-    
-    //search by lat / lon coordinates
-    func getPhotos(for location: (lat: Double, lon: Double), page: Int, completion: @escaping (Result<PhotoCollection, VTError>) -> Void) {
-        
-        guard let url = Endpoint.searchByLocation(latitude: location.lat, longitude: location.lon, page: page).url else {
-            print("Internal Error! Endpoint url could not be constructed.")
-            return
-        }
-        
-        let request = URLRequest(url: url)
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-            
-            //handle general error (eg: network error)
-            if let error = error {
-                print("Request Error! \(error.localizedDescription).")
-                completion(.failure(.requestError))
-                return
-            }
-            
-            //bad http response
-            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200  else {
-                print("httpResponse Error! \(error?.localizedDescription ?? "unknown error").")
-                completion(.failure(.badHTTResponse))
-                return
-            }
-            
-            //no data returned
-            guard let data = data else {
-                completion(.failure(.invalidData))
-                return
-            }
-            
-            //handle successful data response
-            do {
-                let newData = self.newDataObject(from: data)
-                let context = self.dataController?.container.viewContext
-                
-                let decoder = JSONDecoder()
-                decoder.userInfo[CodingUserInfoKey.context!] = context
- 
-                //decode data
-                do {
-                    let results = try decoder.decode(SearchResponse.self, from: newData)
-                    print("Success! Photos for location successfully fetched from remote server.")
+    func getPhotos(for pin: Pin, page: Int, completion: @escaping (Result<PhotoCollection, VTError>) -> Void) {
+       guard let url = Endpoint.searchByLocation(latitude: pin.latitude, longitude: pin.longitude, page: page).url else {
+           print("Internal Error! Endpoint url could not be constructed.")
+           return
+       }
+       
+       let request = URLRequest(url: url)
+       let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+           
+           //handle general error (eg: network error)
+           if let error = error {
+               print("Request Error! \(error.localizedDescription).")
+               completion(.failure(.requestError))
+               return
+           }
+           
+           //bad http response
+           guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200  else {
+               print("httpResponse Error! \(error?.localizedDescription ?? "unknown error").")
+               completion(.failure(.badHTTResponse))
+               return
+           }
+           
+           //no data returned
+           guard let data = data else {
+               completion(.failure(.invalidData))
+               return
+           }
+           
+           //handle successful data response
+           do {
+               let newData = self.newDataObject(from: data)
+               let context = self.dataController?.container.viewContext
+               
+               let decoder = JSONDecoder()
+               decoder.userInfo[CodingUserInfoKey.context!] = context
 
-                    
-                    completion(.success(results.photoCollection))
-                    return
-                }
+               //decode data
+               do {
+                   let results = try decoder.decode(SearchResponse.self, from: newData)
+                   print("Success! Photos for location successfully fetched from remote server.")
                 
-            } catch {
-                //error response from server
-                do {
-                    let decoder = JSONDecoder()
-                    let newData = self.newDataObject(from: data)
+                    do {
+                        //update core data
+                        if let photoCollection = try self.updateCoreData(for: pin, with: results.photoCollection) {
+                            
+                           //pass photo collection back to call site
+                           completion(.success(photoCollection))
+                           return
+                        }
                     
-                    //decode error response data
-                    let serverError = try decoder.decode(VTError.VTServerErrorResponse.self, from: newData)
-                    print("Server Error! Remote server reponded with error message: \(serverError.message)")
-                    if let error = VTError(rawValue: serverError.message) {
-                        completion(.failure(error))
-                        return
+                    } catch {
+                        print("Error! Fetching Photo Collection from Core Data \(error.localizedDescription)")
                     }
-                    
-                } catch {
-                    //error results decoding error
-                    print("Decoding Error! Failed to decode server error response: \(error.localizedDescription).")
-                    completion(.failure(.jsonDecodingError))
                 }
-            }
-        }
-        
-        task.resume()
-    }
+               
+           } catch {
+               //error response from server
+               do {
+                   let decoder = JSONDecoder()
+                   let newData = self.newDataObject(from: data)
+                   
+                   //decode error response data
+                   let serverError = try decoder.decode(VTError.VTServerErrorResponse.self, from: newData)
+                   print("Server Error! Remote server reponded with error message: \(serverError.message)")
+                   if let error = VTError(rawValue: serverError.message) {
+                       completion(.failure(error))
+                       return
+                   }
+                   
+               } catch {
+                   //error results decoding error
+                   print("Decoding Error! Failed to decode server error response: \(error.localizedDescription).")
+                   completion(.failure(.jsonDecodingError))
+               }
+           }
+       }
+       
+       task.resume()
+   }
     
     
     private func newDataObject(from data: Data) -> Data {
@@ -206,44 +217,97 @@ class VTNetworkController {
     }
     
     
-    func getPhotoImage(from urlString: String, completion: @escaping (UIImage?) -> Void) {
-       
-        //load image from temp cache (if downloaded and cached)
-        let imageCacheKey = NSString(string: urlString)
-        if let image = CacheManager.shared.imageCache.object(forKey: imageCacheKey) {
-           completion(image)
-           return
-        }
-        
-        guard let url = URL(string: urlString) else { return }
-        
+    func getPhotoImage(for photo: Photo, completion: @escaping (Result<UIImage, VTError>) -> Void) {
+        guard let urlString = photo.imageURL, let url = URL(string: urlString) else { return }
+            
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
 
             //check for error
             if let error = error {
                 print("Error fetching image: \(error.localizedDescription) ")
-                completion(nil)
+                
+                completion(.failure(.unableToDownloadPhoto))
                 return
             }
 
             //check for server response code 200, else bail out
             guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
-                completion(nil)
+                completion(.failure(.unableToDownloadPhoto))
                 return
             }
 
             if let data = data {
                 guard let image = UIImage(data: data) else {
-                    completion(nil)
+                    completion(.failure(.unableToDownloadPhoto))
                     return
                 }
                 
-                //save image to imageCache (using its urlString as the key)
-                CacheManager.shared.imageCache.setObject(image, forKey: imageCacheKey)
-                completion(image)
+                //save image to core data
+                self.updateCoreData(image: photo, with: data)
+                
+                //pass image back to caller
+                completion(.success(image))
             }
         }
 
         task.resume()
+    }
+}
+
+
+//MARK:- Core Data Helpers
+
+extension VTNetworkController {
+    
+    private func updateCoreData(for pin: Pin, with photoCollection: PhotoCollection) throws -> PhotoCollection? {
+        if let context = self.dataController?.container.viewContext {
+            
+            do {
+                
+            //fetch photo collection context
+            let fetchedCollection = try PhotoCollection.fetchOrCreatePhotoCollection(matching: pin, using: photoCollection, in: context)
+                
+                //update saved page to fetched page
+                fetchedCollection.page = photoCollection.page
+                
+                do {
+                    //fetch photos context
+                    for photo in photoCollection.photos as! Set<Photo> {
+                        _ = try Photo.fetchOrCreatePhoto(matching: photo, for: fetchedCollection, in: context)
+                    }
+
+                } catch {
+                    print("Error! Fetching Photo from Core Data \(error.localizedDescription)")
+                }
+                
+                try? dataController?.container.viewContext.save()
+                dataController?.printCoreDataStatistics()
+                
+                return fetchedCollection
+            
+            } catch {
+                throw error
+            }
+        }
+        
+        return nil
+    }
+    
+    
+    private func updateCoreData(image photo: Photo, with data: Data) {
+        if let context = self.dataController?.container.viewContext {
+            
+            do {
+                if let photo = try Photo.fetchPhoto(matching: photo, in: context) {
+                    photo.image = data
+                }
+   
+                try? dataController?.container.viewContext.save()
+//                dataController?.printCoreDataStatistics()
+                
+            } catch {
+                 print("Error! Fetching Photo from Core Data \(error.localizedDescription)")
+            }
+        }
     }
 }

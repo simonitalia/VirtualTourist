@@ -49,7 +49,7 @@ struct UserSettingsDataPersistenceManager {
         
         //decode data to map region
         if let region = convertToObjectFrom(data: data) {
-            print("Success! Loaded map region: \(region)")
+//            print("Success! Loaded map region: \(region)")
             completion(.success(region))
             
         } else {

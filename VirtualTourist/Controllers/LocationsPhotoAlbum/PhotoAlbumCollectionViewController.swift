@@ -12,39 +12,6 @@ import CoreData
 
 class PhotoAlbumCollectionViewController: PhotoAlbumMasterViewController {
     
-    //MARK:- Data Persistence Properties
-    //Core Data
-//    var dataController: DataController? {
-//        return DataController.shared
-//    }
-    
-    private var fetchedResultsController: NSFetchedResultsController<PhotoCollection>!
-    
-    
-    //MARK:- Class Properties
-    private let cellIdentifier = "PhotoCell"
-    
-    private var pin: Pin? {
-        return PhotoAlbumMasterViewController.pin
-    }
-    
-    private var photoCollection: PhotoCollection! {
-        didSet {
-            //configure UI
-        }
-    }
-    
-    
-    private var photos: [Photo]! {
-        get {
-            guard let collection = photoCollection, let photos = collection.photos else { return [] }
-            return convertNSSetPhotosToArray(photos: photos)
-        }
-        
-        set { return }
-    }
-    
-    
     //MARK:- Storyboard Connections
     //outlets
     @IBOutlet weak var photoAlbumCollectionView: UICollectionView!
@@ -52,24 +19,50 @@ class PhotoAlbumCollectionViewController: PhotoAlbumMasterViewController {
     @IBOutlet weak var collectionViewActivityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var emptyStateView: UIView!
     
-
     //actions
     @IBAction func newCollectionButtonTapped(_ sender: Any) {
-        guard photoCollection != nil else { return }
-        guard photoCollection.pages > 1 else {
+        guard let pages = totalPages else { return }
+        guard pages > 1 else {
             self.presentUserAlert(title: "No More Photos", message: "There are no other photos for this location.")
             return
         }
         
-        performGetPhotos(forPage: getRandomPage())
+        //get random page
+        let page = getRandomPage()
+//        currentPage = page //update current page property
+        performFetchPhotosFromSearch(forPage: Int(page))
     }
     
     
-    //MARK: View Lifecycle
+    //MARK:- Class Properties
+    private let cellIdentifier = "PhotoCell"
+    internal var currentPage: Int64? {
+        return pin?.photoCollection?.page
+    }
+    
+    internal var totalPages: Int64? {
+        return pin?.photoCollection?.pages
+    }
+    
+    private var pin: Pin? = {
+        return PhotoAlbumMasterViewController.pin
+    }()
+    
+    
+    //MARK:- Data Persistence Properties
+    //Core Data
+    internal var dataController: DataController? {
+        return DataController.shared
+    }
+    
+    internal var fetchedResultsController: NSFetchedResultsController<Photo>?
+    
+
+    //MARK:- View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        performFetchPhotos()
         configureVC()
-        configureCoreData()
     }
     
     
@@ -86,12 +79,6 @@ class PhotoAlbumCollectionViewController: PhotoAlbumMasterViewController {
     }
     
     
-    //MARK:- Core Data Setup
-    private func configureCoreData() {
-//        congifureFetchedResultsController()
-    }
-    
-    
     //MARK:- ViewController Setup
     private func configureVC() {
         configureCollectionView()
@@ -102,35 +89,29 @@ class PhotoAlbumCollectionViewController: PhotoAlbumMasterViewController {
         //setup layout
         let layout = configureCompositionalLayout()
         photoAlbumCollectionView.setCollectionViewLayout(layout, animated: false)
-        
-        //trigger fetch of photos
-        performGetPhotos()
-    }
-    
-    
-    private func configureUI() {
-        DispatchQueue.main.async {
-            
-            //if photos
-            switch self.photos.isEmpty {
-            case false:
-                self.photoAlbumCollectionView.reloadData()
-            
-            //if no photos, show empty state view
-            case true:
-                self.setEmptyStateView(true)
-            }
-        }
     }
     
 
-    private func performGetPhotos(forPage number: Int=1) {
+    internal func performFetchPhotos() {
+        if let _ = pin?.photoCollection {
+//            performFetchPhotosFromCoreData(with: photoCollection)
+            performFetchPhotosFromCoreData()
+            
+        } else {
+            performFetchPhotosFromSearch(forPage: 1)
+        }
+    }
+
+
+    private func performFetchPhotosFromSearch(forPage number: Int) {
         guard let pin = pin else { return }
+        
+        print("\nFetching new photos for page \(number)....")
         
         //show / start animating activity indicator
         collectionViewActivityIndicator(animate: true)
         
-        VTNetworkController.shared.getPhotos(for: (lat: pin.latitude, lon: pin.longitude), page: number) { [weak self] result in
+        VTNetworkController.shared.getPhotos(for: pin, page: number) { [weak self] result in
             guard let self = self else { return }
             
             //stop / hide animating activity indicator
@@ -138,20 +119,15 @@ class PhotoAlbumCollectionViewController: PhotoAlbumMasterViewController {
             
             switch result {
             case .success(let photoCollection):
-                print("Photos page: \(photoCollection.page) of \(photoCollection.pages)")
-                self.displayPhotos(with: photoCollection)
                 
+                //update properties
+                self.pin?.photoCollection = photoCollection
+                self.performFetchPhotosFromCoreData()
                 
             case .failure(let error):
                 self.presentUserAlert(title: "Something went wrong", message: error.rawValue)
             }
         }
-    }
-    
-    
-    internal func displayPhotos(with photoCollection: PhotoCollection) {
-        self.photoCollection = photoCollection
-        self.configureUI()
     }
 }
 
@@ -161,13 +137,15 @@ extension PhotoAlbumCollectionViewController: UICollectionViewDelegate {
     
     //support deleting item in collection
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//        guard let photoCollection = photoCollection else { return }
+        
 //        photoCollection.photos.remove(at: indexPath.item)
 //        photoAlbumCollectionView.deleteItems(at: [indexPath])
 
         //display empty state
-        if photos.isEmpty && photoCollection.pages < 2 {
-            self.setEmptyStateView(true)
-        }
+//        if photos.isEmpty && Int(photoCollection.pages) < 2 {
+//            self.setEmptyStateView(true)
+//        }
     }
 }
 
@@ -177,37 +155,36 @@ extension PhotoAlbumCollectionViewController: UICollectionViewDelegate {
 extension PhotoAlbumCollectionViewController: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-//        return fetchedResultsController.sections?.count ?? 0
+        return fetchedResultsController?.sections?.count ?? 1
     }
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return photos.count
-//        return fetchedResultsController.sections?[0].numberOfObjects ?? 0
+        return fetchedResultsController?.sections?[section].numberOfObjects ?? 0
     }
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
-        //get photo object
-        let photo = photos[indexPath.item]
-        
         //configure cell
         let cell = photoAlbumCollectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as! PhotoAlbumCollectionViewCell
-
-        //set cell to default until photo image can be set
+        
+        //remove any prior images in reused cell
+        cell.photoImageView.image = nil
         cell.setPhotoImageViewToDefaultImage()
         
-        //set cell image with actual photo
-        switch photo.image {
-        case nil:
-            cell.performGetPhotoImage(from: photo.imageURL)
+        if let photo = fetchedResultsController?.object(at: indexPath) {
+        
+            //set cell image with actual photo
+            switch photo.image {
+            case nil:
+                cell.performGetPhotoImage(for: photo)
 
-        default:
-            if let data = photo.image {
-                let image = UIImage(data: data)
-                cell.setPhotoImageView(with: image) //if set image fails, pass in nil
+            default:
+                if let data = photo.image {
+                    let image = UIImage(data: data)
+                    cell.setPhotoImageView(with: image) //if set image fails, pass in nil
+                }
             }
         }
         
@@ -216,32 +193,36 @@ extension PhotoAlbumCollectionViewController: UICollectionViewDataSource {
 }
 
 
-//MARK:- Core Data
+//MARK:- Core Data Delegate + Helpers
 extension PhotoAlbumCollectionViewController: NSFetchedResultsControllerDelegate {
     
-//    fileprivate func congifureFetchedResultsController() {
-//        guard let pin = pin, let context = dataController?.viewContext else { return }
-//
-//        let fetchRequest:NSFetchRequest<PhotoCollection> = PhotoCollection.fetchRequest()
-//        let predicate = NSPredicate(format: "pin == %@", pin)
-//        fetchRequest.predicate = predicate
-//
-//        let sortDescriptor = NSSortDescriptor(key: "title", ascending: true)
-//        fetchRequest.sortDescriptors = [sortDescriptor]
-//
-//        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
-//        fetchedResultsController.delegate = self
-//
-//        do {
-//            try fetchedResultsController.performFetch()
-//        } catch {
-//            fatalError("The fetch could not be performed: \(error.localizedDescription)")
-//        }
-//    }
+    private func performFetchPhotosFromCoreData() {
+        guard let pin = pin, let context = dataController?.viewContext else { return }
+
+        let fetchRequest:NSFetchRequest<Photo> = Photo.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "photoCollection.pin == %@", pin)
+        let sortDescriptor = NSSortDescriptor(key: "title", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        fetchedResultsController?.delegate = self
+
+        do {
+            try fetchedResultsController?.performFetch()
+            print("Fetched objects: \(fetchedResultsController?.fetchedObjects?.count ?? 0)")
+            print("Fetched page \(currentPage ?? 0) of \(totalPages ?? 0) pages from core data.")
+
+            //update UI
+            updateUI()
+            
+        } catch {
+            fatalError("The fetch could not be performed: \(error.localizedDescription)")
+        }
+    }
 }
 
 
-// MARK:- Helpers
+// MARK:- CollectionView UI Helpers
 extension PhotoAlbumCollectionViewController {
     
     //collection view layout setup
@@ -260,6 +241,18 @@ extension PhotoAlbumCollectionViewController {
     }
     
     
+    private func updateUI() {
+         DispatchQueue.main.async {
+            guard let photosCount = self.pin?.photoCollection?.photos?.count, photosCount > 0 else {
+                self.setEmptyStateView(true)
+                return
+            }
+            
+            self.photoAlbumCollectionView.reloadData()
+        }
+    }
+
+    
     //set view UI elements state
     private func collectionViewActivityIndicator(animate: Bool) {
         
@@ -275,26 +268,25 @@ extension PhotoAlbumCollectionViewController {
         DispatchQueue.main.async {
             self.emptyStateView.isHidden = !display
             self.photoAlbumCollectionView.isHidden = display
+            self.newCollectionButton.isEnabled = !display
         }
     }
+}
+
+
+//MARK:- Helpers
+extension PhotoAlbumCollectionViewController {
     
-    
-    private func getRandomPage() -> Int {
-        let pages = Int(photoCollection.pages)
-        let currentPage = Int(photoCollection.page)
+    private func getRandomPage() -> Int64 {
+        guard let totalPages = totalPages else { return 0 }
         
-        let pageRange = 1...pages
-        var randomPage = Int.random(in: pageRange)
+        let pageRange = 1...totalPages
+        var randomPage = Int64.random(in: pageRange)
         
         while randomPage == currentPage {
             randomPage = getRandomPage()
         }
 
-        return Int(randomPage)
-    }
-    
-    
-    internal func convertNSSetPhotosToArray(photos: NSSet) -> [Photo]? {
-        return photos.allObjects as? [Photo]
+        return randomPage
     }
 }
