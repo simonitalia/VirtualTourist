@@ -13,6 +13,7 @@ import CoreData
 class PhotoAlbumCollectionViewController: PhotoAlbumMasterViewController {
     
     //MARK:- Storyboard Connections
+    
     //outlets
     @IBOutlet weak var photoAlbumCollectionView: UICollectionView!
     @IBOutlet weak var newCollectionButton: UIBarButtonItem!
@@ -27,19 +28,30 @@ class PhotoAlbumCollectionViewController: PhotoAlbumMasterViewController {
             return
         }
         
-        //get random page
-        let page = getRandomPage()
-        performFetchPhotosFromSearch(forPage: Int(page))
+        //update database
+        if let objectID = pin?.photoCollection?.objectID {
+            dataController?.viewContext.object(with: objectID)
+            try? dataController?.viewContext.save()
+            
+            //get random page and trigger  fetch
+            let page = getRandomPage()
+            performFetchPhotosFromSearch(forPage: Int(page))
+        }
+
+        //TODO:- REMOVE
+        setEmptyStateView(false)
     }
     
     
     //MARK:- Class Properties
+    
+    private var currentSearchTask: URLSessionDataTask?
     private let cellIdentifier = "PhotoCell"
-    internal var currentPage: Int64? {
+    private var currentPage: Int64? {
         return pin?.photoCollection?.page
     }
     
-    internal var totalPages: Int64? {
+    private var totalPages: Int64? {
         return pin?.photoCollection?.pages
     }
     
@@ -54,7 +66,8 @@ class PhotoAlbumCollectionViewController: PhotoAlbumMasterViewController {
         return DataController.shared
     }
     
-    internal var fetchedResultsController: NSFetchedResultsController<Photo>?
+    
+    private var fetchedResultsController: NSFetchedResultsController<Photo>?
     
 
     //MARK:- View Lifecycle
@@ -80,6 +93,7 @@ class PhotoAlbumCollectionViewController: PhotoAlbumMasterViewController {
         }
         
         fetchedResultsController = nil
+        cancelDataTasks()
     }
     
     
@@ -109,16 +123,21 @@ class PhotoAlbumCollectionViewController: PhotoAlbumMasterViewController {
     private func performFetchPhotosFromSearch(forPage number: Int) {
         guard let pin = pin else { return }
         
+        //cance any existing running taskss
+        cancelDataTasks()
+        
         print("\nFetching new photos for page \(number)....")
         
         //show / start animating activity indicator
         collectionViewActivityIndicator(animate: true)
+        collectionViewSetUserInput(enabled: false)
         
-        VTNetworkController.shared.getPhotos(for: pin, page: number) { [weak self] result in
+        currentSearchTask = VTNetworkController.shared.getPhotos(for: pin, page: number) { [weak self] result in
             guard let self = self else { return }
             
             //stop / hide animating activity indicator
             self.collectionViewActivityIndicator(animate: false)
+            self.collectionViewSetUserInput(enabled: true)
             
             switch result {
             case .success(let photoCollection):
@@ -142,19 +161,14 @@ extension PhotoAlbumCollectionViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     
         guard let photo = fetchedResultsController?.object(at: indexPath) else { return }
+//        print("Objects BEFORE delete: \(fetchedResultsController?.fetchedObjects?.count ?? 0)")
         
-        print("Objects BEFORE delete: \(fetchedResultsController?.fetchedObjects?.count ?? 0)")
-        
-        dataController?.viewContext.delete(photo)
+        delete(object: photo)
         
         try? dataController?.viewContext.save()
         dataController?.printCoreDataStatistics()
         
-        print("Objects AFTER delete: \(fetchedResultsController?.fetchedObjects?.count ?? 0)")
-        
-        if fetchedResultsController?.fetchedObjects == nil {
-            self.setEmptyStateView(true)
-        }
+//        print("Objects AFTER delete: \(fetchedResultsController?.fetchedObjects?.count ?? 0)")
         
         //display empty state if objects afer delete
         if let count = fetchedResultsController?.fetchedObjects?.count, count < 1 {
@@ -179,14 +193,15 @@ extension PhotoAlbumCollectionViewController: UICollectionViewDataSource {
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
+    
         //configure cell
         let cell = photoAlbumCollectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as! PhotoAlbumCollectionViewCell
         
         //remove any prior images in reused cell
-        cell.setPhotoImageViewToDefaultImage()
+        cell.setPhotoImageToDownloading()
         
         if let photo = self.fetchedResultsController?.fetchedObjects?[indexPath.item] {
+            
             
             //set cell image with actual photo
             switch photo.image {
@@ -206,7 +221,7 @@ extension PhotoAlbumCollectionViewController: UICollectionViewDataSource {
 }
 
 
-//MARK:- Core Data Delegate + Helpers
+//MARK:- NSFetchedResultsControllerDelegate + Core Data Helpers
 extension PhotoAlbumCollectionViewController: NSFetchedResultsControllerDelegate {
     
     private func performFetchPhotosFromCoreData() {
@@ -274,8 +289,10 @@ extension PhotoAlbumCollectionViewController: NSFetchedResultsControllerDelegate
     }
     
     
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-         
+    private func delete(object: NSManagedObject) {
+        dataController?.viewContext.delete(object)
+        try? dataController?.viewContext.save()
+        dataController?.printCoreDataStatistics()
     }
 }
 
@@ -316,7 +333,6 @@ extension PhotoAlbumCollectionViewController {
         
         DispatchQueue.main.async {
             self.collectionViewActivityIndicator.isHidden = !animate
-            self.newCollectionButton.isEnabled = !animate
             animate ? self.collectionViewActivityIndicator.startAnimating() : self.collectionViewActivityIndicator.stopAnimating()
         }
     }
@@ -326,7 +342,14 @@ extension PhotoAlbumCollectionViewController {
         DispatchQueue.main.async {
             self.emptyStateView.isHidden = !display
             self.photoAlbumCollectionView.isHidden = display
-            self.newCollectionButton.isEnabled = !display
+        }
+    }
+    
+    
+    private func collectionViewSetUserInput(enabled: Bool) {
+        DispatchQueue.main.async {
+            self.photoAlbumCollectionView.isUserInteractionEnabled = enabled
+            self.newCollectionButton.isEnabled = enabled
         }
     }
 }
@@ -334,6 +357,13 @@ extension PhotoAlbumCollectionViewController {
 
 //MARK:- Helpers
 extension PhotoAlbumCollectionViewController {
+    
+    
+    private func cancelDataTasks() {
+        currentSearchTask?.cancel()
+        PhotoAlbumCollectionViewCell.fetchPhotoTasks?.forEach { $0.cancel() }
+    }
+    
     
     private func getRandomPage() -> Int64 {
         guard let totalPages = totalPages else { return 0 }

@@ -11,32 +11,43 @@ import UIKit
 class PhotoAlbumCollectionViewCell: UICollectionViewCell {
     
     //MARK:- Storyboard Connections
+    
     //outlets
     @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var photoActivityIndicator: UIActivityIndicatorView!
     
     
-    func setPhotoImageViewToDefaultImage() {
+    //MARK:- Class Properties
+    static var fetchPhotoTasks: [URLSessionDataTask]?
+    
+    func setPhotoImageToDownloading() {
         DispatchQueue.main.async {
             if let image = UIImage(named: "camera-outline") {
+               self.photoImageView.image = image
+                self.setNeedsDisplay()
+            }
+        }
+    }
+    
+
+    func setPhotoImageViewToDefault() {
+        DispatchQueue.main.async {
+            if let image = UIImage(named: "no-image-outline") {
                 self.photoImageView.image = image
-//                self.setNeedsDisplay()
-                self.setNeedsLayout()
+                self.setNeedsDisplay()
             }
         }
     }
     
 
     func setPhotoImageView(with image: UIImage?) {
-        
         DispatchQueue.main.async {
             if let image = image {
                 self.photoImageView.image = image
-//                self.setNeedsDisplay()
-                self.setNeedsLayout()
-            
+                self.setNeedsDisplay()
+
             } else {
-                self.setPhotoImageViewToDefaultImage()
+                self.setPhotoImageViewToDefault()
             }
         }
     }
@@ -52,24 +63,31 @@ class PhotoAlbumCollectionViewCell: UICollectionViewCell {
     
     
     func performGetPhotoImage(for photo: Photo) {
+        
         guard let _ = photo.imageURL else { return }
            
        //start / show activity indicator
        photoActivityIndicator(animate: true)
        
-       VTNetworkController.shared.getPhotoImage(for: photo) { [weak self] (result) in
+       let fetchPhotoTask = VTNetworkController.shared.getPhotoImage(for: photo) { [weak self] (result) in
            guard let self = self else { return }
            
-           //stop / hide activity indicator
-           self.photoActivityIndicator(animate: false)
+            //stop / hide activity indicator
+            self.photoActivityIndicator(animate: false)
         
             switch result {
             case .success(let image):
                 self.setPhotoImageView(with: image)
             
             case .failure(let error):
+                self.setPhotoImageViewToDefault()
                 print(error.rawValue)
             }
+        }
+        
+        //add task to global property
+        if let dataTask = fetchPhotoTask {
+            PhotoAlbumCollectionViewCell.fetchPhotoTasks?.append(dataTask)
         }
     }
 }

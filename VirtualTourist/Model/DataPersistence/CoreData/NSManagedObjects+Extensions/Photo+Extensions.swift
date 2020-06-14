@@ -23,7 +23,6 @@ extension Photo {
             let photos = try context.fetch(request)
             if photos.count > 0 {
                 assert(photos.count == 1, "Issue with Database. Fetched photos should be unique.")
-//                print("Success! Photo found in core data.")
                 return photos[0] //return record, should only be 1 record
             }
 
@@ -32,8 +31,6 @@ extension Photo {
         }
 
         //create new if not found
-//        print("Photo not found in core data. Creating new Photo.")
-
         let newPhoto = Photo(context: context)
         newPhoto.id = photo.id
         newPhoto.title = photo.title
@@ -46,10 +43,13 @@ extension Photo {
     
     //called when setting photo image
     class func fetchPhoto(matching photo: Photo, in context: NSManagedObjectContext) throws -> Photo? {
-
+        guard let id = photo.id else {
+            return nil
+        }
+        
         //lookup in core data
         let request: NSFetchRequest<Photo> = Photo.fetchRequest()
-        request.predicate = NSPredicate(format: "id = %@", photo.id!)
+        request.predicate = NSPredicate(format: "id = %@", id)
 
         do {
             let photos = try context.fetch(request)
