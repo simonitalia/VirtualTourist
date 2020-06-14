@@ -12,11 +12,23 @@ import CoreData
 
 extension PhotoCollection {
     
+    
+    class func createPhotoCollection(for pin: Pin, using photoCollection: PhotoCollection, in context: NSManagedObjectContext) -> PhotoCollection {
+        
+        let newCollection = PhotoCollection(context: context)
+        newCollection.pin = pin //entity relationship
+        newCollection.page = photoCollection.page
+        newCollection.pages = photoCollection.pages
+        newCollection.total = photoCollection.total
+        return newCollection
+    }
+    
+    
     class func fetchOrCreatePhotoCollection(matching pin: Pin, using photoCollection: PhotoCollection, in context: NSManagedObjectContext) throws -> PhotoCollection {
 
         //lookup in core data
         let request: NSFetchRequest<PhotoCollection> = PhotoCollection.fetchRequest()
-        request.predicate = NSPredicate(format: "pin = %@", pin)
+        request.predicate = NSPredicate(format: "photoCollection = %@", photoCollection)
 
         do {
            let collection = try context.fetch(request)

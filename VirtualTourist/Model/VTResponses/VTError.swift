@@ -17,7 +17,7 @@ enum VTError: String, Error {
     case jsonDecodingError = "Failed to parse json data returned from server."
     case unableToLoadMapRegion = "Unable to load map region from user defaults."
     case unableToSaveMapRegion = "Unable to save map region to user defaults."
-    case unableToDownloadPhoto = "We encountered a problem while downloading photo."
+    case unableToFetchPhoto = "We encountered a problem while fetching photo."
 }
 
 

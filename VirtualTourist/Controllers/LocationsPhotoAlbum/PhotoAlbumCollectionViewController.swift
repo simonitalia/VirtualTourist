@@ -29,7 +29,6 @@ class PhotoAlbumCollectionViewController: PhotoAlbumMasterViewController {
         
         //get random page
         let page = getRandomPage()
-//        currentPage = page //update current page property
         performFetchPhotosFromSearch(forPage: Int(page))
     }
     
@@ -66,6 +65,11 @@ class PhotoAlbumCollectionViewController: PhotoAlbumMasterViewController {
     }
     
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+    }
+    
+    
     override func viewWillDisappear(_ animated: Bool) {}
     
     
@@ -94,7 +98,6 @@ class PhotoAlbumCollectionViewController: PhotoAlbumMasterViewController {
 
     internal func performFetchPhotos() {
         if let _ = pin?.photoCollection {
-//            performFetchPhotosFromCoreData(with: photoCollection)
             performFetchPhotosFromCoreData()
             
         } else {
@@ -137,15 +140,26 @@ extension PhotoAlbumCollectionViewController: UICollectionViewDelegate {
     
     //support deleting item in collection
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        guard let photoCollection = photoCollection else { return }
+    
+        guard let photo = fetchedResultsController?.object(at: indexPath) else { return }
         
-//        photoCollection.photos.remove(at: indexPath.item)
-//        photoAlbumCollectionView.deleteItems(at: [indexPath])
-
-        //display empty state
-//        if photos.isEmpty && Int(photoCollection.pages) < 2 {
-//            self.setEmptyStateView(true)
-//        }
+        print("Objects BEFORE delete: \(fetchedResultsController?.fetchedObjects?.count ?? 0)")
+        
+        dataController?.viewContext.delete(photo)
+        
+        try? dataController?.viewContext.save()
+        dataController?.printCoreDataStatistics()
+        
+        print("Objects AFTER delete: \(fetchedResultsController?.fetchedObjects?.count ?? 0)")
+        
+        if fetchedResultsController?.fetchedObjects == nil {
+            self.setEmptyStateView(true)
+        }
+        
+        //display empty state if objects afer delete
+        if let count = fetchedResultsController?.fetchedObjects?.count, count < 1 {
+            self.setEmptyStateView(true)
+        }
     }
 }
 
@@ -170,11 +184,10 @@ extension PhotoAlbumCollectionViewController: UICollectionViewDataSource {
         let cell = photoAlbumCollectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as! PhotoAlbumCollectionViewCell
         
         //remove any prior images in reused cell
-        cell.photoImageView.image = nil
         cell.setPhotoImageViewToDefaultImage()
         
-        if let photo = fetchedResultsController?.object(at: indexPath) {
-        
+        if let photo = self.fetchedResultsController?.fetchedObjects?[indexPath.item] {
+            
             //set cell image with actual photo
             switch photo.image {
             case nil:
@@ -219,6 +232,51 @@ extension PhotoAlbumCollectionViewController: NSFetchedResultsControllerDelegate
             fatalError("The fetch could not be performed: \(error.localizedDescription)")
         }
     }
+    
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        
+        switch type {
+        case .insert:
+            photoAlbumCollectionView.insertItems(at: [newIndexPath!])
+            break
+        
+        case .delete:
+            photoAlbumCollectionView.deleteItems(at: [indexPath!])
+            break
+        
+        case .update:
+            photoAlbumCollectionView.reloadItems(at: [indexPath!])
+        
+        case .move:
+            photoAlbumCollectionView.moveItem(at: indexPath!, to: newIndexPath!)
+        @unknown default:
+            fatalError("Invalid change type in controller(_:didChange:anObject:for:).")
+        }
+    }
+    
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
+        
+        let indexSet = IndexSet(integer: sectionIndex)
+        
+        switch type {
+        case .insert: photoAlbumCollectionView.insertSections(indexSet)
+        case .delete: photoAlbumCollectionView.deleteSections(indexSet)
+        case .update: photoAlbumCollectionView.reloadSections(indexSet)
+            
+        case .move:
+            fatalError("Invalid change type in controller(_:didChange:atSectionIndex:for:)")
+        
+        @unknown default:
+            fatalError("Invalid change type in controller(_:didChange:atSectionIndex:for:)")
+        }
+    }
+    
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+         
+    }
 }
 
 
@@ -243,11 +301,11 @@ extension PhotoAlbumCollectionViewController {
     
     private func updateUI() {
          DispatchQueue.main.async {
-            guard let photosCount = self.pin?.photoCollection?.photos?.count, photosCount > 0 else {
+            guard let photos = self.fetchedResultsController?.fetchedObjects, !photos.isEmpty else {
                 self.setEmptyStateView(true)
                 return
             }
-            
+
             self.photoAlbumCollectionView.reloadData()
         }
     }

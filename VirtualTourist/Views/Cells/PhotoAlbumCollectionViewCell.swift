@@ -20,7 +20,8 @@ class PhotoAlbumCollectionViewCell: UICollectionViewCell {
         DispatchQueue.main.async {
             if let image = UIImage(named: "camera-outline") {
                 self.photoImageView.image = image
-                self.setNeedsDisplay()
+//                self.setNeedsDisplay()
+                self.setNeedsLayout()
             }
         }
     }
@@ -31,7 +32,8 @@ class PhotoAlbumCollectionViewCell: UICollectionViewCell {
         DispatchQueue.main.async {
             if let image = image {
                 self.photoImageView.image = image
-                self.setNeedsDisplay()
+//                self.setNeedsDisplay()
+                self.setNeedsLayout()
             
             } else {
                 self.setPhotoImageViewToDefaultImage()

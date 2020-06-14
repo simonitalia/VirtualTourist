@@ -13,9 +13,9 @@ class VTNetworkController {
     
     //MARK:- Core Data
     
-    private var dataController: DataController? {
+    private var dataController: DataController? = {
         return DataController.shared
-    }
+    }()
     
     
     //MARK:- Class Properties
@@ -173,7 +173,7 @@ class VTNetworkController {
                            completion(.success(photoCollection))
                            return
                         }
-                    
+                        
                     } catch {
                         print("Error! Fetching Photo Collection from Core Data \(error.localizedDescription)")
                     }
@@ -219,28 +219,38 @@ class VTNetworkController {
     
     func getPhotoImage(for photo: Photo, completion: @escaping (Result<UIImage, VTError>) -> Void) {
         guard let urlString = photo.imageURL, let url = URL(string: urlString) else { return }
-            
+        
+        //check cache for image, load if cached
+//        let imageCacheKey = NSString(string: urlString)
+//        if let image = CacheManager.shared.imageCache.object(forKey: imageCacheKey) {
+//            completion(.success(image))
+//            return
+//        }
+
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
 
             //check for error
             if let error = error {
                 print("Error fetching image: \(error.localizedDescription) ")
                 
-                completion(.failure(.unableToDownloadPhoto))
+                completion(.failure(.unableToFetchPhoto))
                 return
             }
 
             //check for server response code 200, else bail out
             guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
-                completion(.failure(.unableToDownloadPhoto))
+                completion(.failure(.unableToFetchPhoto))
                 return
             }
 
             if let data = data {
                 guard let image = UIImage(data: data) else {
-                    completion(.failure(.unableToDownloadPhoto))
+                    completion(.failure(.unableToFetchPhoto))
                     return
                 }
+                
+                //update cache manager
+//                CacheManager.shared.imageCache.setObject(image, forKey: imageCacheKey)
                 
                 //save image to core data
                 self.updateCoreData(image: photo, with: data)
@@ -267,6 +277,8 @@ extension VTNetworkController {
             //fetch photo collection context
             let fetchedCollection = try PhotoCollection.fetchOrCreatePhotoCollection(matching: pin, using: photoCollection, in: context)
                 
+//            let fetchedCollection = PhotoCollection.createPhotoCollection(for: pin, using: photoCollection, in: context)
+                
                 //update saved page to fetched page
                 fetchedCollection.page = photoCollection.page
                 
@@ -274,6 +286,9 @@ extension VTNetworkController {
                     //fetch photos context
                     for photo in photoCollection.photos as! Set<Photo> {
                         _ = try Photo.fetchOrCreatePhoto(matching: photo, for: fetchedCollection, in: context)
+                        
+                        try? dataController?.container.viewContext.save()
+//                        dataController?.printCoreDataStatistics()
                     }
 
                 } catch {
