@@ -18,6 +18,7 @@ class PhotoAlbumCollectionViewCell: UICollectionViewCell {
     
     
     //MARK: - Class Properties
+    var imageURL: String?
     
     static var fetchPhotoTasks: [URLSessionDataTask]? //invalidate upon user request to fetch new photos
     
@@ -67,9 +68,7 @@ class PhotoAlbumCollectionViewCell: UICollectionViewCell {
     
     
     func performGetPhotoImage(for photo: Photo) {
-        
-        guard let _ = photo.imageURL else { return }
-           
+
        //start / show activity indicator
        photoActivityIndicator(animate: true)
        
@@ -81,7 +80,9 @@ class PhotoAlbumCollectionViewCell: UICollectionViewCell {
         
             switch result {
             case .success(let image):
-                self.setPhotoImageView(with: image)
+                if self.imageURL == photo.imageURL {
+                    self.setPhotoImageView(with: image)
+                }
             
             case .failure(let error):
                 self.setPhotoImageViewToDefault()

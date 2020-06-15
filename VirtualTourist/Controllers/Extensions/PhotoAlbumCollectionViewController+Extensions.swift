@@ -19,15 +19,14 @@ extension PhotoAlbumCollectionViewController {
             
            //configure cell
             let cell = self.photoAlbumCollectionView.dequeueReusableCell(withReuseIdentifier: self.cellIdentifier, for: indexPath) as! PhotoAlbumCollectionViewCell
-            
-            //remove any prior images in reused cell
-            cell.setPhotoImageToDownloading()
-            
+
             if let photo = self.fetchedResultsController?.fetchedObjects?[indexPath.item] {
                 
                 //set cell image with actual photo
                 switch photo.image {
                 case nil:
+                    cell.imageURL = photo.imageURL //capture url of image request to avodin mismatch of recycled cells and images
+                    cell.setPhotoImageToDownloading()
                     cell.performGetPhotoImage(for: photo)
 
                 default:
