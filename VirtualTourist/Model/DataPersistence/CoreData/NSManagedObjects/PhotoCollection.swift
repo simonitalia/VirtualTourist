@@ -11,7 +11,7 @@ import CoreData
 
 class PhotoCollection: NSManagedObject, Decodable {
        
-    //MARK:- Codable support
+    //MARK: - Codable support
     
     //map json keys to nsmanaged object keys
     enum CodingKeys: String, CodingKey {

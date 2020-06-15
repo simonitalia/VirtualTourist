@@ -12,7 +12,7 @@ import CoreData
 
 class PhotoAlbumCollectionViewController: PhotoAlbumMasterViewController {
     
-    //MARK:- Storyboard Connections
+    //MARK: - Storyboard Connections
     
     //outlets
     @IBOutlet weak var photoAlbumCollectionView: UICollectionView!
@@ -28,22 +28,15 @@ class PhotoAlbumCollectionViewController: PhotoAlbumMasterViewController {
             return
         }
         
-        //update database
-        if let objectID = pin?.photoCollection?.objectID {
-            dataController?.viewContext.object(with: objectID)
-            try? dataController?.viewContext.save()
-            
-            //get random page and trigger  fetch
-            let page = getRandomPage()
-            performFetchPhotosFromSearch(forPage: Int(page))
-        }
-
-        //TODO:- REMOVE
+        let page = getRandomPage()
+        performFetchPhotosFromSearch(forPage: Int(page))
+        
+        //TODO: - REMOVE
         setEmptyStateView(false)
     }
     
     
-    //MARK:- Class Properties
+    //MARK: - Class Properties
     
     private var currentSearchTask: URLSessionDataTask?
     private let cellIdentifier = "PhotoCell"
@@ -60,7 +53,8 @@ class PhotoAlbumCollectionViewController: PhotoAlbumMasterViewController {
     }()
     
     
-    //MARK:- Data Persistence Properties
+    //MARK: - Data Persistence Properties
+    
     //Core Data
     internal var dataController: DataController? {
         return DataController.shared
@@ -70,7 +64,8 @@ class PhotoAlbumCollectionViewController: PhotoAlbumMasterViewController {
     private var fetchedResultsController: NSFetchedResultsController<Photo>?
     
 
-    //MARK:- View Lifecycle
+    //MARK: - View Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         performFetchPhotos()
@@ -97,7 +92,8 @@ class PhotoAlbumCollectionViewController: PhotoAlbumMasterViewController {
     }
     
     
-    //MARK:- ViewController Setup
+    //MARK: - ViewController Setup
+    
     private func configureVC() {
         configureCollectionView()
     }
@@ -110,9 +106,10 @@ class PhotoAlbumCollectionViewController: PhotoAlbumMasterViewController {
     }
     
 
-    internal func performFetchPhotos() {
-        if let _ = pin?.photoCollection {
-            performFetchPhotosFromCoreData()
+    //called on view load
+    private func performFetchPhotos() {
+        if let pin = pin, let _ = pin.photoCollection {
+            performFetchPhotosFromCoreData(for: pin)
             
         } else {
             performFetchPhotosFromSearch(forPage: 1)
@@ -123,7 +120,7 @@ class PhotoAlbumCollectionViewController: PhotoAlbumMasterViewController {
     private func performFetchPhotosFromSearch(forPage number: Int) {
         guard let pin = pin else { return }
         
-        //cance any existing running taskss
+        //cancel any existing running tasks
         cancelDataTasks()
         
         print("\nFetching new photos for page \(number)....")
@@ -140,11 +137,9 @@ class PhotoAlbumCollectionViewController: PhotoAlbumMasterViewController {
             self.collectionViewSetUserInput(enabled: true)
             
             switch result {
-            case .success(let photoCollection):
-                
-                //update properties
-                self.pin?.photoCollection = photoCollection
-                self.performFetchPhotosFromCoreData()
+            case .success(let pin):
+                self.pin = pin
+                self.performFetchPhotosFromCoreData(for: pin)
                 
             case .failure(let error):
                 self.presentUserAlert(title: "Something went wrong", message: error.rawValue)
@@ -154,31 +149,35 @@ class PhotoAlbumCollectionViewController: PhotoAlbumMasterViewController {
 }
 
 
+
+
+
 //MARK: CollectionView Delegate
+
 extension PhotoAlbumCollectionViewController: UICollectionViewDelegate {
     
     //support deleting item in collection
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     
         guard let photo = fetchedResultsController?.object(at: indexPath) else { return }
-//        print("Objects BEFORE delete: \(fetchedResultsController?.fetchedObjects?.count ?? 0)")
-        
+
         delete(object: photo)
-        
         try? dataController?.viewContext.save()
         dataController?.printCoreDataStatistics()
-        
-//        print("Objects AFTER delete: \(fetchedResultsController?.fetchedObjects?.count ?? 0)")
         
         //display empty state if objects afer delete
         if let count = fetchedResultsController?.fetchedObjects?.count, count < 1 {
             self.setEmptyStateView(true)
         }
     }
+    
+
+    //remove image from reuable cell when cell disappers
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) { }
 }
 
 
-//MARK:- CollectionView Data Source
+//MARK: - CollectionView Data Source
 
 extension PhotoAlbumCollectionViewController: UICollectionViewDataSource {
     
@@ -202,7 +201,6 @@ extension PhotoAlbumCollectionViewController: UICollectionViewDataSource {
         
         if let photo = self.fetchedResultsController?.fetchedObjects?[indexPath.item] {
             
-            
             //set cell image with actual photo
             switch photo.image {
             case nil:
@@ -221,11 +219,14 @@ extension PhotoAlbumCollectionViewController: UICollectionViewDataSource {
 }
 
 
-//MARK:- NSFetchedResultsControllerDelegate + Core Data Helpers
+//MARK: - NSFetchedResultsControllerDelegate + Core Data Helpers
+
 extension PhotoAlbumCollectionViewController: NSFetchedResultsControllerDelegate {
     
-    private func performFetchPhotosFromCoreData() {
-        guard let pin = pin, let context = dataController?.viewContext else { return }
+//    private func performFetchPhotosFromCoreData() {
+    private func performFetchPhotosFromCoreData(for pin: Pin) {
+//        guard let pin = pin, let context = dataController?.viewContext else { return }
+        guard let context = dataController?.viewContext else { return }
 
         let fetchRequest:NSFetchRequest<Photo> = Photo.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "photoCollection.pin == %@", pin)
@@ -248,86 +249,25 @@ extension PhotoAlbumCollectionViewController: NSFetchedResultsControllerDelegate
         }
     }
     
-    
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        
-        switch type {
-        case .insert:
-            photoAlbumCollectionView.insertItems(at: [newIndexPath!])
-            break
-        
-        case .delete:
-            photoAlbumCollectionView.deleteItems(at: [indexPath!])
-            break
-        
-        case .update:
-            photoAlbumCollectionView.reloadItems(at: [indexPath!])
-        
-        case .move:
-            photoAlbumCollectionView.moveItem(at: indexPath!, to: newIndexPath!)
-        @unknown default:
-            fatalError("Invalid change type in controller(_:didChange:anObject:for:).")
-        }
-    }
-    
-    
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
-        
-        let indexSet = IndexSet(integer: sectionIndex)
-        
-        switch type {
-        case .insert: photoAlbumCollectionView.insertSections(indexSet)
-        case .delete: photoAlbumCollectionView.deleteSections(indexSet)
-        case .update: photoAlbumCollectionView.reloadSections(indexSet)
-            
-        case .move:
-            fatalError("Invalid change type in controller(_:didChange:atSectionIndex:for:)")
-        
-        @unknown default:
-            fatalError("Invalid change type in controller(_:didChange:atSectionIndex:for:)")
-        }
-    }
-    
-    
-    private func delete(object: NSManagedObject) {
-        dataController?.viewContext.delete(object)
-        try? dataController?.viewContext.save()
-        dataController?.printCoreDataStatistics()
-    }
 }
 
 
-// MARK:- CollectionView UI Helpers
+// MARK:- UI Helpers
+
 extension PhotoAlbumCollectionViewController {
-    
-    //collection view layout setup
-    private func configureCompositionalLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout { (section: Int, environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
-            let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: NSCollectionLayoutDimension.fractionalWidth(1.0), heightDimension: NSCollectionLayoutDimension.absolute(105)))
-            item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),  heightDimension: .absolute(100))
-            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 3)
-            let section = NSCollectionLayoutSection(group: group)
-            section.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
-            return section
-        }
-        
-        return layout
-    }
-    
     
     private func updateUI() {
          DispatchQueue.main.async {
-            guard let photos = self.fetchedResultsController?.fetchedObjects, !photos.isEmpty else {
-                self.setEmptyStateView(true)
-                return
-            }
+//            guard let photos = self.fetchedResultsController?.fetchedObjects, !photos.isEmpty else {
+//                self.setEmptyStateView(true)
+//                return
+//            }
 
             self.photoAlbumCollectionView.reloadData()
         }
     }
 
-    
+
     //set view UI elements state
     private func collectionViewActivityIndicator(animate: Bool) {
         
@@ -340,8 +280,9 @@ extension PhotoAlbumCollectionViewController {
     
     private func setEmptyStateView(_ display: Bool) {
         DispatchQueue.main.async {
-            self.emptyStateView.isHidden = !display
             self.photoAlbumCollectionView.isHidden = display
+            self.emptyStateView.isHidden = !display
+            self.view.bringSubviewToFront(self.emptyStateView)
         }
     }
     
@@ -355,9 +296,9 @@ extension PhotoAlbumCollectionViewController {
 }
 
 
-//MARK:- Helpers
+//MARK: - Helpers
+
 extension PhotoAlbumCollectionViewController {
-    
     
     private func cancelDataTasks() {
         currentSearchTask?.cancel()

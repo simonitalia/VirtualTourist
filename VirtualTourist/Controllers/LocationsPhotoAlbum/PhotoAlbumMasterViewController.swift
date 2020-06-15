@@ -12,7 +12,8 @@ import MapKit
 
 class PhotoAlbumMasterViewController: UIViewController {
     
-    //MARK:- Class Properties
+    //MARK: - Class Properties
+    
     //shared bewteen applicable PhotoAlbumVCs
     static var pin: Pin? {
         didSet {

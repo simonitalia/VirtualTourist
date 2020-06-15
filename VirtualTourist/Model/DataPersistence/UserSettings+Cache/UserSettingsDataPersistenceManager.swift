@@ -12,7 +12,8 @@ import MapKit
 
 struct UserSettingsDataPersistenceManager {
     
-    //MARK:- Class Properties
+    //MARK: - Class Properties
+    
     static let shared = UserSettingsDataPersistenceManager()
     private let userDefaults = UserDefaults.standard
     
@@ -25,7 +26,8 @@ struct UserSettingsDataPersistenceManager {
     private init() {}
     
     
-    //MARK:- User Data Save / load methods
+    //MARK: - User Data Save / load methods
+    
     func saveMapRegion() {
         guard let region = AppDelegate.region else { return }
         

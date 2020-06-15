@@ -13,7 +13,8 @@ import CoreData
 
 extension UIViewController {
     
-    //MARK:- UI Helpers
+    //MARK: - UI Helpers
+    
     func presentUserAlert(title: String, message: String) {
         DispatchQueue.main.async {
             let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -24,7 +25,8 @@ extension UIViewController {
 }
 
 
-//MARK:- MapView Delegate
+//MARK: - MapView Delegate
+
 extension UIViewController: MKMapViewDelegate  {
 
     //cretaes and sets pin views on map when annotations added to map view

@@ -39,7 +39,8 @@ class DataController {
             guard error == nil else {
                 fatalError(error!.localizedDescription)
             }
-//            self.autoSaveViewContext()
+            
+            self.autoSaveViewContext()
             self.configureContexts()
             completion?()
         }
@@ -67,7 +68,7 @@ extension DataController {
     }
 }
 
-//MARK:- Print CoreData Stats
+//MARK: - Print CoreData Stats
 
 extension DataController {
     

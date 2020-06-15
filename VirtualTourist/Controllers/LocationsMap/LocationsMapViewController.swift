@@ -13,7 +13,7 @@ import CoreData
 
 class LocationsMapViewController: UIViewController {
     
-    //MARK:- Storyboard Connections
+    //MARK: - Storyboard Connections
     //outlets
     @IBOutlet weak var mapView: MKMapView!
     
@@ -28,7 +28,8 @@ class LocationsMapViewController: UIViewController {
     }
     
     
-    //MARK:- Class Properties
+    //MARK: - Class Properties
+    
     enum Identifier {
         
         enum Storybaord {
@@ -51,7 +52,8 @@ class LocationsMapViewController: UIViewController {
     }
     
     
-    //MARK:- Data Persistence Properties
+    //MARK: - Data Persistence Properties
+    
     //Core Data
     var dataController: DataController? {
         return DataController.shared
@@ -65,7 +67,8 @@ class LocationsMapViewController: UIViewController {
     }
     
     
-    //MARK:- View Lifecycle
+    //MARK: - View Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -90,13 +93,15 @@ class LocationsMapViewController: UIViewController {
     }
     
     
-    //MARK:- Core Data Setup
+    //MARK: - Core Data Setup
+    
     private func configureCoreData() {
         congifureFetchedResultsController()
     }
     
     
-    //MARK:- VC Setup
+    //MARK: - VC Setup
+    
     private func configureVC() {
         configureMapView()
     }
@@ -148,7 +153,8 @@ extension LocationsMapViewController {
 }
 
 
-//MARK:- MKMAPView Delegate
+//MARK: - MKMAPView Delegate
+
 extension LocationsMapViewController  {
     
     //track annotation view taps
@@ -165,7 +171,8 @@ extension LocationsMapViewController  {
 }
 
 
-//MARK:- Core Data
+//MARK: - Core Data
+
 extension LocationsMapViewController: NSFetchedResultsControllerDelegate {
     
     //fetch / load objects from core data on app launch
@@ -195,7 +202,8 @@ extension LocationsMapViewController: NSFetchedResultsControllerDelegate {
 }
     
 
-//MARK:- Core Data Helpers
+//MARK: - Core Data Helpers
+
 extension LocationsMapViewController {
     private func createPin(with mapCoordinate: CLLocationCoordinate2D) {
         let annotation = mapView.createMapPointAnnotation(from: mapCoordinate)

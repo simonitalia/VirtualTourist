@@ -10,15 +10,16 @@ import UIKit
 
 class PhotoAlbumCollectionViewCell: UICollectionViewCell {
     
-    //MARK:- Storyboard Connections
+    //MARK: - Storyboard Connections
     
     //outlets
     @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var photoActivityIndicator: UIActivityIndicatorView!
     
     
-    //MARK:- Class Properties
-    static var fetchPhotoTasks: [URLSessionDataTask]?
+    //MARK: - Class Properties
+    
+    static var fetchPhotoTasks: [URLSessionDataTask]? //invalidate upon user requests fetch new photos
     
     func setPhotoImageToDownloading() {
         DispatchQueue.main.async {

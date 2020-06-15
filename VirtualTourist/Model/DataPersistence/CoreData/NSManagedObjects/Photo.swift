@@ -12,7 +12,8 @@ import CoreData
 
 class Photo: NSManagedObject, Codable {
 
-    //MARK:- Codable support
+    //MARK: - Codable support
+    
     //map json keys to nsmanaged object keys
     enum CodingKeys: String, CodingKey {
         case id

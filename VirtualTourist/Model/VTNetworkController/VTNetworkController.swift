@@ -7,18 +7,18 @@
 //
 
 import UIKit
-import CoreData
 
 class VTNetworkController {
     
-    //MARK:- Core Data
+    //MARK: - Core Data
     
-    private var dataController: DataController? = {
+    var dataController: DataController? = {
         return DataController.shared
     }()
     
     
-    //MARK:- Class Properties
+    //MARK: - Class Properties
+    
     //accessible class properties
     static var shared = VTNetworkController()
     
@@ -121,9 +121,9 @@ class VTNetworkController {
         print("EnpointUrl: \(url)") //to debug
     }
   
-    
-    func getPhotos(for pin: Pin, page: Int, completion: @escaping (Result<PhotoCollection, VTError>) -> Void) -> URLSessionDataTask? {
-       guard let url = Endpoint.searchByLocation(latitude: pin.latitude, longitude: pin.longitude, page: page).url else {
+
+    func getPhotos(for pin: Pin, page: Int, completion: @escaping (Result<Pin, VTError>) -> Void) -> URLSessionDataTask? {
+            guard let url = Endpoint.searchByLocation(latitude: pin.latitude, longitude: pin.longitude, page: page).url else {
            print("Internal Error! Endpoint url could not be constructed.")
            return nil
        }
@@ -166,10 +166,10 @@ class VTNetworkController {
                 
                     do {
                         //update core data
-                        if let photoCollection = try self.updateCoreData(for: pin, with: results.photoCollection) {
+                        if let pin = try self.updateCoreData(for: pin, with: results.photoCollection) {
                             
-                           //pass photo collection back to call site
-                           completion(.success(photoCollection))
+                            //pass photo collection back to call site
+                            completion(.success(pin))
                            return
                         }
                         
@@ -179,6 +179,7 @@ class VTNetworkController {
                 }
                
            } catch {
+            
                //error response from server
                do {
                    let decoder = JSONDecoder()
@@ -203,18 +204,6 @@ class VTNetworkController {
         task.resume()
         return task
    }
-    
-    
-    private func newDataObject(from data: Data) -> Data {
-        
-        //remove unneccessary characters from response
-        let prefix = "jsonFlickrApi("
-        let suffix = ")"
-        let start = prefix.count
-        let end = data.count - suffix.count
-        let range = start..<end
-        return data.subdata(in: range)
-    }
     
     
     func getPhotoImage(for photo: Photo, completion: @escaping (Result<UIImage, VTError>) -> Void) -> URLSessionDataTask? {
@@ -266,60 +255,4 @@ class VTNetworkController {
 }
 
 
-//MARK:- Core Data Helpers
 
-extension VTNetworkController {
-    
-    private func updateCoreData(for pin: Pin, with photoCollection: PhotoCollection) throws -> PhotoCollection? {
-        if let context = self.dataController?.container.viewContext {
-            
-            do {
-                
-                //fetch photo collection context
-                let fetchedCollection = try PhotoCollection.fetchOrCreatePhotoCollection(matching: pin, using: photoCollection, in: context)
-
-                //update saved page to fetched page
-                fetchedCollection.page = photoCollection.page
-                
-                do {
-                    //fetch photos context
-                    for photo in photoCollection.photos as! Set<Photo> {
-                        _ = try Photo.fetchOrCreatePhoto(matching: photo, for: fetchedCollection, in: context)
-                        
-                        try? dataController?.container.viewContext.save()
-                    }
-                    
-                    try? dataController?.container.viewContext.save()
-                    dataController?.printCoreDataStatistics()
-
-                } catch {
-                    print("Error! Fetching Photo from Core Data \(error.localizedDescription)")
-                }
-                
-                return fetchedCollection
-            
-            } catch {
-                throw error
-            }
-        }
-        
-        return nil
-    }
-    
-    
-    private func updateCoreData(image photo: Photo, with data: Data) {
-        if let context = self.dataController?.container.viewContext {
-            
-            do {
-                if let photo = try Photo.fetchPhoto(matching: photo, in: context) {
-                    photo.image = data
-                    try? dataController?.container.viewContext.save()
-                }
-   
-            
-            } catch {
-                 print("Error! Fetching Photo from Core Data \(error.localizedDescription)")
-            }
-        }
-    }
-}
