@@ -106,3 +106,51 @@ extension PhotoAlbumCollectionViewController {
         return layout
     }
 }
+
+
+//MARK: - Core Data Helpers
+
+extension PhotoAlbumCollectionViewController: NSFetchedResultsControllerDelegate {
+    
+    func performFetchPhotosFromCoreData(for pin: Pin) {
+        guard let identifier = pin.identifier else { return }
+        guard let context = dataController?.viewContext else { return }
+
+        let fetchRequest:NSFetchRequest<Photo> = Photo.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "photoCollection.pin.identifier == %@", identifier)
+        let sortDescriptor = NSSortDescriptor(key: "title", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        fetchedResultsController?.delegate = self
+
+        do {
+            try fetchedResultsController?.performFetch()
+            print("Fetched objects: \(fetchedResultsController?.fetchedObjects?.count ?? 0)")
+            print("Fetched page \(currentPage ?? 0) of \(totalPages ?? 0) pages from core data.")
+
+            //update Collection View Data Source
+            updateCollectionViewSnapshot()
+            
+        } catch {
+            fatalError("The fetch could not be performed: \(error.localizedDescription)")
+        }
+    }
+    
+    
+    func performDelete() {
+        guard let photos = fetchedResultsController?.fetchedObjects, !photos.isEmpty else { return }
+        guard let context = dataController?.backgroundContext else {
+            print("Error! Delete of Photos di not initiate")
+            return
+        }
+        
+        do {
+            try Photo.delete(photos: photos, in: context)
+            dataController?.printCoreDataStatistics()
+            
+        } catch {
+            print("Error! Error encountered deleting photos. \(error.localizedDescription)")
+        }
+    }
+}

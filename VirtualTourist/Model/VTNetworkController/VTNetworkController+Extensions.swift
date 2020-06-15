@@ -22,6 +22,9 @@ extension VTNetworkController {
                 
                 let fetchedCollection = try PhotoCollection.fetchOrCreatePhotoCollection(pin: pin, using: photoCollection, in: context)
                 
+                //update collection details
+                fetchedCollection.page = photoCollection.page
+                
                 do {
                     
                     //fetch photos context
