@@ -65,4 +65,13 @@ extension Photo {
         
         return nil
     }
+    
+    
+    //purge photos from core data
+    class func delete(photos: NSSet, in context: NSManagedObjectContext) {
+        
+        
+        
+    }
+    
 }

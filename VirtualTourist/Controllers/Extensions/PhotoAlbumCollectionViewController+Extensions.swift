@@ -44,10 +44,13 @@ extension PhotoAlbumCollectionViewController {
     
     
     func updateCollectionViewSnapshot() {
-        var snapshot = NSDiffableDataSourceSnapshot<CollectionViewSection, Photo>()
-        snapshot.appendSections([.main])
-        snapshot.appendItems(fetchedResultsController?.fetchedObjects ?? [])
-        self.collectionViewDataSource?.apply(snapshot, animatingDifferences: true, completion: nil)
+        
+        DispatchQueue.main.async {
+            var snapshot = NSDiffableDataSourceSnapshot<CollectionViewSection, Photo>()
+            snapshot.appendSections([.main])
+            snapshot.appendItems(self.fetchedResultsController?.fetchedObjects ?? [])
+            self.collectionViewDataSource?.apply(snapshot, animatingDifferences: true, completion: nil)
+        }
         
         //update UI
         updateUI()

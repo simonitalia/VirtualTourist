@@ -160,11 +160,11 @@ class PhotoAlbumCollectionViewController: PhotoAlbumMasterViewController {
 }
 
 
-//MARK: - NSFetchedResultsControllerDelegate + Core Data Helpers
+//MARK: - Core Data Helpers
 
 extension PhotoAlbumCollectionViewController: NSFetchedResultsControllerDelegate {
     
-    private func performFetchPhotosFromCoreData(for pin: Pin) {
+    func performFetchPhotosFromCoreData(for pin: Pin) {
         guard let context = dataController?.viewContext else { return }
 
         let fetchRequest:NSFetchRequest<Photo> = Photo.fetchRequest()
@@ -187,6 +187,25 @@ extension PhotoAlbumCollectionViewController: NSFetchedResultsControllerDelegate
             fatalError("The fetch could not be performed: \(error.localizedDescription)")
         }
     }
+    
+    func performDelete(photos: [Photo]) {
+        
+        let photoCollection = pin
+        
+        
+        guard  let context = dataController?.container.newBackgroundContext() else {
+            print("Error! Delete of Photos di not initiate")
+            return
+        }
+        
+        let photos = pin?.photoCollection?.photos
+        
+//        Photo.delete(photos: photos, in: context)
+        
+            
+        
+    }
+    
 }
 
 
