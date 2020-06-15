@@ -9,47 +9,53 @@
 import UIKit
 import CoreData
 
-//MARK: - NSFetchedResultsControllerDelegate
+
+//MARK: - CollectionView Data Source + Data Helpers
 
 extension PhotoAlbumCollectionViewController {
     
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        
-        switch type {
-        case .insert:
-            photoAlbumCollectionView.insertItems(at: [newIndexPath!])
-            break
-        
-        case .delete:
-            photoAlbumCollectionView.deleteItems(at: [indexPath!])
-            break
-        
-        case .update:
-            photoAlbumCollectionView.reloadItems(at: [indexPath!])
-        
-        case .move:
-            photoAlbumCollectionView.moveItem(at: indexPath!, to: newIndexPath!)
-        @unknown default:
-            fatalError("Invalid change type in controller(_:didChange:anObject:for:).")
+    func configureCollectionViewCell() {
+        collectionViewDataSource = UICollectionViewDiffableDataSource<CollectionViewSection, Photo>(collectionView: photoAlbumCollectionView) { [unowned self] (collectionView, indexPath, item) -> UICollectionViewCell? in
+            
+           //configure cell
+            let cell = self.photoAlbumCollectionView.dequeueReusableCell(withReuseIdentifier: self.cellIdentifier, for: indexPath) as! PhotoAlbumCollectionViewCell
+            
+            //remove any prior images in reused cell
+            cell.setPhotoImageToDownloading()
+            
+            if let photo = self.fetchedResultsController?.fetchedObjects?[indexPath.item] {
+                
+                //set cell image with actual photo
+                switch photo.image {
+                case nil:
+                    cell.performGetPhotoImage(for: photo)
+
+                default:
+                    if let data = photo.image {
+                        let image = UIImage(data: data)
+                        cell.setPhotoImageView(with: image) //if set image fails, pass in nil
+                    }
+                }
+            }
+            
+            return cell
         }
     }
     
     
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
+    func updateCollectionViewSnapshot() {
+        var snapshot = NSDiffableDataSourceSnapshot<CollectionViewSection, Photo>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(fetchedResultsController?.fetchedObjects ?? [])
+        self.collectionViewDataSource?.apply(snapshot, animatingDifferences: true, completion: nil)
         
-        let indexSet = IndexSet(integer: sectionIndex)
-        
-        switch type {
-        case .insert: photoAlbumCollectionView.insertSections(indexSet)
-        case .delete: photoAlbumCollectionView.deleteSections(indexSet)
-        case .update: photoAlbumCollectionView.reloadSections(indexSet)
-            
-        case .move:
-            fatalError("Invalid change type in controller(_:didChange:atSectionIndex:for:)")
-        
-        @unknown default:
-            fatalError("Invalid change type in controller(_:didChange:atSectionIndex:for:)")
-        }
+        //update UI
+        updateUI()
+    }
+    
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        updateCollectionViewSnapshot()
     }
     
     
@@ -61,6 +67,25 @@ extension PhotoAlbumCollectionViewController {
 }
 
 
+//MARK: CollectionView Delegate
+
+extension PhotoAlbumCollectionViewController: UICollectionViewDelegate {
+    
+    //support deleting item in collection
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    
+        guard let photo = fetchedResultsController?.object(at: indexPath) else { return }
+
+        delete(object: photo)
+        try? dataController?.viewContext.save()
+        dataController?.printCoreDataStatistics()
+        
+        //display empty state if objects afer delete
+        updateUI()
+    }
+}
+    
+    
 //MARK: - CollectionView Layout
 
 extension PhotoAlbumCollectionViewController {

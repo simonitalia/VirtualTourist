@@ -19,7 +19,10 @@ class PhotoAlbumCollectionViewCell: UICollectionViewCell {
     
     //MARK: - Class Properties
     
-    static var fetchPhotoTasks: [URLSessionDataTask]? //invalidate upon user requests fetch new photos
+    static var fetchPhotoTasks: [URLSessionDataTask]? //invalidate upon user request to fetch new photos
+    
+    
+    //MARK: - Set Views
     
     func setPhotoImageToDownloading() {
         DispatchQueue.main.async {

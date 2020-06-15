@@ -18,6 +18,7 @@ class PhotoAlbumMapViewController: PhotoAlbumMasterViewController {
     
     
     //MARK: Class Properties
+    
     private var pin: Pin? {
         return PhotoAlbumMasterViewController.pin
     }

@@ -21,7 +21,6 @@ struct UserSettingsDataPersistenceManager {
         static let mapRegion = "MapRegion"
     }
     
-    
     //private init
     private init() {}
     

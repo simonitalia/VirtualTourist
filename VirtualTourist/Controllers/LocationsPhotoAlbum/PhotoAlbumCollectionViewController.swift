@@ -38,8 +38,17 @@ class PhotoAlbumCollectionViewController: PhotoAlbumMasterViewController {
     
     //MARK: - Class Properties
     
+    enum CollectionViewSection {
+        case main
+    }
+    
+    
+    //collection view properties
+    let cellIdentifier = "PhotoCell"
+    var collectionViewDataSource: UICollectionViewDiffableDataSource<CollectionViewSection, Photo>?
+    
+    
     private var currentSearchTask: URLSessionDataTask?
-    private let cellIdentifier = "PhotoCell"
     private var currentPage: Int64? {
         return pin?.photoCollection?.page
     }
@@ -56,12 +65,11 @@ class PhotoAlbumCollectionViewController: PhotoAlbumMasterViewController {
     //MARK: - Data Persistence Properties
     
     //Core Data
-    internal var dataController: DataController? {
+    var dataController: DataController? {
         return DataController.shared
     }
     
-    
-    private var fetchedResultsController: NSFetchedResultsController<Photo>?
+    var fetchedResultsController: NSFetchedResultsController<Photo>?
     
 
     //MARK: - View Lifecycle
@@ -100,7 +108,10 @@ class PhotoAlbumCollectionViewController: PhotoAlbumMasterViewController {
     
     
     private func configureCollectionView() {
-        //setup layout
+        
+        //setup layout and cell
+        configureCollectionViewCell()
+        
         let layout = configureCompositionalLayout()
         photoAlbumCollectionView.setCollectionViewLayout(layout, animated: false)
     }
@@ -149,83 +160,11 @@ class PhotoAlbumCollectionViewController: PhotoAlbumMasterViewController {
 }
 
 
-
-
-
-//MARK: CollectionView Delegate
-
-extension PhotoAlbumCollectionViewController: UICollectionViewDelegate {
-    
-    //support deleting item in collection
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    
-        guard let photo = fetchedResultsController?.object(at: indexPath) else { return }
-
-        delete(object: photo)
-        try? dataController?.viewContext.save()
-        dataController?.printCoreDataStatistics()
-        
-        //display empty state if objects afer delete
-        if let count = fetchedResultsController?.fetchedObjects?.count, count < 1 {
-            self.setEmptyStateView(true)
-        }
-    }
-    
-
-    //remove image from reuable cell when cell disappers
-    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) { }
-}
-
-
-//MARK: - CollectionView Data Source
-
-extension PhotoAlbumCollectionViewController: UICollectionViewDataSource {
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return fetchedResultsController?.sections?.count ?? 1
-    }
-    
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return fetchedResultsController?.sections?[section].numberOfObjects ?? 0
-    }
-    
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    
-        //configure cell
-        let cell = photoAlbumCollectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as! PhotoAlbumCollectionViewCell
-        
-        //remove any prior images in reused cell
-        cell.setPhotoImageToDownloading()
-        
-        if let photo = self.fetchedResultsController?.fetchedObjects?[indexPath.item] {
-            
-            //set cell image with actual photo
-            switch photo.image {
-            case nil:
-                cell.performGetPhotoImage(for: photo)
-
-            default:
-                if let data = photo.image {
-                    let image = UIImage(data: data)
-                    cell.setPhotoImageView(with: image) //if set image fails, pass in nil
-                }
-            }
-        }
-        
-        return cell
-    }
-}
-
-
 //MARK: - NSFetchedResultsControllerDelegate + Core Data Helpers
 
 extension PhotoAlbumCollectionViewController: NSFetchedResultsControllerDelegate {
     
-//    private func performFetchPhotosFromCoreData() {
     private func performFetchPhotosFromCoreData(for pin: Pin) {
-//        guard let pin = pin, let context = dataController?.viewContext else { return }
         guard let context = dataController?.viewContext else { return }
 
         let fetchRequest:NSFetchRequest<Photo> = Photo.fetchRequest()
@@ -241,14 +180,13 @@ extension PhotoAlbumCollectionViewController: NSFetchedResultsControllerDelegate
             print("Fetched objects: \(fetchedResultsController?.fetchedObjects?.count ?? 0)")
             print("Fetched page \(currentPage ?? 0) of \(totalPages ?? 0) pages from core data.")
 
-            //update UI
-            updateUI()
+            //update Collection View Data Source
+            updateCollectionViewSnapshot()
             
         } catch {
             fatalError("The fetch could not be performed: \(error.localizedDescription)")
         }
     }
-    
 }
 
 
@@ -256,14 +194,11 @@ extension PhotoAlbumCollectionViewController: NSFetchedResultsControllerDelegate
 
 extension PhotoAlbumCollectionViewController {
     
-    private func updateUI() {
+    func updateUI() {
          DispatchQueue.main.async {
-//            guard let photos = self.fetchedResultsController?.fetchedObjects, !photos.isEmpty else {
-//                self.setEmptyStateView(true)
-//                return
-//            }
-
-            self.photoAlbumCollectionView.reloadData()
+            if let count = self.fetchedResultsController?.fetchedObjects?.count, count < 1 {
+                self.setEmptyStateView(true)
+            }
         }
     }
 
