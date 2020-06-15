@@ -11,24 +11,16 @@ import CoreData
 
 
 extension PhotoCollection {
-    
-    
-    class func createPhotoCollection(for pin: Pin, using photoCollection: PhotoCollection, in context: NSManagedObjectContext) -> PhotoCollection {
+
+    class func fetchOrCreatePhotoCollection(pin: Pin, using photoCollection: PhotoCollection, in context: NSManagedObjectContext) throws -> PhotoCollection {
         
-        let newCollection = PhotoCollection(context: context)
-        newCollection.pin = pin //entity relationship
-        newCollection.page = photoCollection.page
-        newCollection.pages = photoCollection.pages
-        newCollection.total = photoCollection.total
-        return newCollection
-    }
-    
-    
-    class func fetchOrCreatePhotoCollection(matching pin: Pin, using photoCollection: PhotoCollection, in context: NSManagedObjectContext) throws -> PhotoCollection {
+        guard let identifier = pin.identifier else {
+            fatalError("Error! Photo Collection cannot be created for Pin. Pin is missing.")
+        }
 
         //lookup in core data
         let request: NSFetchRequest<PhotoCollection> = PhotoCollection.fetchRequest()
-        request.predicate = NSPredicate(format: "photoCollection = %@", photoCollection)
+        request.predicate = NSPredicate(format: "pin.identifier = %@", identifier)
 
         do {
            let collection = try context.fetch(request)
@@ -41,9 +33,9 @@ extension PhotoCollection {
            throw error
         }
 
-        print("Photo Collection not found in core data. Creating new Photo Collection.")
-
         //create new if not found
+        print("Photo Collection not found in core data, creating new Photo Collection.")
+
         let newCollection = PhotoCollection(context: context)
         newCollection.pin = pin //entity relationship
         newCollection.page = photoCollection.page

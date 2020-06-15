@@ -17,28 +17,28 @@ extension VTNetworkController {
     func updateCoreData(for pin: Pin, with photoCollection: PhotoCollection) throws -> Pin? {
         if let context = self.dataController?.container.viewContext {
             
+            //create new photo collection
             do {
-//                let newCollection = PhotoCollection.createPhotoCollection(for: pin, using: photoCollection, in: context)
-                let fetchedCollection = try PhotoCollection.fetchOrCreatePhotoCollection(matching: pin, using: photoCollection, in: context)
+                
+                let fetchedCollection = try PhotoCollection.fetchOrCreatePhotoCollection(pin: pin, using: photoCollection, in: context)
                 
                 do {
+                    
                     //fetch photos context
                     for photo in photoCollection.photos as! Set<Photo> {
-//                        _ = try Photo.fetchOrCreatePhoto(matching: photo, for: newCollection, in: context)
                         _ = try Photo.fetchOrCreatePhoto(matching: photo, for: fetchedCollection, in: context)
                     }
-                    
-                    try? dataController?.container.viewContext.save()
+
+                    try? context.save()
                     dataController?.printCoreDataStatistics()
                     return pin
-
+                
                 } catch {
-                    print("Error! Fetching Photo from Core Data \(error.localizedDescription)")
+                     print("Error! Failed to create new photos for for photo collection, \(error.localizedDescription)")
                 }
                 
-                
             } catch {
-                print("Error! Fetching Photo Collection from Core Data \(error.localizedDescription)")
+                print("Error! Fetching or creating Photo Collection, \(error.localizedDescription)")
             }
         }
         
@@ -52,7 +52,7 @@ extension VTNetworkController {
             do {
                 if let photo = try Photo.fetchPhoto(matching: photo, in: context) {
                     photo.image = data
-                    try? dataController?.container.viewContext.save()
+                    try? context.save()
                 }
    
             } catch {
@@ -60,18 +60,7 @@ extension VTNetworkController {
             }
         }
     }
-    
-    
-    
-    
-    
-    
-    
 }
-
-
-
-
 
 
 //MARK: - Helpers

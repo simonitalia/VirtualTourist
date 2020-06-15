@@ -253,6 +253,3 @@ class VTNetworkController {
         return task
     }
 }
-
-
-

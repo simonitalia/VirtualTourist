@@ -217,12 +217,7 @@ extension LocationsMapViewController {
         updateUI(with: [pinAnnotation])
         
         //update core data
-        try? dataController?.container.viewContext.save()
+        try? context.save()
         dataController?.printCoreDataStatistics()
     }
 }
-
-
-
-
-

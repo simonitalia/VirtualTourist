@@ -23,6 +23,7 @@ extension Photo {
             let photos = try context.fetch(request)
             if photos.count > 0 {
                 assert(photos.count == 1, "Issue with Database. Fetched photos should be unique.")
+//                print("Success! Photo found in core data.")
                 return photos[0] //return record, should only be 1 record
             }
 
@@ -31,6 +32,7 @@ extension Photo {
         }
 
         //create new if not found
+//        print("Photo not found in core data, creating new Photo.")
         let newPhoto = Photo(context: context)
         newPhoto.id = photo.id
         newPhoto.title = photo.title
@@ -68,10 +70,14 @@ extension Photo {
     
     
     //purge photos from core data
-    class func delete(photos: NSSet, in context: NSManagedObjectContext) {
+    class func delete(photos: [Photo], in context: NSManagedObjectContext) throws {
+        photos.forEach { context.delete($0) }
         
-        
-        
+        do {
+            try context.save()
+            
+        } catch {
+            throw error
+        }
     }
-    
 }

@@ -30,9 +30,6 @@ class PhotoAlbumCollectionViewController: PhotoAlbumMasterViewController {
         
         let page = getRandomPage()
         performFetchPhotosFromSearch(forPage: Int(page))
-        
-        //TODO: - REMOVE
-        setEmptyStateView(false)
     }
     
     
@@ -165,10 +162,11 @@ class PhotoAlbumCollectionViewController: PhotoAlbumMasterViewController {
 extension PhotoAlbumCollectionViewController: NSFetchedResultsControllerDelegate {
     
     func performFetchPhotosFromCoreData(for pin: Pin) {
+        guard let identifier = pin.identifier else { return }
         guard let context = dataController?.viewContext else { return }
 
         let fetchRequest:NSFetchRequest<Photo> = Photo.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "photoCollection.pin == %@", pin)
+        fetchRequest.predicate = NSPredicate(format: "photoCollection.pin.identifier == %@", identifier)
         let sortDescriptor = NSSortDescriptor(key: "title", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
         
@@ -188,24 +186,24 @@ extension PhotoAlbumCollectionViewController: NSFetchedResultsControllerDelegate
         }
     }
     
-    func performDelete(photos: [Photo]) {
-        
-        let photoCollection = pin
-        
-        
-        guard  let context = dataController?.container.newBackgroundContext() else {
+    
+    
+    
+    func performDelete() {
+        guard let photos = fetchedResultsController?.fetchedObjects, !photos.isEmpty else { return }
+        guard let context = dataController?.backgroundContext else {
             print("Error! Delete of Photos di not initiate")
             return
         }
         
-        let photos = pin?.photoCollection?.photos
-        
-//        Photo.delete(photos: photos, in: context)
-        
+        do {
+            try Photo.delete(photos: photos, in: context)
+            dataController?.printCoreDataStatistics()
             
-        
+        } catch {
+            print("Error! Error encountered deleting photos. \(error.localizedDescription)")
+        }
     }
-    
 }
 
 
@@ -235,8 +233,8 @@ extension PhotoAlbumCollectionViewController {
     private func setEmptyStateView(_ display: Bool) {
         DispatchQueue.main.async {
             self.photoAlbumCollectionView.isHidden = display
-            self.emptyStateView.isHidden = !display
             self.view.bringSubviewToFront(self.emptyStateView)
+            self.emptyStateView.isHidden = !display
         }
     }
     
