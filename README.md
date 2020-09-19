@@ -5,7 +5,7 @@ UIKit
 VirtualTourist
 
 # Objective
-
+A MapKit powered app to Pin location/s on a Map, then view a collection of (publically available) photos uploaded to Flickr, matching the geo-coordinates of the Pinned location/s.
 
 
 # Demo
@@ -23,7 +23,7 @@ VirtualTourist
 
 - User Session Management
 
-- REST API w/ JSON (GET, POST, PUT, DELETE)
+- Flickr REST API w/ JSON (GET)
 
 - Observer / Notifications
 
